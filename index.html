@@ -88,7 +88,6 @@
         const Play = (props) => <Icon name="play" {...props} />;
 
         const App = () => {
-            const [isMenuOpen, setIsMenuOpen] = useState(false);
             const [scrolled, setScrolled] = useState(false);
             
             // Default fallback articles
@@ -166,11 +165,8 @@
                 return () => window.removeEventListener('scroll', handleScroll);
             }, []);
 
-            const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
             const scrollToSection = (e, id) => {
                 e.preventDefault();
-                setIsMenuOpen(false); // Close menu when link is clicked
                 const element = document.getElementById(id);
                 if (element) {
                 const headerOffset = 80;
@@ -187,10 +183,12 @@
             return (
                 <div className="min-h-screen bg-amber-50 font-sans text-stone-800 selection:bg-orange-200">
                 
-                {/* Navigation */}
-                <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${scrolled || isMenuOpen ? 'bg-amber-50/95 shadow-md backdrop-blur-md py-2' : 'bg-transparent py-4'}`}>
+                {/* Navigation - Simplified: No Hamburger, Just Links */}
+                <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${scrolled ? 'bg-amber-50/95 shadow-md backdrop-blur-md py-2' : 'bg-transparent py-4'}`}>
                     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
+                    <div className="flex flex-col md:flex-row justify-between items-center h-auto md:h-16 gap-4 md:gap-0">
+                        
+                        {/* Logo Area */}
                         <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
                         <Heart className="text-orange-600 fill-orange-600 w-6 h-6" />
                         <span className="font-serif text-xl font-bold tracking-tight text-stone-900">
@@ -198,38 +196,22 @@
                         </span>
                         </div>
                         
-                        {/* Desktop Menu */}
-                        <div className="hidden md:flex space-x-8 items-center relative z-[101]">
+                        {/* Always Visible Links (Desktop & Mobile) */}
+                        <div className="flex flex-wrap justify-center gap-4 md:gap-8 items-center relative z-[101]">
                         <a href="#podcast" onClick={(e) => scrollToSection(e, 'podcast')} className="text-stone-600 hover:text-orange-600 transition-colors font-medium text-sm tracking-wide uppercase cursor-pointer">Podcast</a>
                         <a href="#books" onClick={(e) => scrollToSection(e, 'books')} className="text-stone-600 hover:text-orange-600 transition-colors font-medium text-sm tracking-wide uppercase cursor-pointer">Books</a>
                         <a href="#articles" onClick={(e) => scrollToSection(e, 'articles')} className="text-stone-600 hover:text-orange-600 transition-colors font-medium text-sm tracking-wide uppercase cursor-pointer">Articles</a>
-                        <a href="#newsletter" onClick={(e) => scrollToSection(e, 'newsletter')} className="px-5 py-2.5 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 transition-colors font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer">
+                        <a href="#newsletter" onClick={(e) => scrollToSection(e, 'newsletter')} className="px-4 py-2 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 transition-colors font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer text-xs md:text-sm">
                             Subscribe
                         </a>
                         </div>
 
-                        {/* Mobile Menu Button */}
-                        <div className="md:hidden flex items-center z-[101]">
-                        <button onClick={toggleMenu} className="text-stone-600 hover:text-orange-600 p-2 focus:outline-none" aria-label="Toggle menu">
-                            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                        </button>
-                        </div>
                     </div>
                     </div>
-
-                    {/* Mobile Dropdown - FIXED: Added bg-white and border to ensure visibility */}
-                    {isMenuOpen && (
-                    <div className="md:hidden absolute top-16 left-0 w-full bg-white border-b border-orange-100 shadow-xl z-[100] flex flex-col p-4 animate-in slide-in-from-top-5">
-                        <a href="#podcast" onClick={(e) => scrollToSection(e, 'podcast')} className="block px-4 py-3 text-lg font-medium text-stone-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg cursor-pointer border-b border-gray-100">Podcast</a>
-                        <a href="#books" onClick={(e) => scrollToSection(e, 'books')} className="block px-4 py-3 text-lg font-medium text-stone-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg cursor-pointer border-b border-gray-100">Books</a>
-                        <a href="#articles" onClick={(e) => scrollToSection(e, 'articles')} className="block px-4 py-3 text-lg font-medium text-stone-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg cursor-pointer border-b border-gray-100">Articles</a>
-                        <a href="#newsletter" onClick={(e) => scrollToSection(e, 'newsletter')} className="block px-4 py-3 text-lg font-medium text-orange-600 bg-orange-50 rounded-lg mt-2 cursor-pointer">Subscribe Now</a>
-                    </div>
-                    )}
                 </nav>
 
                 {/* Hero Section */}
-                <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+                <header className="relative pt-40 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
                     <div className="inline-block py-1.5 px-4 rounded-full bg-orange-100 text-orange-800 text-xs font-bold tracking-widest uppercase mb-6 animate-fade-in-up">
                         ICU Nurse | Writer | Speaker
