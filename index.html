@@ -217,12 +217,12 @@
                     </div>
                     </div>
 
-                    {/* Mobile Dropdown */}
+                    {/* Mobile Dropdown - FIXED: Added bg-white and border to ensure visibility */}
                     {isMenuOpen && (
-                    <div className="absolute top-full left-0 right-0 bg-white border-b border-orange-100 shadow-xl md:hidden flex flex-col p-4 animate-in slide-in-from-top-5">
-                        <a href="#podcast" onClick={(e) => scrollToSection(e, 'podcast')} className="block px-4 py-3 text-lg font-medium text-stone-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg cursor-pointer">Podcast</a>
-                        <a href="#books" onClick={(e) => scrollToSection(e, 'books')} className="block px-4 py-3 text-lg font-medium text-stone-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg cursor-pointer">Books</a>
-                        <a href="#articles" onClick={(e) => scrollToSection(e, 'articles')} className="block px-4 py-3 text-lg font-medium text-stone-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg cursor-pointer">Articles</a>
+                    <div className="md:hidden absolute top-16 left-0 w-full bg-white border-b border-orange-100 shadow-xl z-[100] flex flex-col p-4 animate-in slide-in-from-top-5">
+                        <a href="#podcast" onClick={(e) => scrollToSection(e, 'podcast')} className="block px-4 py-3 text-lg font-medium text-stone-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg cursor-pointer border-b border-gray-100">Podcast</a>
+                        <a href="#books" onClick={(e) => scrollToSection(e, 'books')} className="block px-4 py-3 text-lg font-medium text-stone-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg cursor-pointer border-b border-gray-100">Books</a>
+                        <a href="#articles" onClick={(e) => scrollToSection(e, 'articles')} className="block px-4 py-3 text-lg font-medium text-stone-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg cursor-pointer border-b border-gray-100">Articles</a>
                         <a href="#newsletter" onClick={(e) => scrollToSection(e, 'newsletter')} className="block px-4 py-3 text-lg font-medium text-orange-600 bg-orange-50 rounded-lg mt-2 cursor-pointer">Subscribe Now</a>
                     </div>
                     )}
