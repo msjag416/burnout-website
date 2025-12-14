@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head><meta name="p:domain_verify" content="bbaeb38efd24bcdb126c9381047fc8b6"/>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta name="p:domain_verify" content="bbaeb38efd24bcdb126c9381047fc8b6"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Andrea Gomez | ICU Nurse, Author & Burnout Recovery Expert</title>
-    <meta name="description" content="Join Andrea Gomez for burnout recovery tools, nursing leadership insights, and mental health resources. Listen to the podcast and explore books on thriving in toxic workplaces.">
+    <meta name="description" content="Read Andrea Gomez for burnout recovery tools and nursing leadership commentary. Listen to the podcast and find books on surviving toxic workplaces.">
     
     <!-- Favicon (Heart Icon) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ea580c'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
@@ -22,6 +23,11 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
     <!-- Custom Tailwind Configuration -->
     <script>
         tailwind.config = {
@@ -38,6 +44,7 @@
                     animation: {
                         'blob': 'blob 7s infinite',
                         'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         blob: {
@@ -56,64 +63,173 @@
         }
     </script>
     <style>
-        html { scroll-behavior: smooth; }
-        .delay-100 { animation-delay: 100ms; }
-        .delay-200 { animation-delay: 200ms; }
-        .delay-300 { animation-delay: 300ms; }
+        html { scroll-padding-top: 80px; }
+        /* Used for the Newsletter section */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, #f5f5f4 1px, transparent 1px),
+                            linear-gradient(to bottom, #f5f5f4 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
     </style>
 </head>
 <body class="bg-amber-50">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
+
+        // --- CONFIGURATION ---
+        
+        const QUIZ_CONFIG = {
+            questions: [
+                "Do you wake up tired after a full night of sleep, or dread the start of your shift?",
+                "Are you more critical, cynical, or detached from your colleagues and patients?",
+                "Does it take longer to finish charting or tasks you used to knock out quickly?",
+                "Are you experiencing unexplained headaches, stomach issues, or muscle tension?",
+                "Do you think about quitting, moving to the woods, or getting a minor injury just to get a day off?",
+                "When you are at home, are you actually there mentally, or are you still obsessing over work?",
+                "Have you lost interest in hobbies that used to make you happy because you are too drained?"
+            ],
+            // Logic for results based on score (index 0 = low risk, index 1 = medium, index 2 = high)
+            getResult: (score) => {
+                if (score <= 2) {
+                    return {
+                        title: "Vitals: Stable (For Now)",
+                        icon: "check-circle",
+                        text: "You are stressed, but you aren't broken yet. You still have a chance to fix the boundaries before the roof caves in.",
+                        color: "text-green-600",
+                        bgColor: "bg-green-100",
+                        cta: "Stay Protected",
+                        actionId: "newsletter"
+                    };
+                } else if (score <= 5) {
+                    return {
+                        title: "Vitals: Tachycardic",
+                        icon: "alert-triangle",
+                        text: "You are teetering on the edge. The check engine light is on, and you are ignoring it. Make changes now before you hit the wall.",
+                        color: "text-orange-600",
+                        bgColor: "bg-orange-100",
+                        cta: "Get The Guide",
+                        link: "https://www.amazon.com/dp/B0F1L3KFLY"
+                    };
+                } else {
+                    return {
+                        title: "Code Blue: Burnout Detected",
+                        icon: "flame",
+                        text: "You are cooked. Stop, drop, and roll right out of that mindset. This isn't just a bad week; this is unsustainable.",
+                        color: "text-red-600",
+                        bgColor: "bg-red-100",
+                        cta: "Start Recovery Now",
+                        link: "https://www.amazon.com/dp/B0F1L3KFLY"
+                    };
+                }
+            }
+        };
+
+        const DEFAULT_ARTICLES = [
+            {
+                title: "Toxic Employees Are Contagious",
+                link: "https://medium.com/@msjag416/toxic-employees-are-contagious-how-one-person-can-wreck-a-whole-workplace-765430ce9376",
+                thumbnail: null,
+                description: "Discover how negativity spreads in healthcare environments and what leaders can do to stop the infection before it spreads..."
+            },
+            {
+                title: "Unmasking the Truth",
+                link: "https://medium.com/@msjag416/frontline-reflections-navigating-ppe-challenges-burnout-and-resilience-among-nurses-during-the-8347dabdc1a7",
+                thumbnail: null,
+                description: "Navigating PPE challenges, burnout, and resilience among nurses during the most challenging times..."
+            },
+            {
+                title: "Why Gen Z Nurses Push Back",
+                link: "https://medium.com/@msjag416/gen-z-nurses-and-workplace-criticism-are-they-pushing-back-or-just-pushing-for-respect-a786565027bb",
+                thumbnail: null,
+                description: "A new generation is changing the rules of nursing. Here is why their boundaries are exactly what the profession needs..."
+            }
+        ];
+
+        // --- COMPONENTS ---
 
         // Icon Wrapper to handle Lucide in browser
         const Icon = ({ name, size = 24, className }) => {
             useEffect(() => {
-                lucide.createIcons();
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
             }, [name]);
             return <i data-lucide={name} width={size} height={size} className={className}></i>;
         };
 
-        // Icon Components mapping
-        const BookOpen = (props) => <Icon name="book-open" {...props} />;
-        const Mic = (props) => <Icon name="mic" {...props} />;
-        const PenTool = (props) => <Icon name="pen-tool" {...props} />;
-        const Mail = (props) => <Icon name="mail" {...props} />;
-        const Heart = (props) => <Icon name="heart" {...props} />;
-        const ArrowRight = (props) => <Icon name="arrow-right" {...props} />;
-        const Menu = (props) => <Icon name="menu" {...props} />;
-        const X = (props) => <Icon name="x" {...props} />;
-        const Instagram = (props) => <Icon name="instagram" {...props} />;
-        const Linkedin = (props) => <Icon name="linkedin" {...props} />;
-        const ExternalLink = (props) => <Icon name="external-link" {...props} />;
-        const Play = (props) => <Icon name="play" {...props} />;
-        const Activity = (props) => <Icon name="activity" {...props} />;
-        const CheckCircle = (props) => <Icon name="check-circle" {...props} />;
-        const AlertTriangle = (props) => <Icon name="alert-triangle" {...props} />;
-        const Flame = (props) => <Icon name="flame" {...props} />;
+        const NavLink = ({ href, children, onClick, mobile }) => {
+            const handleClick = (e) => {
+                // If it's a smooth scroll link (starts with #)
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const element = document.querySelector(href);
+                    if (element) {
+                        const offset = 80; // Header height
+                        const bodyRect = document.body.getBoundingClientRect().top;
+                        const elementRect = element.getBoundingClientRect().top;
+                        const elementPosition = elementRect - bodyRect;
+                        const offsetPosition = elementPosition - offset;
 
-        // --- NEW QUIZ COMPONENT ---
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+
+                        // If mobile, wait a beat before closing so it doesn't jar the user
+                        if (mobile && onClick) {
+                            setTimeout(() => {
+                                onClick();
+                            }, 350);
+                        }
+                    }
+                } else {
+                    // Standard link behavior
+                     if (mobile && onClick) onClick();
+                }
+            };
+
+            return (
+                <a 
+                    href={href} 
+                    onClick={handleClick}
+                    className={`${mobile ? 'block py-4 text-2xl border-b border-stone-100' : 'text-sm uppercase tracking-wide'} font-bold text-stone-600 hover:text-orange-600 transition-colors cursor-pointer`}
+                >
+                    {children}
+                </a>
+            );
+        };
+
+        const ArticleSkeleton = () => (
+            <div className="bg-white rounded-2xl border border-stone-100 overflow-hidden h-full flex flex-col">
+                <div className="h-48 bg-stone-200 animate-pulse"></div>
+                <div className="p-8 flex-grow">
+                    <div className="h-3 bg-stone-200 w-24 rounded mb-4 animate-pulse"></div>
+                    <div className="h-6 bg-stone-200 w-full rounded mb-2 animate-pulse"></div>
+                    <div className="h-6 bg-stone-200 w-2/3 rounded mb-6 animate-pulse"></div>
+                    <div className="h-4 bg-stone-200 w-full rounded mb-2 animate-pulse"></div>
+                    <div className="h-4 bg-stone-200 w-full rounded mb-2 animate-pulse"></div>
+                    <div className="h-4 bg-stone-200 w-3/4 rounded animate-pulse"></div>
+                </div>
+            </div>
+        );
+
         const BurnoutQuiz = () => {
             const [status, setStatus] = useState('start'); // start, question, result
             const [currentQ, setCurrentQ] = useState(0);
             const [score, setScore] = useState(0);
 
-            const questions = [
-                "Do you wake up feeling tired even after a full night of sleep, or dread the start of your shift?",
-                "Have you become more critical, cynical, or detached from your colleagues and patients?",
-                "Is it taking you longer to finish charting or tasks you used to knock out quickly?",
-                "Are you experiencing unexplained headaches, stomach issues, or muscle tension?",
-                "Do you fantasize about quitting, moving to the woods, or getting a minor injury just to get a day off?",
-                "When you are at home, are you actually there mentally, or are you still obsessing over work?",
-                "Have you lost interest in hobbies that used to make you happy because you are too drained?"
-            ];
-
             const handleAnswer = (isYes) => {
                 if (isYes) setScore(prev => prev + 1);
                 
-                if (currentQ < questions.length - 1) {
+                if (currentQ < QUIZ_CONFIG.questions.length - 1) {
                     setCurrentQ(prev => prev + 1);
                 } else {
                     setStatus('result');
@@ -126,54 +242,36 @@
                 setScore(0);
             };
 
-            const renderResult = () => {
-                if (score <= 2) {
-                    return {
-                        title: "Vitals: Stable (For Now)",
-                        icon: <CheckCircle className="w-16 h-16 text-green-500 mb-4" />,
-                        text: "You are stressed, but you aren't broken yet. You still have a chance to fix the boundaries before the roof caves in.",
-                        color: "green",
-                        cta: "Stay Protected",
-                        action: () => document.getElementById('newsletter').scrollIntoView({ behavior: 'smooth' })
-                    };
-                } else if (score <= 5) {
-                    return {
-                        title: "Vitals: Tachycardic",
-                        icon: <AlertTriangle className="w-16 h-16 text-orange-500 mb-4" />,
-                        text: "You are teetering on the edge. The check engine light is on, and you are ignoring it. You need to make changes now before you hit the wall.",
-                        color: "orange",
-                        cta: "Get The Guide",
-                        action: () => window.open('https://www.amazon.com/dp/B0F1L3KFLY', '_blank')
-                    };
-                } else {
-                    return {
-                        title: "Code Blue: Burnout Detected",
-                        icon: <Flame className="w-16 h-16 text-red-600 mb-4" />,
-                        text: "You are cooked. You need to stop, drop, and roll right out of that mindset. This isn't just a bad week; this is unsustainable.",
-                        color: "red",
-                        cta: "Start Recovery Now",
-                        action: () => window.open('https://www.amazon.com/dp/B0F1L3KFLY', '_blank')
-                    };
+            const handleAction = (result) => {
+                if (result.actionId) {
+                    document.getElementById(result.actionId).scrollIntoView({ behavior: 'smooth' });
+                } else if (result.link) {
+                    window.open(result.link, '_blank');
                 }
             };
 
             return (
-                <section id="quiz" className="py-16 px-4 relative z-20 -mt-10">
-                    <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-stone-100">
-                        <div className="p-8 md:p-12">
-                            
+                <section id="quiz" className="py-16 px-4 relative z-20 -mt-20">
+                    <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-stone-200 md:min-h-[400px] flex flex-col relative">
+                        {/* Fake Medical Monitor Header */}
+                        <div className="bg-stone-900 px-6 py-3 flex justify-between items-center border-b border-stone-800">
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+                                <span className="text-xs font-mono text-green-400 uppercase tracking-widest">System Monitor // Vitals Check</span>
+                            </div>
+                            <div className="text-xs font-mono text-stone-500">ID: PT-001</div>
+                        </div>
+
+                        <div className="p-8 md:p-12 flex-grow flex flex-col justify-center">
                             {/* Start Screen */}
                             {status === 'start' && (
-                                <div className="text-center">
-                                    <div className="inline-block p-3 rounded-full bg-orange-100 mb-4">
-                                        <Activity className="w-8 h-8 text-orange-600" />
-                                    </div>
+                                <div className="text-center animate-fade-in-up">
                                     <h2 className="text-3xl font-serif font-bold text-stone-900 mb-4">Check Your Vitals</h2>
-                                    <p className="text-stone-600 mb-8 text-lg">
-                                        Most of us walk around thinking chest pain is a normal part of the Tuesday commute. 
+                                    <p className="text-stone-600 mb-8 text-lg leading-relaxed">
+                                        Most of us think chest pain is a normal part of the Tuesday commute. 
                                         Let's find out if you're just tired, or if you're burning out.
                                     </p>
-                                    <button onClick={() => setStatus('question')} className="bg-stone-900 text-white font-bold py-3 px-8 rounded-full hover:bg-orange-600 transition-colors shadow-lg transform hover:-translate-y-1">
+                                    <button onClick={() => setStatus('question')} className="bg-orange-600 text-white font-bold py-4 px-10 rounded-xl hover:bg-stone-900 transition-colors shadow-lg transform hover:-translate-y-1">
                                         Start Assessment
                                     </button>
                                 </div>
@@ -181,25 +279,26 @@
 
                             {/* Question Screen */}
                             {status === 'question' && (
-                                <div className="animate-fade-in-up">
-                                    <div className="flex justify-between items-center mb-6 text-xs font-bold tracking-widest text-stone-400 uppercase">
-                                        <span>Question {currentQ + 1} of {questions.length}</span>
-                                        <span>Status: Assessing</span>
+                                <div className="animate-fade-in-up w-full max-w-2xl mx-auto">
+                                    <div className="flex justify-between items-end mb-6">
+                                        <span className="text-xs font-bold tracking-widest text-orange-600 uppercase">Question {currentQ + 1} / {QUIZ_CONFIG.questions.length}</span>
+                                        <div className="h-1 w-24 bg-stone-100 rounded-full overflow-hidden">
+                                            <div 
+                                                className="h-full bg-orange-500 transition-all duration-500" 
+                                                style={{ width: `${((currentQ + 1) / QUIZ_CONFIG.questions.length) * 100}%` }}
+                                            ></div>
+                                        </div>
                                     </div>
-                                    <div className="w-full bg-stone-100 h-2 rounded-full mb-8">
-                                        <div 
-                                            className="bg-orange-500 h-2 rounded-full transition-all duration-500" 
-                                            style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}
-                                        ></div>
-                                    </div>
+                                    
                                     <h3 className="text-2xl md:text-3xl font-serif font-bold text-stone-900 mb-10 leading-snug">
-                                        {questions[currentQ]}
+                                        {QUIZ_CONFIG.questions[currentQ]}
                                     </h3>
-                                    <div className="flex gap-4 flex-col sm:flex-row">
-                                        <button onClick={() => handleAnswer(false)} className="flex-1 py-4 px-6 border-2 border-stone-200 rounded-xl font-bold text-stone-600 hover:border-stone-900 hover:text-stone-900 transition-all">
+                                    
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <button onClick={() => handleAnswer(false)} className="py-4 px-6 border-2 border-stone-200 rounded-xl font-bold text-stone-500 hover:border-stone-800 hover:text-stone-900 transition-all">
                                             No, rarely
                                         </button>
-                                        <button onClick={() => handleAnswer(true)} className="flex-1 py-4 px-6 bg-orange-600 border-2 border-orange-600 rounded-xl font-bold text-white hover:bg-orange-700 hover:border-orange-700 transition-all shadow-md">
+                                        <button onClick={() => handleAnswer(true)} className="py-4 px-6 bg-stone-900 border-2 border-stone-900 rounded-xl font-bold text-white hover:bg-orange-600 hover:border-orange-600 transition-all shadow-md">
                                             Yes, often
                                         </button>
                                     </div>
@@ -208,21 +307,23 @@
 
                             {/* Result Screen */}
                             {status === 'result' && (() => {
-                                const result = renderResult();
+                                const result = QUIZ_CONFIG.getResult(score);
                                 return (
                                     <div className="text-center animate-fade-in-up">
-                                        <div className="flex justify-center">{result.icon}</div>
-                                        <h3 className={`text-3xl font-serif font-bold mb-4 text-${result.color === 'red' ? 'red-600' : result.color === 'orange' ? 'orange-600' : 'stone-900'}`}>
+                                        <div className={`inline-block p-4 rounded-full ${result.bgColor} mb-6`}>
+                                            <Icon name={result.icon} className={`w-12 h-12 ${result.color}`} />
+                                        </div>
+                                        <h3 className={`text-3xl font-serif font-bold mb-4 text-stone-900`}>
                                             {result.title}
                                         </h3>
-                                        <p className="text-stone-600 text-lg mb-8 leading-relaxed">
+                                        <p className="text-stone-600 text-lg mb-8 leading-relaxed max-w-xl mx-auto">
                                             {result.text}
                                         </p>
                                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                            <button onClick={result.action} className="bg-stone-900 text-white font-bold py-3 px-8 rounded-full hover:bg-orange-600 transition-colors shadow-lg">
+                                            <button onClick={() => handleAction(result)} className="bg-stone-900 text-white font-bold py-3 px-8 rounded-full hover:bg-orange-600 transition-colors shadow-lg">
                                                 {result.cta}
                                             </button>
-                                            <button onClick={resetQuiz} className="text-stone-500 font-bold py-3 px-8 hover:text-stone-900 transition-colors">
+                                            <button onClick={resetQuiz} className="text-stone-400 font-bold py-3 px-8 hover:text-stone-900 transition-colors">
                                                 Retake Quiz
                                             </button>
                                         </div>
@@ -237,39 +338,16 @@
 
         const App = () => {
             const [scrolled, setScrolled] = useState(false);
-            
-            // Default fallback articles
-            const defaultArticles = [
-                {
-                title: "Toxic Employees Are Contagious",
-                link: "https://medium.com/@msjag416/toxic-employees-are-contagious-how-one-person-can-wreck-a-whole-workplace-765430ce9376",
-                thumbnail: null,
-                description: "Discover how negativity spreads in healthcare environments and what leaders can do to stop the infection before it spreads..."
-                },
-                {
-                title: "Unmasking the Truth",
-                link: "https://medium.com/@msjag416/frontline-reflections-navigating-ppe-challenges-burnout-and-resilience-among-nurses-during-the-8347dabdc1a7",
-                thumbnail: null,
-                description: "Navigating PPE challenges, burnout, and resilience among nurses during the most challenging times..."
-                },
-                {
-                title: "Why Gen Z Nurses Push Back",
-                link: "https://medium.com/@msjag416/gen-z-nurses-and-workplace-criticism-are-they-pushing-back-or-just-pushing-for-respect-a786565027bb",
-                thumbnail: null,
-                description: "A new generation is changing the rules of nursing. Here is why their boundaries are exactly what the profession needs..."
-                }
-            ];
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+            const [articles, setArticles] = useState(DEFAULT_ARTICLES);
+            const [loadingArticles, setLoadingArticles] = useState(true);
 
-            const [articles, setArticles] = useState(defaultArticles);
-
-            // Helper to strip HTML tags
             const stripHtml = (html) => {
                 let tmp = document.createElement("DIV");
                 tmp.innerHTML = html;
                 return tmp.textContent || tmp.innerText || "";
             };
 
-            // Helper to find image
             const findImageInContent = (content) => {
                 const div = document.createElement('div');
                 div.innerHTML = content;
@@ -277,337 +355,364 @@
                 return img ? img.src : null;
             };
 
-            // Fetch Medium Articles
             useEffect(() => {
-                fetch('https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@msjag416')
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.status === 'ok' && data.items.length > 0) {
-                    const formattedArticles = data.items.slice(0, 3).map(item => {
-                        let image = item.thumbnail;
-                        if (!image) {
-                            image = findImageInContent(item.description || item.content);
-                        }
+                // Keep loading state true initially to show skeletons
+                setLoadingArticles(true);
 
-                        return {
-                        title: item.title,
-                        link: item.link,
-                        thumbnail: image,
-                        description: stripHtml(item.description).substring(0, 120) + "..."
-                        };
-                    });
-                    setArticles(formattedArticles);
+                fetch('https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@msjag416')
+                .then((res) => {
+                    if (!res.ok) throw new Error('Network response was not ok');
+                    return res.json();
+                })
+                .then((data) => {
+                    if (data.status === 'ok' && data.items && data.items.length > 0) {
+                        const formattedArticles = data.items.slice(0, 3).map(item => {
+                            let image = item.thumbnail;
+                            if (!image) {
+                                image = findImageInContent(item.description || item.content);
+                            }
+                            return {
+                                title: item.title,
+                                link: item.link,
+                                thumbnail: image,
+                                description: stripHtml(item.description).substring(0, 120) + "..."
+                            };
+                        });
+                        setArticles(formattedArticles);
                     }
                 })
                 .catch((error) => {
-                    console.error("Error fetching Medium articles:", error);
+                    console.log("Using default articles due to fetch error:", error);
+                    // No action needed, defaults already set
+                })
+                .finally(() => {
+                     // Add a small artificial delay so the skeleton doesn't flash too fast if net is instant
+                    setTimeout(() => setLoadingArticles(false), 800);
                 });
             }, []);
 
-            // Navbar scroll effect
             useEffect(() => {
                 const handleScroll = () => {
-                setScrolled(window.scrollY > 20);
+                    setScrolled(window.scrollY > 20);
                 };
                 window.addEventListener('scroll', handleScroll);
                 return () => window.removeEventListener('scroll', handleScroll);
             }, []);
 
-            const scrollToSection = (e, id) => {
-                e.preventDefault();
-                const element = document.getElementById(id);
-                if (element) {
-                const headerOffset = 80;
-                const elementPosition = element.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: "smooth"
-                });
-                }
-            };
+            useEffect(() => {
+                const handleResize = () => {
+                    if (window.innerWidth >= 768) setMobileMenuOpen(false);
+                };
+                window.addEventListener('resize', handleResize);
+                return () => window.removeEventListener('resize', handleResize);
+            }, []);
 
             return (
-                <div className="min-h-screen bg-amber-50 font-sans text-stone-800 selection:bg-orange-200">
+                <div className="min-h-screen bg-amber-50 font-sans text-stone-800 selection:bg-orange-200 bg-grid-pattern">
                 
-                {/* Navigation - Simplified: No Hamburger, Just Links */}
-                <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${scrolled ? 'bg-amber-50/95 shadow-md backdrop-blur-md py-2' : 'bg-transparent py-4'}`}>
-                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col md:flex-row justify-between items-center h-auto md:h-16 gap-4 md:gap-0">
-                        
-                        {/* Logo Area */}
-                        <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-                        <Heart className="text-orange-600 fill-orange-600 w-6 h-6" />
-                        <span className="font-serif text-xl font-bold tracking-tight text-stone-900">
-                            Andrea Gomez
-                        </span>
-                        </div>
-                        
-                        {/* Always Visible Links (Desktop & Mobile) */}
-                        <div className="flex flex-wrap justify-center gap-4 md:gap-8 items-center relative z-[101]">
-                        <a href="#podcast" onClick={(e) => scrollToSection(e, 'podcast')} className="text-stone-600 hover:text-orange-600 transition-colors font-medium text-sm tracking-wide uppercase cursor-pointer">Podcast</a>
-                        <a href="#books" onClick={(e) => scrollToSection(e, 'books')} className="text-stone-600 hover:text-orange-600 transition-colors font-medium text-sm tracking-wide uppercase cursor-pointer">Books</a>
-                        <a href="#articles" onClick={(e) => scrollToSection(e, 'articles')} className="text-stone-600 hover:text-orange-600 transition-colors font-medium text-sm tracking-wide uppercase cursor-pointer">Articles</a>
-                        <a href="#newsletter" onClick={(e) => scrollToSection(e, 'newsletter')} className="px-4 py-2 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 transition-colors font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer text-xs md:text-sm">
-                            Subscribe
-                        </a>
-                        </div>
-
-                    </div>
-                    </div>
-                </nav>
-
-                {/* Hero Section */}
-                <header className="relative pt-40 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-                    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                    <div className="inline-block py-1.5 px-4 rounded-full bg-orange-100 text-orange-800 text-xs font-bold tracking-widest uppercase mb-6 animate-fade-in-up">
-                        ICU Nurse | Writer | Speaker
-                    </div>
-                    <h1 className="text-5xl md:text-7xl font-serif font-bold text-stone-900 mb-8 leading-[1.1] animate-fade-in-up delay-100">
-                        From Burnout to <span className="text-orange-600 relative inline-block whitespace-nowrap">
-                        Balance
-                        <svg className="absolute w-full h-3 -bottom-1 left-0 text-orange-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
-                            <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
-                        </svg>
-                        </span>
-                    </h1>
-                    <p className="mt-4 max-w-2xl mx-auto text-xl text-stone-600 leading-relaxed animate-fade-in-up delay-200">
-                        Heal from burnout, navigate toxic workplaces, and reclaim your mental health.
-                    </p>
-                    <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
-                        <button onClick={(e) => scrollToSection(e, 'books')} className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-bold rounded-full text-white bg-orange-600 hover:bg-orange-700 md:text-lg shadow-lg shadow-orange-600/20 transition-all hover:-translate-y-1 hover:shadow-xl cursor-pointer">
-                        Explore My Books
-                        </button>
-                        <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-8 py-3.5 border border-stone-200 text-base font-bold rounded-full text-stone-700 bg-white hover:bg-stone-50 md:text-lg shadow-sm transition-all hover:-translate-y-1 hover:border-orange-200 cursor-pointer">
-                        <Play className="w-4 h-4 mr-2 fill-current" /> Listen to Podcast
-                        </a>
-                    </div>
-                    </div>
-                    
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-0 pointer-events-none opacity-40">
-                    <div className="absolute top-20 left-10 w-96 h-96 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-                    <div className="absolute top-20 right-10 w-96 h-96 bg-amber-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-                    <div className="absolute -bottom-8 left-1/3 w-96 h-96 bg-stone-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
-                    </div>
-                </header>
-
-                {/* --- QUIZ SECTION INJECTED HERE --- */}
-                <BurnoutQuiz />
-
-                {/* Podcast Section */}
-                <section id="podcast" className="py-24 bg-white relative z-10 border-y border-stone-100 scroll-mt-24">
-                    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">The Podcast</h2>
-                        <p className="text-lg text-stone-500">Real conversations about nursing, mental health, and survival.</p>
-                    </div>
-
-                    <div className="bg-stone-900 rounded-3xl p-6 md:p-10 shadow-2xl text-white transform transition-all hover:scale-[1.01] duration-300 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-orange-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                        
-                        <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
-                        <div className="w-40 h-40 md:w-48 md:h-48 bg-gradient-to-br from-orange-500 to-amber-700 rounded-xl shadow-lg flex-shrink-0 flex items-center justify-center text-5xl font-serif font-bold text-white/90 border-4 border-white/10">
-                            B2B
-                        </div>
-                        <div className="flex-1 text-center md:text-left">
-                            <div className="uppercase tracking-widest text-xs font-bold text-orange-400 mb-2">Listen Now</div>
-                            <h3 className="text-2xl md:text-3xl font-bold mb-2 leading-tight">Burnout to Balance</h3>
-                            <p className="text-stone-400 mb-6 text-lg">Andrea Gomez • Season 1</p>
-                            <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
-                            <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A" target="_blank" rel="noopener noreferrer" className="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full transition-colors flex items-center gap-2 transform hover:scale-105 cursor-pointer">
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                Play on Spotify
-                            </a>
-                            </div>
-                        </div>
-                        </div>
-                        
-                        <div className="mt-10 flex items-center gap-4 text-xs font-mono text-stone-500">
-                        <span>0:00</span>
-                        <div className="h-1.5 flex-1 bg-stone-800 rounded-full overflow-hidden">
-                            <div className="w-1/3 h-full bg-orange-500 rounded-full relative">
-                                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-md"></div>
-                            </div>
-                        </div>
-                        <span>Latest Episode</span>
-                        </div>
-                    </div>
-                    </div>
-                </section>
-
-                {/* Books Section */}
-                <section id="books" className="py-24 bg-amber-50 relative z-10 scroll-mt-24">
-                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">Essential Reading</h2>
-                        <p className="text-lg text-stone-600">Guides for thriving, not just surviving.</p>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
-                        
-                        {/* Book 1 */}
-                        <article className="group bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-stone-100">
-                        <div className="relative -mt-16 mb-8 mx-auto w-48 shadow-2xl rounded-lg transform group-hover:-translate-y-2 transition-transform duration-500">
-                            <img 
-                                src="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg" 
-                                alt="Burnout to Balance Book Cover" 
-                                className="w-full h-auto rounded-lg"
-                                onError={(e) => {
-                                    e.target.onerror = null; 
-                                    e.target.src='https://placehold.co/400x600/orange/white?text=Burnout+to+Balance'
-                                }}
-                            />
-                        </div>
-                        <h3 className="text-2xl font-bold text-stone-900 mb-2 font-serif text-center">Burnout to Balance</h3>
-                        <div className="w-12 h-1 bg-orange-500 mx-auto mb-4 rounded-full"></div>
-                        <p className="text-stone-500 mb-6 font-medium italic text-center">Your 8-Step Guide to Thriving in a Messy Workplace</p>
-                        <p className="text-stone-600 mb-8 flex-grow leading-relaxed text-center">
-                            A comprehensive roadmap for nurses and professionals seeking to reclaim their joy and career from the grip of burnout.
-                        </p>
-                        <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg cursor-pointer">
-                            Get it on Amazon <ExternalLink size={18} />
-                        </a>
-                        </article>
-
-                        {/* Book 2 */}
-                        <article className="group bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-stone-100">
-                        <div className="relative -mt-16 mb-8 mx-auto w-48 shadow-2xl rounded-lg transform group-hover:-translate-y-2 transition-transform duration-500">
-                            <img 
-                                src="https://images-na.ssl-images-amazon.com/images/P/B0DTFMFZTT.01._SCLZZZZZZZ_.jpg" 
-                                alt="Stronger Than You Think Book Cover" 
-                                className="w-full h-auto rounded-lg"
-                                onError={(e) => {
-                                    e.target.onerror = null; 
-                                    e.target.src='https://placehold.co/400x600/teal/white?text=Stronger+Than+You+Think'
-                                }}
-                            />
-                        </div>
-                        <h3 className="text-2xl font-bold text-stone-900 mb-2 font-serif text-center">Stronger Than You Think</h3>
-                        <div className="w-12 h-1 bg-teal-500 mx-auto mb-4 rounded-full"></div>
-                        <p className="text-teal-700 mb-6 font-medium italic text-center">A Guide for Teens Overcoming Anxiety</p>
-                        <p className="text-stone-600 mb-8 flex-grow leading-relaxed text-center">
-                            Empowering the next generation with tools to navigate childhood trauma, anxiety, and the pressures of modern life.
-                        </p>
-                        <a href="https://www.amazon.com/dp/B0DTFMFZTT" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-teal-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg cursor-pointer">
-                            Get it on Amazon <ExternalLink size={18} />
-                        </a>
-                        </article>
-
-                    </div>
-                    </div>
-                </section>
-
-                {/* Medium Articles Section */}
-                <section id="articles" className="py-24 bg-white relative z-10 scroll-mt-24">
-                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-stone-100 pb-6 relative z-20">
-                        <div>
-                        <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-2">Latest on Medium</h2>
-                        <p className="text-stone-500">Insights on nursing leadership and workplace culture.</p>
-                        </div>
-                        
-                        <a href="https://medium.com/@msjag416" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center gap-2 text-orange-600 font-bold hover:text-orange-700 transition-colors group cursor-pointer relative z-20">
-                        See profile <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform"/>
-                        </a>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-8 relative z-10">
-                        {articles.map((article, index) => (
-                        <div key={index} className="bg-amber-50 rounded-2xl border border-transparent hover:border-orange-200 transition-all hover:shadow-xl hover:-translate-y-1 relative overflow-hidden flex flex-col h-full group">
-                            
-                            <a href={article.link} target="_blank" rel="noopener noreferrer" className="flex flex-col h-full w-full cursor-pointer absolute inset-0 z-10">
-                                <span className="sr-only">Read {article.title}</span>
-                            </a>
-
-                            <div className="h-48 w-full overflow-hidden bg-orange-100/50 flex items-center justify-center pointer-events-none">
-                            {article.thumbnail ? (
-                                <img src={article.thumbnail} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                            ) : (
-                                <div className="text-orange-300">
-                                    <PenTool size={48} className="opacity-50" />
-                                </div>
-                            )}
-                            </div>
-                            
-                            <div className="p-8 flex flex-col flex-grow pointer-events-none">
-                            <span className="text-xs font-bold tracking-wider uppercase text-orange-600 mb-3 block">Latest Post</span>
-                            <h3 className="text-xl font-bold text-stone-900 mb-3 group-hover:text-orange-600 transition-colors leading-tight line-clamp-2">
-                                {article.title}
-                            </h3>
-                            <p className="text-stone-600 text-sm line-clamp-3 leading-relaxed mb-6">
-                                {article.description}
-                            </p>
-                            </div>
-
-                            <div className="px-8 pb-8 mt-auto pointer-events-none">
-                                <span className="inline-flex items-center text-sm font-bold text-stone-900 border-b-2 border-orange-300 pb-0.5 group-hover:border-orange-600 transition-colors">
-                                    Read Full Article
+                    {/* Navigation */}
+                    <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${scrolled || mobileMenuOpen ? 'bg-amber-50/95 shadow-sm backdrop-blur-md py-3' : 'bg-transparent py-5'}`}>
+                        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex justify-between items-center">
                                 
-                                </span>
+                                {/* Logo */}
+                                <div className="flex items-center gap-2 cursor-pointer z-[102]" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+                                    <Icon name="heart" className="text-orange-600 fill-orange-600 w-6 h-6" />
+                                    <span className="font-serif text-xl font-bold tracking-tight text-stone-900">
+                                        Andrea Gomez
+                                    </span>
+                                </div>
+                                
+                                {/* Desktop Links */}
+                                <div className="hidden md:flex items-center gap-8">
+                                    <NavLink href="#podcast">Podcast</NavLink>
+                                    <NavLink href="#books">Books</NavLink>
+                                    <NavLink href="#articles">Articles</NavLink>
+                                    <a href="#newsletter" className="px-5 py-2.5 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 transition-colors font-bold text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer">
+                                        Subscribe
+                                    </a>
+                                </div>
+
+                                {/* Mobile Menu Button */}
+                                <div className="md:hidden z-[102]">
+                                    <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-stone-900 focus:outline-none">
+                                        <Icon name={mobileMenuOpen ? "x" : "menu"} className="w-6 h-6" />
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        ))}
-                    </div>
-                    
-                    <div className="mt-10 text-center md:hidden relative z-20">
-                        <a href="https://medium.com/@msjag416" className="inline-flex items-center gap-2 text-orange-600 font-bold hover:text-orange-700 transition-colors cursor-pointer">
-                        See profile <ArrowRight size={20} />
-                        </a>
-                    </div>
-                    </div>
-                </section>
 
-                {/* Newsletter Section */}
-                <section id="newsletter" className="py-24 bg-stone-900 text-center px-4 scroll-mt-24 relative z-10">
-                    <div className="max-w-2xl mx-auto">
-                    <div className="inline-block p-4 rounded-full bg-stone-800 mb-6">
-                        <Mail className="w-8 h-8 text-orange-500" />
-                    </div>
-                    <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">Join the Community</h2>
-                    <p className="text-stone-400 mb-8 text-lg">
-                        Get weekly insights on burnout recovery, mental health tools, and updates on my latest writing.
-                    </p>
-                    
-                    <form action="https://formsubmit.co/proRNinc@gmail.com" method="POST" className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto relative">
-                        <input type="hidden" name="_subject" value="New Website Subscriber!" />
-                        <input type="hidden" name="_captcha" value="false" />
-                        <input type="hidden" name="_autoresponse" value="Thanks for subscribing to Andrea Gomez's newsletter! We'll keep you posted." />
+                        {/* Mobile Menu Overlay */}
+                        <div className={`fixed inset-0 bg-amber-50 z-[100] transition-transform duration-300 ease-in-out transform ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden flex flex-col justify-center items-center`}>
+                            <div className="flex flex-col gap-6 text-center">
+                                <NavLink mobile href="#podcast" onClick={() => setMobileMenuOpen(false)}>Podcast</NavLink>
+                                <NavLink mobile href="#books" onClick={() => setMobileMenuOpen(false)}>Books</NavLink>
+                                <NavLink mobile href="#articles" onClick={() => setMobileMenuOpen(false)}>Articles</NavLink>
+                                <NavLink mobile href="#newsletter" onClick={() => setMobileMenuOpen(false)}>Newsletter</NavLink>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* Hero Section */}
+                    <header className="relative pt-40 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+                        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                            <div className="inline-block py-1.5 px-4 rounded-full bg-orange-100 text-orange-800 text-xs font-bold tracking-widest uppercase mb-6 animate-fade-in-up border border-orange-200">
+                                ICU Nurse | Writer | Speaker
+                            </div>
+                            <h1 className="text-5xl md:text-7xl font-serif font-black text-stone-900 mb-8 leading-[1.1] animate-fade-in-up [animation-delay:100ms]">
+                                From Burnout to <span className="text-orange-600 relative inline-block whitespace-nowrap">
+                                    Balance
+                                    <svg className="absolute w-full h-3 -bottom-1 left-0 text-orange-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
+                                        <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
+                                    </svg>
+                                </span>
+                            </h1>
+                            <p className="mt-4 max-w-2xl mx-auto text-xl text-stone-600 leading-relaxed animate-fade-in-up [animation-delay:200ms] font-medium">
+                                Heal from burnout. Navigate toxic workplaces. Take back your mental health.
+                            </p>
+                            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up [animation-delay:300ms]">
+                                <a href="#books" className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-orange-600 hover:bg-orange-700 md:text-lg shadow-lg shadow-orange-600/20 transition-all hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+                                    Explore My Books
+                                </a>
+                                <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-8 py-4 border-2 border-stone-200 text-base font-bold rounded-full text-stone-700 bg-white hover:bg-stone-50 md:text-lg shadow-sm transition-all hover:-translate-y-1 hover:border-orange-200 cursor-pointer">
+                                    <Icon name="play" className="w-4 h-4 mr-2 fill-current" /> Listen to Podcast
+                                </a>
+                            </div>
+                        </div>
                         
-                        <input type="email" name="email" placeholder="Enter your email address" required className="flex-1 px-6 py-4 rounded-xl text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 border-none shadow-lg placeholder:text-stone-400" />
-                        <button type="submit" className="px-8 py-4 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-stone-900 focus:ring-orange-500 shadow-lg cursor-pointer">
-                        Subscribe
-                        </button>
-                    </form>
-                    <p className="text-stone-600 text-sm mt-6">
-                        Join 2,000+ others. Unsubscribe at any time.
-                    </p>
-                    </div>
-                </section>
+                        {/* Abstract Shapes */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-0 pointer-events-none opacity-40">
+                            <div className="absolute top-20 left-0 lg:left-20 w-72 h-72 md:w-96 md:h-96 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+                            <div className="absolute top-20 right-0 lg:right-20 w-72 h-72 md:w-96 md:h-96 bg-amber-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+                            <div className="absolute -bottom-8 left-1/3 w-96 h-96 bg-stone-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+                        </div>
+                    </header>
 
-                {/* Footer */}
-                <footer className="bg-stone-950 text-stone-400 py-12 border-t border-stone-900 relative z-10">
-                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="text-sm text-center md:text-left">
-                        <div className="font-serif text-lg text-stone-200 mb-1">Andrea Gomez</div>
-                        <span className="text-stone-600">Site built with love, clarity, and a little caffeine.</span> <br/>
-                        <span className="text-stone-700 text-xs">© 2026 All rights reserved.</span>
-                    </div>
-                    
-                    <div className="flex gap-8">
-                        <a href="https://medium.com/@msjag416" aria-label="Medium" className="text-stone-500 hover:text-white transition-colors transform hover:scale-110 cursor-pointer">
-                        <span className="sr-only">Medium</span>
-                        <PenTool size={24} />
-                        </a>
-                        <a href="https://www.instagram.com/msjag_writer/" aria-label="Instagram" className="text-stone-500 hover:text-white transition-colors transform hover:scale-110 cursor-pointer">
-                        <Instagram size={24} />
-                        </a>
-                        <a href="https://www.linkedin.com/in/jag416/" aria-label="LinkedIn" className="text-stone-500 hover:text-white transition-colors transform hover:scale-110 cursor-pointer">
-                        <Linkedin size={24} />
-                        </a>
-                    </div>
-                    </div>
-                </footer>
+                    {/* Quiz Component */}
+                    <BurnoutQuiz />
+
+                    {/* Podcast Section */}
+                    <section id="podcast" className="py-24 bg-white relative z-10 border-y border-stone-100">
+                        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="text-center mb-12">
+                                <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">The Podcast</h2>
+                                <p className="text-lg text-stone-500 font-medium">Real conversations about nursing, mental health, and survival.</p>
+                            </div>
+
+                            <div className="bg-stone-900 rounded-3xl p-6 md:p-10 shadow-2xl text-white transform transition-all duration-500 hover:shadow-orange-900/20 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-80 h-80 bg-orange-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-orange-600/30 transition-all duration-500"></div>
+                                
+                                <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                                    <div className="w-40 h-40 md:w-48 md:h-48 bg-gradient-to-br from-orange-500 to-amber-700 rounded-2xl shadow-lg flex-shrink-0 flex items-center justify-center text-5xl font-serif font-bold text-white/90 border-4 border-white/10 rotate-3 group-hover:rotate-0 transition-transform duration-500">
+                                        B2B
+                                    </div>
+                                    <div className="flex-1 text-center md:text-left">
+                                        <div className="uppercase tracking-widest text-xs font-bold text-orange-400 mb-2">Listen Now</div>
+                                        <h3 className="text-3xl md:text-4xl font-bold mb-3 leading-tight">Burnout to Balance</h3>
+                                        <p className="text-stone-400 mb-8 text-lg">Andrea Gomez • Season 1</p>
+                                        <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
+                                            <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A" target="_blank" rel="noopener noreferrer" className="bg-green-500 hover:bg-green-400 text-stone-900 font-bold py-3 px-8 rounded-full transition-colors flex items-center gap-2 transform hover:scale-105 cursor-pointer">
+                                                <Icon name="play" className="w-5 h-5 fill-current" /> Play on Spotify
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Audio Player Visual */}
+                                <div className="mt-12 flex items-center gap-4 text-xs font-mono text-stone-500">
+                                    <span>0:00</span>
+                                    <div className="h-1 flex-1 bg-stone-800 rounded-full overflow-hidden">
+                                        <div className="w-1/3 h-full bg-orange-500 rounded-full relative animate-pulse"></div>
+                                    </div>
+                                    <span>Latest Episode</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Books Section */}
+                    <section id="books" className="py-24 bg-amber-50 relative z-10">
+                        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="text-center mb-16">
+                                <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">Essential Reading</h2>
+                                <p className="text-lg text-stone-600 font-medium">Guides for thriving, not just surviving.</p>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
+                                
+                                {/* Book 1 */}
+                                <article className="group bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-stone-100">
+                                    <div className="relative -mt-16 mb-8 mx-auto w-48 shadow-2xl rounded-lg transform group-hover:-translate-y-2 transition-transform duration-500">
+                                        <img 
+                                            src="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg" 
+                                            alt="Burnout to Balance Book Cover" 
+                                            className="w-full h-auto rounded-lg"
+                                            loading="lazy"
+                                            onError={(e) => {
+                                                e.target.onerror = null; 
+                                                e.target.src='https://placehold.co/400x600/orange/white?text=Burnout+to+Balance'
+                                            }}
+                                        />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-stone-900 mb-2 font-serif text-center">Burnout to Balance</h3>
+                                    <div className="w-12 h-1 bg-orange-500 mx-auto mb-4 rounded-full"></div>
+                                    <p className="text-stone-500 mb-6 font-medium italic text-center">Your 8-Step Guide to Thriving in a Messy Workplace</p>
+                                    <p className="text-stone-600 mb-8 flex-grow leading-relaxed text-center">
+                                        A comprehensive roadmap for nurses and professionals seeking to take back their joy and career from the grip of burnout.
+                                    </p>
+                                    <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg cursor-pointer">
+                                        Get it on Amazon <Icon name="external-link" size={18} />
+                                    </a>
+                                </article>
+
+                                {/* Book 2 */}
+                                <article className="group bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-stone-100">
+                                    <div className="relative -mt-16 mb-8 mx-auto w-48 shadow-2xl rounded-lg transform group-hover:-translate-y-2 transition-transform duration-500">
+                                        <img 
+                                            src="https://images-na.ssl-images-amazon.com/images/P/B0DTFMFZTT.01._SCLZZZZZZZ_.jpg" 
+                                            alt="Stronger Than You Think Book Cover" 
+                                            className="w-full h-auto rounded-lg"
+                                            loading="lazy"
+                                            onError={(e) => {
+                                                e.target.onerror = null; 
+                                                e.target.src='https://placehold.co/400x600/teal/white?text=Stronger+Than+You+Think'
+                                            }}
+                                        />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-stone-900 mb-2 font-serif text-center">Stronger Than You Think</h3>
+                                    <div className="w-12 h-1 bg-teal-500 mx-auto mb-4 rounded-full"></div>
+                                    <p className="text-teal-700 mb-6 font-medium italic text-center">A Guide for Teens Overcoming Anxiety</p>
+                                    <p className="text-stone-600 mb-8 flex-grow leading-relaxed text-center">
+                                        Teaching the next generation tools to navigate childhood trauma, anxiety, and the pressures of modern life.
+                                    </p>
+                                    <a href="https://www.amazon.com/dp/B0DTFMFZTT" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-teal-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg cursor-pointer">
+                                        Get it on Amazon <Icon name="external-link" size={18} />
+                                    </a>
+                                </article>
+
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Medium Articles Section */}
+                    <section id="articles" className="py-24 bg-white relative z-10">
+                        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-stone-100 pb-6 relative z-20">
+                                <div>
+                                    <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-2">Latest Writing</h2>
+                                    <p className="text-stone-500 font-medium">Notes on nursing leadership and workplace culture.</p>
+                                </div>
+                                
+                                <a href="https://medium.com/@msjag416" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center gap-2 text-orange-600 font-bold hover:text-orange-700 transition-colors group cursor-pointer relative z-20">
+                                    See profile <Icon name="arrow-right" size={20} className="group-hover:translate-x-1 transition-transform"/>
+                                </a>
+                            </div>
+
+                            <div className="grid md:grid-cols-3 gap-8 relative z-10">
+                                {loadingArticles ? (
+                                    /* Loading Skeletons */
+                                    <>
+                                        <ArticleSkeleton />
+                                        <ArticleSkeleton />
+                                        <ArticleSkeleton />
+                                    </>
+                                ) : (
+                                    /* Actual Articles */
+                                    articles.map((article, index) => (
+                                        <div key={index} className="bg-amber-50 rounded-2xl border border-transparent hover:border-orange-200 transition-all hover:shadow-xl hover:-translate-y-1 relative overflow-hidden flex flex-col h-full group">
+                                            
+                                            <a href={article.link} target="_blank" rel="noopener noreferrer" className="flex flex-col h-full w-full cursor-pointer absolute inset-0 z-10">
+                                                <span className="sr-only">Read {article.title}</span>
+                                            </a>
+
+                                            <div className="h-48 w-full overflow-hidden bg-orange-100/50 flex items-center justify-center pointer-events-none">
+                                                {article.thumbnail ? (
+                                                    <img src={article.thumbnail} alt="" loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                                                ) : (
+                                                    <div className="text-orange-300">
+                                                        <Icon name="pen-tool" size={48} className="opacity-50" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            
+                                            <div className="p-8 flex flex-col flex-grow pointer-events-none">
+                                                <span className="text-xs font-bold tracking-wider uppercase text-orange-600 mb-3 block">Medium</span>
+                                                <h3 className="text-xl font-bold text-stone-900 mb-3 group-hover:text-orange-600 transition-colors leading-tight line-clamp-2">
+                                                    {article.title}
+                                                </h3>
+                                                <p className="text-stone-600 text-sm line-clamp-3 leading-relaxed mb-6">
+                                                    {article.description}
+                                                </p>
+                                            </div>
+
+                                            <div className="px-8 pb-8 mt-auto pointer-events-none">
+                                                <span className="inline-flex items-center text-sm font-bold text-stone-900 border-b-2 border-orange-300 pb-0.5 group-hover:border-orange-600 transition-colors">
+                                                    Read Full Article
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                            
+                            <div className="mt-10 text-center md:hidden relative z-20">
+                                <a href="https://medium.com/@msjag416" className="inline-flex items-center gap-2 text-orange-600 font-bold hover:text-orange-700 transition-colors cursor-pointer">
+                                    See profile <Icon name="arrow-right" size={20} />
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Newsletter Section */}
+                    <section id="newsletter" className="py-24 bg-stone-900 text-center px-4 relative z-10">
+                        <div className="max-w-2xl mx-auto glass-panel rounded-3xl p-8 md:p-12">
+                            <div className="inline-block p-4 rounded-full bg-stone-800 mb-6">
+                                <Icon name="mail" className="w-8 h-8 text-orange-500" />
+                            </div>
+                            <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">Join the Community</h2>
+                            <p className="text-stone-400 mb-8 text-lg">
+                                Get weekly updates on burnout recovery and mental health tools.
+                            </p>
+                            
+                            <form action="https://formsubmit.co/proRNinc@gmail.com" method="POST" className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto relative">
+                                <input type="hidden" name="_subject" value="New Website Subscriber!" />
+                                <input type="hidden" name="_captcha" value="false" />
+                                <input type="hidden" name="_autoresponse" value="Thanks for subscribing to Andrea Gomez's newsletter! We'll keep you posted." />
+                                
+                                <input type="email" name="email" placeholder="Enter your email address" required className="flex-1 px-6 py-4 rounded-xl text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 border-none shadow-lg placeholder:text-stone-400" />
+                                <button type="submit" className="px-8 py-4 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-stone-900 focus:ring-orange-500 shadow-lg cursor-pointer">
+                                    Subscribe
+                                </button>
+                            </form>
+                            <p className="text-stone-600 text-sm mt-6">
+                                Join 2,000+ others. Unsubscribe at any time.
+                            </p>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="bg-stone-950 text-stone-400 py-12 border-t border-stone-900 relative z-10">
+                        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+                            <div className="text-sm text-center md:text-left">
+                                <div className="font-serif text-lg text-stone-200 mb-1">Andrea Gomez</div>
+                                <span className="text-stone-600">Site built with love, clarity, and a little caffeine.</span> <br/>
+                                <span className="text-stone-700 text-xs">© {new Date().getFullYear()} All rights reserved.</span>
+                            </div>
+                            
+                            <div className="flex gap-8">
+                                <a href="https://medium.com/@msjag416" aria-label="Medium" className="text-stone-500 hover:text-white transition-colors transform hover:scale-110 cursor-pointer">
+                                    <span className="sr-only">Medium</span>
+                                    <Icon name="pen-tool" size={24} />
+                                </a>
+                                <a href="https://www.instagram.com/msjag_writer/" aria-label="Instagram" className="text-stone-500 hover:text-white transition-colors transform hover:scale-110 cursor-pointer">
+                                    <Icon name="instagram" size={24} />
+                                </a>
+                                <a href="https://www.linkedin.com/in/jag416/" aria-label="LinkedIn" className="text-stone-500 hover:text-white transition-colors transform hover:scale-110 cursor-pointer">
+                                    <Icon name="linkedin" size={24} />
+                                </a>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
             );
         };
