@@ -567,7 +567,7 @@
                         </div>
 
                         {/* Mobile Menu Overlay */}
-                        <div className={`fixed inset-0 bg-amber-50 z-[100] transition-transform duration-300 ease-in-out transform ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden flex flex-col justify-center items-center`}>
+                        <div className={`fixed inset-0 bg-amber-50 z-[101] transition-transform duration-300 ease-in-out transform ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden flex flex-col justify-center items-center`}>
                             <div className="flex flex-col gap-6 text-center">
                                 <NavLink mobile href="#about" onClick={() => setMobileMenuOpen(false)}>About</NavLink>
                                 <NavLink mobile href="#podcast" onClick={() => setMobileMenuOpen(false)}>Podcast</NavLink>
