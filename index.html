@@ -165,11 +165,7 @@
         }
         /* Ensure semantic content is readable before hydration */
         .static-content {
-            padding: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
-            color: #1c1917;
-            font-family: serif;
+            display: none;
         }
     </style>
 </head>
@@ -539,7 +535,7 @@
                             <div className="flex justify-between items-center">
                                 
                                 {/* Logo */}
-                                <div className="flex items-center gap-2 cursor-pointer z-[102]" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+                                <div className="flex items-center gap-2 cursor-pointer z-[102] relative" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
                                     <Icon name="heart" className="text-orange-600 fill-orange-600 w-6 h-6" />
                                     <span className="font-serif text-xl font-bold tracking-tight text-stone-900">
                                         Andrea Gomez
