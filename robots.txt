@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://www.andreagomez.com/sitemap.xml
+Sitemap: https://burnouttobalanceguide.com/sitemap.xml
