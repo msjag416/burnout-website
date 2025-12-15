@@ -5,9 +5,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Andrea Gomez | ICU Nurse, Author & Burnout Recovery Expert</title>
-    <meta name="description" content="Read Andrea Gomez for burnout recovery tools and nursing leadership commentary. Listen to the podcast and find books on surviving toxic workplaces.">
+    <meta name="description" content="Read Andrea Gomez for burnout recovery tools and nursing leadership commentary. Listen to the podcast and find books on surviving messy workplaces.">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.andreagomez.com/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.andreagomez.com/">
+    <meta property="og:title" content="Andrea Gomez | ICU Nurse, Author & Burnout Recovery Expert">
+    <meta property="og:description" content="Read Andrea Gomez for burnout recovery tools and nursing leadership commentary. Listen to the podcast and find books on surviving messy workplaces.">
+    <meta property="og:image" content="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.andreagomez.com/">
+    <meta name="twitter:title" content="Andrea Gomez | ICU Nurse, Author & Burnout Recovery Expert">
+    <meta name="twitter:description" content="Read Andrea Gomez for burnout recovery tools and nursing leadership commentary. Listen to the podcast and find books on surviving messy workplaces.">
+    <meta name="twitter:image" content="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg">
+
+    <!-- Mobile App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#fffbf0">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://www.andreagomez.com/#person",
+          "name": "Andrea Gomez",
+          "jobTitle": "ICU Nurse and Author",
+          "url": "https://www.andreagomez.com/",
+          "sameAs": [
+            "https://medium.com/@msjag416",
+            "https://www.instagram.com/msjag_writer/",
+            "https://www.linkedin.com/in/jag416/"
+          ]
+        },
+        {
+          "@type": "Book",
+          "name": "Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace",
+          "author": { "@id": "https://www.andreagomez.com/#person" },
+          "url": "https://www.amazon.com/dp/B0F1L3KFLY",
+          "image": "https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg",
+          "inLanguage": "en",
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "price": "14.99",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@type": "Book",
+          "name": "Stronger Than You Think: A Guide for Teens Overcoming Anxiety and Childhood Trauma",
+          "author": { "@id": "https://www.andreagomez.com/#person" },
+          "url": "https://www.amazon.com/dp/B0DTFMFZTT",
+          "image": "https://images-na.ssl-images-amazon.com/images/P/B0DTFMFZTT.01._SCLZZZZZZZ_.jpg",
+          "inLanguage": "en",
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "price": "12.99",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@type": "PodcastSeries",
+          "name": "Burnout to Balance",
+          "author": { "@id": "https://www.andreagomez.com/#person" },
+          "url": "https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A",
+          "description": "Real conversations about nursing, mental health, and survival."
+        },
+        {
+          "@type": "BlogPosting",
+          "headline": "Toxic Employees Are Contagious",
+          "author": { "@id": "https://www.andreagomez.com/#person" },
+          "url": "https://medium.com/@msjag416/toxic-employees-are-contagious-how-one-person-can-wreck-a-whole-workplace-765430ce9376",
+          "description": "Discover how negativity spreads in healthcare environments."
+        }
+      ]
+    }
+    </script>
     
-    <!-- Favicon (Heart Icon) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ea580c'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
     
     <!-- React and ReactDOM -->
@@ -64,7 +148,6 @@
     </script>
     <style>
         html { scroll-padding-top: 80px; }
-        /* Used for the Newsletter section */
         .glass-panel {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -76,10 +159,50 @@
                             linear-gradient(to bottom, #f5f5f4 1px, transparent 1px);
             background-size: 40px 40px;
         }
+        /* Fallback for when JS is disabled */
+        #root:empty {
+            display: none;
+        }
+        /* Ensure semantic content is readable before hydration */
+        .static-content {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #1c1917;
+            font-family: serif;
+        }
     </style>
 </head>
 <body class="bg-amber-50">
-    <div id="root"></div>
+    <!-- Static content for crawlers / No-JS -->
+    <div id="root">
+        <main class="static-content">
+            <header>
+                <h1>Andrea Gomez: ICU Nurse, Author, and Burnout Recovery Expert</h1>
+                <p>Helping nurses and professionals heal from burnout and navigate messy workplaces.</p>
+            </header>
+            
+            <article>
+                <h2>The Reality of Burnout in Nursing</h2>
+                <p>Burnout isn't just exhaustion. Exhaustion recovers with sleep. Burnout requires systemic change. I watched colleagues leave the profession. They left because they had no other choice. My work focuses on the specific mechanisms of this collapse. We must identify the poison before we can find the antidote.</p>
+                <p>The healthcare system demands more than a human can give. We accept this as normal. We shouldn't. My writing documents the gap between what hospitals promise and what they deliver. It validates the gaslighting nurses face daily.</p>
+            </article>
+
+            <article>
+                <h2>About Andrea Gomez</h2>
+                <p>I am an ICU nurse. I have seen the healthcare system at its best and its worst. I write to make sense of the messy environment. Based in Toronto, I work with nurses across Canada who are navigating these same broken systems. My books and articles serve as a survival guide for those still in the trenches.</p>
+            </article>
+
+            <section>
+                <h2>Books</h2>
+                <h3>Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace</h3>
+                <p>This book provides a map. It maps the territory of a messy workplace. You cannot navigate a minefield without knowing where the explosives lie. This guide identifies eight specific steps. These steps move a nurse from desperation to stability. It does not promise a perfect job. It promises a way to survive the one you have.</p>
+
+                <h3>Stronger Than You Think: A Guide for Teens Overcoming Anxiety</h3>
+                <p>Teens today face anxieties that previous generations did not. The digital age compresses trauma. It speeds up the cycle of comparison and despair. This book hands them tools. They can use these tools to dismantle their panic.</p>
+            </section>
+        </main>
+    </div>
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
@@ -425,6 +548,7 @@
                                 
                                 {/* Desktop Links */}
                                 <div className="hidden md:flex items-center gap-8">
+                                    <NavLink href="#about">About</NavLink>
                                     <NavLink href="#podcast">Podcast</NavLink>
                                     <NavLink href="#books">Books</NavLink>
                                     <NavLink href="#articles">Articles</NavLink>
@@ -445,6 +569,7 @@
                         {/* Mobile Menu Overlay */}
                         <div className={`fixed inset-0 bg-amber-50 z-[100] transition-transform duration-300 ease-in-out transform ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden flex flex-col justify-center items-center`}>
                             <div className="flex flex-col gap-6 text-center">
+                                <NavLink mobile href="#about" onClick={() => setMobileMenuOpen(false)}>About</NavLink>
                                 <NavLink mobile href="#podcast" onClick={() => setMobileMenuOpen(false)}>Podcast</NavLink>
                                 <NavLink mobile href="#books" onClick={() => setMobileMenuOpen(false)}>Books</NavLink>
                                 <NavLink mobile href="#articles" onClick={() => setMobileMenuOpen(false)}>Articles</NavLink>
@@ -468,7 +593,7 @@
                                 </span>
                             </h1>
                             <p className="mt-4 max-w-2xl mx-auto text-xl text-stone-600 leading-relaxed animate-fade-in-up [animation-delay:200ms] font-medium">
-                                Heal from burnout. Navigate toxic workplaces. Take back your mental health.
+                                Heal from burnout. Navigate messy workplaces. Take back your mental health.
                             </p>
                             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up [animation-delay:300ms]">
                                 <a href="#books" className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-orange-600 hover:bg-orange-700 md:text-lg shadow-lg shadow-orange-600/20 transition-all hover:-translate-y-1 hover:shadow-xl cursor-pointer">
@@ -491,12 +616,46 @@
                     {/* Quiz Component */}
                     <BurnoutQuiz />
 
+                    {/* About Section (Expanded for SEO) */}
+                    <section id="about" className="py-24 bg-white relative z-10 border-t border-stone-100">
+                        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="grid md:grid-cols-12 gap-12 items-start">
+                                <div className="md:col-span-5">
+                                    <div className="relative">
+                                        <div className="absolute -inset-4 bg-orange-100 rounded-2xl transform -rotate-2"></div>
+                                        <img 
+                                            src="burnout_to_balance_books.JPG" 
+                                            alt="Wall art in a coffee shop reading Happiness is a Cup of Coffee and a Good Book, with a display of Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace books by Andrea Gomez" 
+                                            className="relative rounded-xl shadow-lg w-full h-auto object-cover transition-all duration-500 hover:scale-[1.02]"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="md:col-span-7">
+                                    <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-6">The System is Broken, Not You</h2>
+                                    <div className="prose prose-stone prose-lg text-stone-600 leading-relaxed">
+                                        <p className="mb-4">
+                                            Working in the ICU breaks people. It breaks them because the system demands more than a human can give. I watched colleagues leave the profession. They left because they had no other choice. My work focuses on the specific mechanisms of this collapse. We must identify the poison before we can find the antidote.
+                                        </p>
+                                        <p className="mb-4">
+                                            The healthcare system relies on the assumption that nurses will always do more with less. We accept this as normal. We shouldn't. My writing documents the gap between what hospitals promise and what they deliver. It validates the gaslighting nurses face daily.
+                                        </p>
+                                        <p>
+                                            I am an ICU nurse. I have seen the healthcare system at its best and its worst. I write to make sense of the messy environment. Based in Toronto, I work with nurses across Canada who are navigating these same broken systems. My books and articles serve as a survival guide for those still in the trenches. You do not have to burn out to be a good nurse. You just need better tools.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
                     {/* Podcast Section */}
-                    <section id="podcast" className="py-24 bg-white relative z-10 border-y border-stone-100">
+                    <section id="podcast" className="py-24 bg-amber-50 relative z-10 border-y border-stone-100">
                         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="text-center mb-12">
                                 <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">The Podcast</h2>
-                                <p className="text-lg text-stone-500 font-medium">Real conversations about nursing, mental health, and survival.</p>
+                                <p className="text-lg text-stone-500 font-medium max-w-2xl mx-auto">
+                                    The podcast records the conversations we usually have in the breakroom. We speak plainly about the failures of leadership. We laugh at the absurdity of the job. It serves as a record of our reality.
+                                </p>
                             </div>
 
                             <div className="bg-stone-900 rounded-3xl p-6 md:p-10 shadow-2xl text-white transform transition-all duration-500 hover:shadow-orange-900/20 relative overflow-hidden group">
@@ -531,7 +690,7 @@
                     </section>
 
                     {/* Books Section */}
-                    <section id="books" className="py-24 bg-amber-50 relative z-10">
+                    <section id="books" className="py-24 bg-white relative z-10">
                         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="text-center mb-16">
                                 <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">Essential Reading</h2>
@@ -558,7 +717,7 @@
                                     <div className="w-12 h-1 bg-orange-500 mx-auto mb-4 rounded-full"></div>
                                     <p className="text-stone-500 mb-6 font-medium italic text-center">Your 8-Step Guide to Thriving in a Messy Workplace</p>
                                     <p className="text-stone-600 mb-8 flex-grow leading-relaxed text-center">
-                                        A comprehensive roadmap for nurses and professionals seeking to take back their joy and career from the grip of burnout.
+                                        This book provides a map. It maps the territory of a messy workplace. You cannot navigate a minefield without knowing where the explosives lie. This guide identifies eight specific steps. These steps move a nurse from desperation to stability. It does not promise a perfect job. It promises a way to survive the one you have.
                                     </p>
                                     <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg cursor-pointer">
                                         Get it on Amazon <Icon name="external-link" size={18} />
@@ -583,7 +742,7 @@
                                     <div className="w-12 h-1 bg-teal-500 mx-auto mb-4 rounded-full"></div>
                                     <p className="text-teal-700 mb-6 font-medium italic text-center">A Guide for Teens Overcoming Anxiety</p>
                                     <p className="text-stone-600 mb-8 flex-grow leading-relaxed text-center">
-                                        Teaching the next generation tools to navigate childhood trauma, anxiety, and the pressures of modern life.
+                                        Teens today face anxieties that previous generations did not. The digital age compresses trauma. It speeds up the cycle of comparison and despair. This book hands them tools. They can use these tools to dismantle their panic.
                                     </p>
                                     <a href="https://www.amazon.com/dp/B0DTFMFZTT" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-teal-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg cursor-pointer">
                                         Get it on Amazon <Icon name="external-link" size={18} />
@@ -595,7 +754,7 @@
                     </section>
 
                     {/* Medium Articles Section */}
-                    <section id="articles" className="py-24 bg-white relative z-10">
+                    <section id="articles" className="py-24 bg-amber-50 relative z-10">
                         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-stone-100 pb-6 relative z-20">
                                 <div>
@@ -619,7 +778,7 @@
                                 ) : (
                                     /* Actual Articles */
                                     articles.map((article, index) => (
-                                        <div key={index} className="bg-amber-50 rounded-2xl border border-transparent hover:border-orange-200 transition-all hover:shadow-xl hover:-translate-y-1 relative overflow-hidden flex flex-col h-full group">
+                                        <div key={index} className="bg-white rounded-2xl border border-transparent hover:border-orange-200 transition-all hover:shadow-xl hover:-translate-y-1 relative overflow-hidden flex flex-col h-full group">
                                             
                                             <a href={article.link} target="_blank" rel="noopener noreferrer" className="flex flex-col h-full w-full cursor-pointer absolute inset-0 z-10">
                                                 <span className="sr-only">Read {article.title}</span>
