@@ -465,110 +465,178 @@
             const [articles, setArticles] = useState(DEFAULT_ARTICLES);
             const [loadingArticles, setLoadingArticles] = useState(true);
 
-            // ... (helper functions remain same)
+            const stripHtml = (html) => {
+                let tmp = document.createElement("DIV");
+                tmp.innerHTML = html;
+                return tmp.textContent || tmp.innerText || "";
+            };
+
+            const findImageInContent = (content) => {
+                const div = document.createElement('div');
+                div.innerHTML = content;
+                const img = div.querySelector('img');
+                return img ? img.src : null;
+            };
 
             useEffect(() => {
-                // Toggle body scroll lock when menu opens/closes
-                if (mobileMenuOpen) {
-                    document.body.classList.add('menu-open');
-                } else {
-                    document.body.classList.remove('menu-open');
-                }
-            }, [mobileMenuOpen]);
+                // Keep loading state true initially to show skeletons
+                setLoadingArticles(true);
 
-            // ... (rest of useEffects remain same)
+                fetch('https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@msjag416')
+                .then((res) => {
+                    if (!res.ok) throw new Error('Network response was not ok');
+                    return res.json();
+                })
+                .then((data) => {
+                    if (data.status === 'ok' && data.items && data.items.length > 0) {
+                        const formattedArticles = data.items.slice(0, 3).map(item => {
+                            let image = item.thumbnail;
+                            if (!image) {
+                                image = findImageInContent(item.description || item.content);
+                            }
+                            return {
+                                title: item.title,
+                                link: item.link,
+                                thumbnail: image,
+                                description: stripHtml(item.description).substring(0, 120) + "..."
+                            };
+                        });
+                        setArticles(formattedArticles);
+                    }
+                })
+                .catch((error) => {
+                    console.log("Using default articles due to fetch error:", error);
+                    // No action needed, defaults already set
+                })
+                .finally(() => {
+                     // Add a small artificial delay so the skeleton doesn't flash too fast if net is instant
+                    setTimeout(() => setLoadingArticles(false), 800);
+                });
+            }, []);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setScrolled(window.scrollY > 20);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            useEffect(() => {
+                const handleResize = () => {
+                    if (window.innerWidth >= 768) setMobileMenuOpen(false);
+                };
+                window.addEventListener('resize', handleResize);
+                return () => window.removeEventListener('resize', handleResize);
+            }, []);
+
+            useEffect(() => {
+                // We will disable this scroll lock since the new menu uses fixed positioning
+                // if (mobileMenuOpen) {
+                //     document.body.classList.add('menu-open');
+                // } else {
+                //     document.body.classList.remove('menu-open');
+                // }
+            }, [mobileMenuOpen]);
 
             return (
                 <div className="min-h-screen bg-amber-50 font-sans text-stone-800 selection:bg-orange-200 bg-grid-pattern">
                 
                     {/* Navigation */}
-                    <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${scrolled ? 'bg-[#fffbf0]/95 shadow-sm backdrop-blur-md py-3' : 'bg-transparent py-5'}`}>
+                    <nav className="fixed top-0 left-0 right-0 z-50 bg-amber-50/95 backdrop-blur-md shadow-sm">
                         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center h-20">
                                 
                                 {/* Logo */}
-                                <div className="flex items-center gap-2 cursor-pointer z-[102] relative" onClick={() => {
-                                    setMobileMenuOpen(false);
-                                    window.scrollTo({top: 0, behavior: 'smooth'});
-                                }}>
+                                <div 
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => {
+                                        window.scrollTo({top: 0, behavior: 'smooth'});
+                                        setMobileMenuOpen(false);
+                                    }}
+                                >
                                     <Icon name="heart" className="text-orange-600 fill-orange-600 w-6 h-6" />
                                     <span className="font-serif text-xl font-bold tracking-tight text-stone-900">
                                         Andrea Gomez
                                     </span>
                                 </div>
                                 
-                                {/* Desktop Links */}
+                                {/* Desktop Navigation */}
                                 <div className="hidden md:flex items-center gap-8">
-                                    <NavLink href="#about">About</NavLink>
-                                    <NavLink href="#podcast">Podcast</NavLink>
-                                    <NavLink href="#books">Books</NavLink>
-                                    <NavLink href="#articles">Articles</NavLink>
-                                    <a href="#newsletter" className="px-5 py-2.5 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 transition-colors font-bold text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer">
+                                    <a href="#about" className="text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">About</a>
+                                    <a href="#podcast" className="text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">Podcast</a>
+                                    <a href="#books" className="text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">Books</a>
+                                    <a href="#articles" className="text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">Articles</a>
+                                    <a 
+                                        href="#newsletter" 
+                                        className="px-5 py-2.5 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 transition-colors font-bold text-sm shadow-md"
+                                    >
                                         Subscribe
                                     </a>
                                 </div>
 
-                                {/* Mobile Menu Trigger Button */}
-                                <div className="md:hidden z-[102]">
-                                    <button 
-                                        onClick={() => setMobileMenuOpen(true)} 
-                                        className="p-2 text-stone-900 focus:outline-none hover:bg-orange-100 rounded-full transition-colors"
-                                        aria-label="Open Menu"
-                                    >
-                                        <Icon name="menu" className="w-8 h-8" />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Full Screen Mobile Menu Overlay */}
-                        {/* We use a fixed div that sits on top of everything (z-[200]) */}
-                        <div className={`fixed inset-0 bg-[#fffbf0] z-[200] flex flex-col transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden`}>
-                            
-                            {/* Mobile Menu Header */}
-                            <div className="flex justify-between items-center p-6 border-b border-stone-200">
-                                <div className="flex items-center gap-2">
-                                    <Icon name="heart" className="text-orange-600 fill-orange-600 w-6 h-6" />
-                                    <span className="font-serif text-xl font-bold tracking-tight text-stone-900">
-                                        Menu
-                                    </span>
-                                </div>
-                                <button 
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="p-2 text-stone-900 hover:bg-red-100 hover:text-red-600 rounded-full transition-colors focus:outline-none"
-                                    aria-label="Close Menu"
+                                {/* Mobile Menu Button */}
+                                <button
+                                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                    className="md:hidden p-2 text-stone-900 focus:outline-none relative z-[60]"
+                                    aria-label="Toggle menu"
                                 >
-                                    <Icon name="x" className="w-8 h-8" />
+                                    <Icon name={mobileMenuOpen ? "x" : "menu"} className="w-7 h-7" />
                                 </button>
                             </div>
-
-                            {/* Mobile Menu Links */}
-                            <div className="flex-grow flex flex-col justify-center items-center gap-8 p-6 overflow-y-auto">
-                                <NavLink mobile href="#about" onClick={() => setMobileMenuOpen(false)}>About</NavLink>
-                                <NavLink mobile href="#podcast" onClick={() => setMobileMenuOpen(false)}>Podcast</NavLink>
-                                <NavLink mobile href="#books" onClick={() => setMobileMenuOpen(false)}>Books</NavLink>
-                                <NavLink mobile href="#articles" onClick={() => setMobileMenuOpen(false)}>Articles</NavLink>
-                                <a href="#newsletter" onClick={() => setMobileMenuOpen(false)} className="mt-4 px-8 py-4 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 transition-colors font-bold text-xl shadow-lg w-full max-w-xs text-center">
-                                    Subscribe
-                                </a>
-                            </div>
-
-                            {/* Mobile Menu Footer (Socials) */}
-                            <div className="p-8 border-t border-stone-200 bg-stone-50">
-                                <div className="flex justify-center gap-8">
-                                    <a href="https://medium.com/@msjag416" className="text-stone-400 hover:text-orange-600 transition-colors">
-                                        <Icon name="pen-tool" size={28} />
-                                    </a>
-                                    <a href="https://www.instagram.com/msjag_writer/" className="text-stone-400 hover:text-orange-600 transition-colors">
-                                        <Icon name="instagram" size={28} />
-                                    </a>
-                                    <a href="https://www.linkedin.com/in/jag416/" className="text-stone-400 hover:text-orange-600 transition-colors">
-                                        <Icon name="linkedin" size={28} />
-                                    </a>
-                                </div>
-                                <p className="text-center text-xs text-stone-400 mt-4">© {new Date().getFullYear()} Andrea Gomez</p>
-                            </div>
                         </div>
+
+                        {/* Mobile Menu Overlay */}
+                        {mobileMenuOpen && (
+                            <>
+                                {/* Backdrop */}
+                                <div 
+                                    className="fixed inset-0 bg-stone-900/20 backdrop-blur-sm z-40 md:hidden"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                ></div>
+                                
+                                {/* Menu Panel */}
+                                <div className="fixed top-20 right-0 w-full max-w-sm bg-amber-50 shadow-2xl z-50 md:hidden border-l border-stone-200">
+                                    <div className="flex flex-col p-8 space-y-6">
+                                        <a 
+                                            href="#about" 
+                                            onClick={() => setTimeout(() => setMobileMenuOpen(false), 100)}
+                                            className="text-xl font-bold text-stone-600 hover:text-orange-600 transition-colors uppercase tracking-wide"
+                                        >
+                                            About
+                                        </a>
+                                        <a 
+                                            href="#podcast" 
+                                            onClick={() => setTimeout(() => setMobileMenuOpen(false), 100)}
+                                            className="text-xl font-bold text-stone-600 hover:text-orange-600 transition-colors uppercase tracking-wide"
+                                        >
+                                            Podcast
+                                        </a>
+                                        <a 
+                                            href="#books" 
+                                            onClick={() => setTimeout(() => setMobileMenuOpen(false), 100)}
+                                            className="text-xl font-bold text-stone-600 hover:text-orange-600 transition-colors uppercase tracking-wide"
+                                        >
+                                            Books
+                                        </a>
+                                        <a 
+                                            href="#articles" 
+                                            onClick={() => setTimeout(() => setMobileMenuOpen(false), 100)}
+                                            className="text-xl font-bold text-stone-600 hover:text-orange-600 transition-colors uppercase tracking-wide"
+                                        >
+                                            Articles
+                                        </a>
+                                        <a 
+                                            href="#newsletter" 
+                                            onClick={() => setTimeout(() => setMobileMenuOpen(false), 100)}
+                                            className="inline-block text-center px-6 py-3 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 transition-colors font-bold text-sm shadow-md uppercase tracking-wide"
+                                        >
+                                            Subscribe
+                                        </a>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </nav>
 
                     {/* Hero Section */}
