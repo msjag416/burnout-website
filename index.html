@@ -554,8 +554,12 @@
                                 </div>
 
                                 {/* Mobile Menu Button */}
-                                <div className="md:hidden z-[102]">
-                                    <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-stone-900 focus:outline-none">
+                                <div className="md:hidden z-[201]">
+                                    <button 
+                                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+                                        className="p-2 text-stone-900 focus:outline-none"
+                                        key={mobileMenuOpen ? "open" : "closed"}
+                                    >
                                         <Icon name={mobileMenuOpen ? "x" : "menu"} className="w-6 h-6" />
                                     </button>
                                 </div>
@@ -563,7 +567,7 @@
                         </div>
 
                         {/* Mobile Menu Overlay */}
-                        <div className={`fixed inset-0 bg-amber-50 z-[101] transition-transform duration-300 ease-in-out transform ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden flex flex-col justify-center items-center`}>
+                        <div className={`fixed inset-0 bg-[#fffbf0] z-[200] transition-transform duration-300 ease-in-out transform ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden flex flex-col justify-center items-center`}>
                             <div className="flex flex-col gap-6 text-center">
                                 <NavLink mobile href="#about" onClick={() => setMobileMenuOpen(false)}>About</NavLink>
                                 <NavLink mobile href="#podcast" onClick={() => setMobileMenuOpen(false)}>Podcast</NavLink>
