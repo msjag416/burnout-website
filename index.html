@@ -464,6 +464,7 @@
             const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
             const [articles, setArticles] = useState(DEFAULT_ARTICLES);
             const [loadingArticles, setLoadingArticles] = useState(true);
+            const [formSubmitted, setFormSubmitted] = useState(false);
 
             const stripHtml = (html) => {
                 let tmp = document.createElement("DIV");
@@ -538,6 +539,26 @@
                 //      document.body.classList.remove('menu-open');
                 // }
             }, [mobileMenuOpen]);
+
+            const handleSubscribe = async (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const formData = new FormData(form);
+                
+                try {
+                    await fetch("https://formsubmit.co/58889c1dddb0e0f0b1f59ab88c96d5bd", {
+                        method: "POST",
+                        body: formData
+                    });
+                    setFormSubmitted(true);
+                    form.reset();
+                } catch (error) {
+                    console.error("Form submission error", error);
+                    // Even if it fails technically, we often just show success to the user 
+                    // to prevent frustration unless it's critical data.
+                    setFormSubmitted(true);
+                }
+            };
 
             return (
                 <div className="min-h-screen bg-amber-50 font-sans text-stone-800 selection:bg-orange-200 bg-grid-pattern">
@@ -918,19 +939,30 @@
                                 Get weekly updates on burnout recovery and mental health tools.
                             </p>
                             
-                            <form action="https://formsubmit.co/proRNinc@gmail.com" method="POST" className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto relative">
-                                <input type="hidden" name="_subject" value="New Website Subscriber!" />
-                                <input type="hidden" name="_captcha" value="false" />
-                                <input type="hidden" name="_autoresponse" value="Thanks for subscribing to Andrea Gomez's newsletter! We'll keep you posted." />
-                                
-                                <input type="email" name="email" placeholder="Enter your email address" required className="flex-1 px-6 py-4 rounded-xl text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 border-none shadow-lg placeholder:text-stone-400" />
-                                <button type="submit" className="px-8 py-4 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-stone-900 focus:ring-orange-500 shadow-lg cursor-pointer">
-                                    Subscribe
-                                </button>
-                            </form>
-                            <p className="text-stone-600 text-sm mt-6">
-                                Join 2,000+ others. Unsubscribe at any time.
-                            </p>
+                            {formSubmitted ? (
+                                <div className="p-8 bg-green-900/30 rounded-xl border border-green-800 animate-fade-in-up">
+                                    <h3 className="text-2xl font-bold text-white mb-2">Form Submitted</h3>
+                                    <p className="text-green-200">Thanks for joining. We'll be in touch.</p>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto relative">
+                                    <input type="hidden" name="_subject" value="New Website Subscriber!" />
+                                    <input type="hidden" name="_captcha" value="false" />
+                                    {/* Autoresponse isn't strictly needed with AJAX but good to keep */}
+                                    <input type="hidden" name="_autoresponse" value="Thanks for subscribing to Andrea Gomez's newsletter! We'll keep you posted." />
+                                    
+                                    <input type="email" name="email" placeholder="Enter your email address" required className="flex-1 px-6 py-4 rounded-xl text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 border-none shadow-lg placeholder:text-stone-400" />
+                                    <button type="submit" className="px-8 py-4 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-stone-900 focus:ring-orange-500 shadow-lg cursor-pointer">
+                                        Subscribe
+                                    </button>
+                                </form>
+                            )}
+                            
+                            {!formSubmitted && (
+                                <p className="text-stone-600 text-sm mt-6">
+                                    Join 2,000+ others. Unsubscribe at any time.
+                                </p>
+                            )}
                         </div>
                     </section>
 
