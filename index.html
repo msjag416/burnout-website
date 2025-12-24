@@ -159,6 +159,13 @@
                             linear-gradient(to bottom, #f5f5f4 1px, transparent 1px);
             background-size: 40px 40px;
         }
+        /* Custom Animation Delays */
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
         /* Lock body scroll when menu is open */
         body.menu-open {
             overflow: hidden;
@@ -286,48 +293,6 @@
                 }
             }, [name]);
             return <i data-lucide={name} width={size} height={size} className={className}></i>;
-        };
-
-        const NavLink = ({ href, children, onClick, mobile }) => {
-            const handleClick = (e) => {
-                // If it's a smooth scroll link (starts with #)
-                if (href.startsWith('#')) {
-                    e.preventDefault();
-                    const element = document.querySelector(href);
-                    if (element) {
-                        const offset = 80; // Header height
-                        const bodyRect = document.body.getBoundingClientRect().top;
-                        const elementRect = element.getBoundingClientRect().top;
-                        const elementPosition = elementRect - bodyRect;
-                        const offsetPosition = elementPosition - offset;
-
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                        });
-
-                        // If mobile, wait a beat before closing so it doesn't jar the user
-                        if (mobile && onClick) {
-                            setTimeout(() => {
-                                onClick();
-                            }, 350);
-                        }
-                    }
-                } else {
-                    // Standard link behavior
-                      if (mobile && onClick) onClick();
-                }
-            };
-
-            return (
-                <a 
-                    href={href} 
-                    onClick={handleClick}
-                    className={`${mobile ? 'block py-4 text-2xl border-b border-stone-100' : 'text-sm uppercase tracking-wide'} font-bold text-stone-600 hover:text-orange-600 transition-colors cursor-pointer`}
-                >
-                    {children}
-                </a>
-            );
         };
 
         const ArticleSkeleton = () => (
@@ -460,7 +425,7 @@
         };
 
         const App = () => {
-            const [scrolled, setScrolled] = useState(false);
+            // Removed unused 'scrolled' state and 'setScrolled'
             const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
             const [articles, setArticles] = useState(DEFAULT_ARTICLES);
             const [loadingArticles, setLoadingArticles] = useState(true);
@@ -515,13 +480,7 @@
                 });
             }, []);
 
-            useEffect(() => {
-                const handleScroll = () => {
-                    setScrolled(window.scrollY > 20);
-                };
-                window.addEventListener('scroll', handleScroll);
-                return () => window.removeEventListener('scroll', handleScroll);
-            }, []);
+            // Removed unused scroll event listener useEffect
 
             useEffect(() => {
                 const handleResize = () => {
@@ -531,14 +490,7 @@
                 return () => window.removeEventListener('resize', handleResize);
             }, []);
 
-            useEffect(() => {
-                // We will disable this scroll lock since the new menu uses fixed positioning
-                // if (mobileMenuOpen) {
-                //      document.body.classList.add('menu-open');
-                // } else {
-                //      document.body.classList.remove('menu-open');
-                // }
-            }, [mobileMenuOpen]);
+            // Removed empty useEffect for mobileMenuOpen
 
             const handleSubscribe = async (e) => {
                 e.preventDefault();
