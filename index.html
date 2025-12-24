@@ -678,15 +678,17 @@
                     <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 mb-8 relative z-20">
                         <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-stone-900 aspect-video group relative">
                             {/* INSTRUCTION: 
-                                Replace 'your-video-file.mp4' with the path to your actual MP4 file. 
-                                Ensure the file is in your public/assets folder or provide a full URL.
+                                1. Replace 'assets/video-thumbnail.jpg' with the actual path to your image file.
+                                2. Replace 'your-video-file.mp4' with your video file.
                             */}
                             <video 
                                 controls 
+                                preload="metadata"
                                 className="w-full h-full object-cover"
                                 poster="/api/placeholder/800/450" 
                             >
-                                <source src="your-video-file.mp4" type="video/mp4" />
+                                {/* Added #t=0.001 to force browser to look at frame 1 if poster fails */}
+                                <source src="your-video-file.mp4#t=0.001" type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
                         </div>
