@@ -708,6 +708,10 @@
                                             src="burnout_to_balance_books.JPG" 
                                             alt="Wall art in a coffee shop reading Happiness is a Cup of Coffee and a Good Book, with a display of Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace books by Andrea Gomez" 
                                             className="relative rounded-xl shadow-lg w-full h-auto object-cover transition-all duration-500 hover:scale-[1.02]"
+                                            onError={(e) => {
+                                                e.target.onerror = null; 
+                                                e.target.src='https://placehold.co/600x800/orange/white?text=Burnout+Books+Image';
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -798,7 +802,7 @@
                                     <div className="w-12 h-1 bg-orange-500 mx-auto mb-4 rounded-full"></div>
                                     <p className="text-stone-500 mb-6 font-medium italic text-center">Your 8-Step Guide to Thriving in a Messy Workplace</p>
                                     <p className="text-stone-600 mb-8 flex-grow leading-relaxed text-center">
-                                        This book provides a map. It maps the territory of a messy workplace. You cannot navigate a minefield without knowing where the explosives lie. This guide identifies eight specific steps. These steps move a nurse from desperation to stability. It does not promise a perfect job. It promises a way to survive the one you have.
+                                        This book maps the territory of a messy workplace. You can't navigate a minefield without knowing where the explosives lie. This book identifies eight specific steps. These steps move any employee from desperation to stability. It doesn't promise a perfect job. It promises a way to survive the one you have.
                                     </p>
                                     <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg cursor-pointer">
                                         Get it on Amazon <Icon name="external-link" size={18} />
