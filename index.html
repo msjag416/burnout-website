@@ -28,17 +28,86 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#fffbf0">
 
-    <!-- Structured Data (JSON-LD) -->
+   <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
         {
+          "@type": "WebSite",
+          "@id": "https://burnouttobalanceguide.com/#website",
+          "name": "Burnout to Balance Guide",
+          "url": "https://burnouttobalanceguide.com/",
+          "description": "Resources for nurses and professionals recovering from workplace burnout. Written by ICU Nurse Andrea Gomez with 27+ years of clinical experience.",
+          "publisher": { "@id": "https://www.andreagomez.com/#person" },
+          "inLanguage": "en-US"
+        },
+        {
           "@type": "Person",
           "@id": "https://www.andreagomez.com/#person",
           "name": "Andrea Gomez",
-          "jobTitle": "ICU Nurse and Author",
+          "jobTitle": "ICU Nurse, Author, and Burnout Recovery Expert",
+          "description": "Registered Nurse with 27+ years of clinical experience including 12+ years in Trauma-Neuro ICU at major Toronto hospitals. Author of books on workplace burnout and teen mental health.",
           "url": "https://www.andreagomez.com/",
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "University of Nebraska",
+            "sameAs": "https://www.unl.edu/"
+          },
+          "hasCredential": [
+            {
+              "@type": "EducationalOccupationalCredential",
+              "credentialCategory": "Professional License",
+              "name": "Registered Nurse (RN)",
+              "recognizedBy": {
+                "@type": "Organization",
+                "name": "College of Nurses of Ontario",
+                "url": "https://www.cno.org/"
+              }
+            },
+            {
+              "@type": "EducationalOccupationalCredential",
+              "credentialCategory": "degree",
+              "name": "Bachelor of Arts in Psychology",
+              "recognizedBy": {
+                "@type": "CollegeOrUniversity",
+                "name": "University of Nebraska"
+              }
+            },
+            {
+              "@type": "EducationalOccupationalCredential",
+              "credentialCategory": "degree",
+              "name": "Bachelor of Arts in English",
+              "recognizedBy": {
+                "@type": "CollegeOrUniversity",
+                "name": "University of Nebraska"
+              }
+            }
+          ],
+          "hasOccupation": [
+            {
+              "@type": "Occupation",
+              "name": "Trauma-Neuro ICU Nurse",
+              "skills": ["Critical Care Nursing", "Ventilator Management", "Trauma Care", "Neurological Assessment"]
+            },
+            {
+              "@type": "Occupation",
+              "name": "Healthcare Author",
+              "skills": ["Workplace Psychology", "Healthcare Writing", "Mental Health Education"]
+            }
+          ],
+          "knowsAbout": [
+            "Nursing Burnout",
+            "Job Burnout",
+            "Moral Injury in Healthcare",
+            "Workplace Psychology",
+            "ICU Nursing",
+            "Critical Care",
+            "Toxic Workplaces",
+            "Teen Anxiety",
+            "Childhood Trauma Recovery",
+            "Healthcare Worker Mental Health"
+          ],
           "sameAs": [
             "https://medium.com/@msjag416",
             "https://www.instagram.com/msjag_writer/",
@@ -49,9 +118,12 @@
           "@type": "Book",
           "name": "Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace",
           "author": { "@id": "https://www.andreagomez.com/#person" },
+          "description": "Eight specific steps that move any employee from desperation to stability in a messy workplace.",
           "url": "https://www.amazon.com/dp/B0F1L3KFLY",
           "image": "https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg",
           "inLanguage": "en",
+          "genre": ["Self-Help", "Workplace Psychology", "Mental Health"],
+          "about": ["Workplace Burnout", "Professional Boundaries", "Toxic Workplaces"],
           "offers": {
             "@type": "Offer",
             "availability": "https://schema.org/InStock",
@@ -63,9 +135,12 @@
           "@type": "Book",
           "name": "Stronger Than You Think: A Guide for Teens Overcoming Anxiety and Childhood Trauma",
           "author": { "@id": "https://www.andreagomez.com/#person" },
+          "description": "Tools for teenagers to dismantle panic and overcome anxiety in the digital age.",
           "url": "https://www.amazon.com/dp/B0DTFMFZTT",
           "image": "https://images-na.ssl-images-amazon.com/images/P/B0DTFMFZTT.01._SCLZZZZZZZ_.jpg",
           "inLanguage": "en",
+          "genre": ["Young Adult Nonfiction", "Mental Health", "Self-Help for Teens"],
+          "about": ["Teen Anxiety", "Childhood Trauma", "Adolescent Mental Health"],
           "offers": {
             "@type": "Offer",
             "availability": "https://schema.org/InStock",
@@ -78,7 +153,9 @@
           "name": "Burnout to Balance",
           "author": { "@id": "https://www.andreagomez.com/#person" },
           "url": "https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A",
-          "description": "Real conversations about nursing, mental health, and survival."
+          "description": "Real conversations about nursing, mental health, and survival.",
+          "inLanguage": "en",
+          "genre": ["Health & Wellness", "Mental Health", "Nursing"]
         },
         {
           "@type": "BlogPosting",
@@ -86,6 +163,43 @@
           "author": { "@id": "https://www.andreagomez.com/#person" },
           "url": "https://medium.com/@msjag416/toxic-employees-are-contagious-how-one-person-can-wreck-a-whole-workplace-765430ce9376",
           "description": "Discover how negativity spreads in healthcare environments."
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is the difference between burnout and exhaustion?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Exhaustion recovers with sleep. Burnout does not. Burnout is chronic workplace stress that has not been successfully managed. It involves emotional exhaustion, depersonalization toward patients or clients, and reduced personal accomplishment. Rest alone cannot fix burnout because the cause is systemic, not personal."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What causes nursing burnout?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Nursing burnout results from chronic exposure to unmanageable workloads, insufficient staffing, moral distress from being unable to provide adequate patient care, lack of autonomy in clinical decisions, and inadequate organizational support. The healthcare system demands more than a human can sustainably give."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is moral injury in healthcare?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Moral injury occurs when healthcare workers are forced to act against their professional ethics or witness care that violates their values. Unlike burnout, which responds to rest and boundary-setting, moral injury stems from systemic failures that force nurses to provide substandard care despite knowing better."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How long does it take to recover from burnout?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Burnout recovery typically takes months to years, not days or weeks. Research suggests full recovery from severe burnout can take one to three years when underlying work conditions change. If the work environment remains the same, recovery is unlikely regardless of personal interventions."
+              }
+            }
+          ]
         }
       ]
     }
