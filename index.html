@@ -846,6 +846,33 @@
                         </div>
                     </div>
 
+                    <!-- Email Capture Screen (gates the result) -->
+                    <div id="quiz-email-capture" class="hidden-quiz animate-fade-in-up w-full max-w-2xl mx-auto text-center">
+                        <div class="mb-8">
+                            <div class="inline-block p-4 rounded-full bg-orange-100 mb-4">
+                                <i data-lucide="mail" class="w-8 h-8 text-orange-600"></i>
+                            </div>
+                            <h3 class="text-2xl md:text-3xl font-serif font-bold text-stone-900 mb-3 leading-snug">
+                                Where should I send your personalized recovery plan?
+                            </h3>
+                            <p class="text-stone-600 leading-relaxed">
+                                Enter your email to see your results. A recovery write-up tailored to your score will land in your inbox moments later.
+                            </p>
+                        </div>
+                        <form id="quiz-email-form" action="https://formsubmit.co/58889c1dddb0e0f0b1f59ab88c96d5bd" method="POST" class="flex flex-col gap-3 max-w-md mx-auto">
+                            <input type="hidden" name="_subject" value="New Burnout Quiz Lead" />
+                            <input type="hidden" name="_captcha" value="false" />
+                            <input type="hidden" name="_autoresponse" id="quiz-autoresponse" value="" />
+                            <input type="hidden" name="quiz_tier" id="quiz-tier-field" value="" />
+                            <input type="hidden" name="quiz_score" id="quiz-score-field" value="" />
+                            <input type="email" id="quiz-email-input" name="email" placeholder="your@email.com" required class="w-full px-6 py-4 rounded-xl text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 border border-stone-200 shadow-sm placeholder:text-stone-400" />
+                            <button type="submit" class="w-full px-8 py-4 bg-stone-900 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors shadow-lg cursor-pointer">
+                                Send My Results
+                            </button>
+                            <p class="text-xs text-stone-400 mt-2">Unsubscribe any time.</p>
+                        </form>
+                    </div>
+
                     <!-- Result Screen -->
                     <div id="quiz-result" class="hidden-quiz text-center animate-fade-in-up">
                         <div id="result-icon-bg" class="inline-block p-4 rounded-full mb-6">
@@ -948,7 +975,7 @@
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">Essential Reading</h2>
-                    <p class="text-lg text-stone-600 font-medium">Guides for surviving and thriving.</p>
+                    <p class="text-lg text-stone-600 font-medium">Buy my books.</p>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
@@ -1201,10 +1228,48 @@
 
         const uiStart = document.getElementById('quiz-start');
         const uiQuestion = document.getElementById('quiz-question');
+        const uiEmailCapture = document.getElementById('quiz-email-capture');
         const uiResult = document.getElementById('quiz-result');
         const qText = document.getElementById('quiz-question-text');
         const qProgressText = document.getElementById('quiz-progress-text');
         const qProgressBar = document.getElementById('quiz-progress-bar');
+
+        // Recovery plan autoresponses sent via FormSubmit (tier-specific)
+        const TIER_AUTORESPONSES = {
+            stable: `Thanks for taking the burnout check-in.
+
+Your score came back Stable, which means your nervous system is holding the line. That's good news, and it's also the moment to reinforce what's keeping you there. Burnout rarely arrives all at once. It builds quietly, in small surrenders: one more shift, one more email at midnight, one more skipped meal.
+
+Keep the recovery lane open. Sleep on a schedule. Protect one full day a week where work stays closed. Move your body in ways that don't feel like punishment. These are the difference between staying Stable and sliding into the next tier.
+
+For the inside track on surviving messy workplaces before they flatten you, my book Burnout to Balance walks through the eight steps I wish I'd known in my first decade of ICU nursing. You can find it here: https://www.amazon.com/dp/B0F1L3KFLY
+
+Andrea`,
+            tachycardic: `Thanks for taking the burnout check-in.
+
+Your score came back Tachycardic. In clinical terms, this is the middle zone where the warning lights are already on. The check-engine signs are visible: sleep that doesn't restore, tasks taking longer than they should, a slow drift from colleagues or patients. You aren't at full burnout yet, and this is the window where recovery costs you weeks instead of years.
+
+Three things to do this week. Name one boundary you've been breaking for other people's convenience, and hold it once. Get a full sleep cycle. One genuine, phone-in-another-room, eight-hour night. Say the word burnout out loud to someone who won't flinch. Silence is half the damage.
+
+The full recovery map lives in my book Burnout to Balance, including the eight steps for working inside a messy system without becoming part of it. You can find it here: https://www.amazon.com/dp/B0F1L3KFLY
+
+Andrea`,
+            codeblue: `Thanks for taking the burnout check-in.
+
+Your score came back Code Blue. Clinically, this is full burnout: emotional exhaustion, depersonalization toward your patients or colleagues, and reduced personal accomplishment, all present at the same time. Burnout at this level is not a character flaw. The cause is systemic. Working inside organizations that ask for more than a human can sustainably give produces exactly this outcome.
+
+Recovery from severe burnout takes one to three years, not a weekend. It starts with believing this is happening, and then addressing the systemic pieces (staffing, overtime, moral injury) rather than grinding harder on yourself. Two things to do today. First, talk to your family doctor or a mental health professional. Physical symptoms at this stage need a medical eye on them. Second, stop calling it stress. Naming it burnout is the first clinical step toward recovery.
+
+My book Burnout to Balance was written for people at exactly this moment. The eight steps map the way out from where you are right now. You can find it here: https://www.amazon.com/dp/B0F1L3KFLY
+
+Andrea`
+        };
+
+        function getTierKey(s) {
+            if (s <= 2) return 'stable';
+            if (s <= 5) return 'tachycardic';
+            return 'codeblue';
+        }
 
         function startQuiz() {
             uiStart.classList.add('hidden-quiz');
@@ -1224,12 +1289,19 @@
                 currentQ++;
                 updateQuestionUI();
             } else {
-                showResult();
+                showEmailCapture();
             }
+        }
+
+        function showEmailCapture() {
+            uiQuestion.classList.add('hidden-quiz');
+            uiEmailCapture.classList.remove('hidden-quiz');
+            lucide.createIcons();
         }
 
         function showResult() {
             uiQuestion.classList.add('hidden-quiz');
+            uiEmailCapture.classList.add('hidden-quiz');
             uiResult.classList.remove('hidden-quiz');
             
             const rTitle = document.getElementById('result-title');
@@ -1263,13 +1335,35 @@
             currentQ = 0;
             score = 0;
             uiResult.classList.add('hidden-quiz');
+            uiEmailCapture.classList.add('hidden-quiz');
             uiStart.classList.remove('hidden-quiz');
+            const emailField = document.getElementById('quiz-email-input');
+            if (emailField) emailField.value = '';
         }
 
         document.getElementById('btn-start-quiz').addEventListener('click', startQuiz);
         document.getElementById('btn-answer-no').addEventListener('click', () => handleAnswer(false));
         document.getElementById('btn-answer-yes').addEventListener('click', () => handleAnswer(true));
         document.getElementById('btn-reset-quiz').addEventListener('click', resetQuiz);
+
+        // Quiz email capture -> FormSubmit (same endpoint as newsletter, different _subject)
+        const quizEmailForm = document.getElementById('quiz-email-form');
+        quizEmailForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const tierKey = getTierKey(score);
+            const tierLabels = { stable: 'Stable', tachycardic: 'Tachycardic', codeblue: 'Code Blue' };
+            document.getElementById('quiz-tier-field').value = tierLabels[tierKey];
+            document.getElementById('quiz-score-field').value = score + ' / ' + QUIZ_QUESTIONS.length;
+            document.getElementById('quiz-autoresponse').value = TIER_AUTORESPONSES[tierKey];
+            const formData = new FormData(quizEmailForm);
+            try {
+                await fetch(quizEmailForm.action, { method: "POST", body: formData });
+            } catch (error) {
+                console.error("Quiz lead submission error", error);
+            } finally {
+                showResult();
+            }
+        });
 
         // 5. Dynamic Article Fetching
         function stripHtml(html) {
