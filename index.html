@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" data-theme="quiet">
 <head>
     <meta name="p:domain_verify" content="bbaeb38efd24bcdb126c9381047fc8b6"/>
     <meta charset="UTF-8">
@@ -242,7 +242,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,400&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Geist:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
 
     <!-- Custom Tailwind Configuration -->
     <script>
@@ -291,7 +291,346 @@
         
         /* Hide elements dynamically for the quiz UI */
         .hidden-quiz { display: none !important; }
+
+        /* ===== SYMPTOM TICKER (marquee) ===== */
+        .symptom-ticker { font-family: var(--font-sans); }
+        .ticker-track {
+          animation: ticker-scroll 22s linear infinite;
+          will-change: transform;
+        }
+        .ticker-track-wrap:hover .ticker-track { animation-play-state: paused; }
+        .ticker-item {
+          font-family: var(--font-serif, Georgia, serif);
+          font-style: italic;
+          font-weight: 400;
+          font-size: clamp(1rem, 1.6vw, 1.5rem);
+          letter-spacing: -0.005em;
+          padding: 0 1.25rem;
+          color: #faf7f2;
+        }
+        .ticker-dot {
+          color: var(--c-accent, #ea580c);
+          font-size: 0.75rem;
+          padding: 0 0.25rem;
+          transform: translateY(-2px);
+          display: inline-block;
+        }
+        @keyframes ticker-scroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .ticker-track { animation: none; }
+        }
+
+        /* ===== MASTHEAD STRIP ===== */
+        .masthead-strip { font-family: var(--font-sans); }
     </style>
+
+    <!-- Theme System (color + font swaps via CSS variables) -->
+    <style id="theme-styles">
+      /* ===== THEME DEFINITIONS ===== */
+      /* Three bolder, more distinct directions */
+
+      /* 1. QUIET — extreme minimal. Off-white, charcoal, one single red accent.
+            Magazine-quiet like The Browser / Pudding Hmm. */
+      :root,
+      html[data-theme="quiet"] {
+        --font-sans: 'Söhne', 'Inter', ui-sans-serif, system-ui, sans-serif;
+        --font-serif: 'GT Super', 'Fraunces', 'Times New Roman', serif;
+        --c-bg: #f3f1ed;
+        --c-bg-alt: #ffffff;
+        --c-bg-dark: #141413;
+        --c-bg-darker: #0a0a09;
+        --c-bg-accent-soft: #e9e6df;
+        --c-text: #141413;
+        --c-text-muted: #6a665e;
+        --c-text-faint: #9a958b;
+        --c-border: #ddd8cd;
+        --c-border-soft: #e9e4d8;
+        --c-accent: #e63946;        /* single red */
+        --c-accent-hover: #c42a37;
+        --c-accent-soft: #fadfe2;
+        --c-accent-softer: #fbeaec;
+        --c-accent-text: #a31e29;
+        --c-accent-2: #141413;       /* mono second "accent" */
+        --c-accent-2-hover: #000000;
+        --c-accent-2-text: #141413;
+        --c-on-accent: #ffffff;
+        --c-grid: #e8e4d8;
+        --c-danger: #e63946;
+      }
+
+      /* 2. AGAINST — bold, angry, editorial. Inky background, Playfair italic + chunky sans,
+            crimson fire accent. Think op-ed / protest poster. */
+      html[data-theme="against"] {
+        --font-sans: 'Archivo', 'Inter', system-ui, sans-serif;
+        --font-serif: 'Playfair Display', 'DM Serif Display', Georgia, serif;
+        --c-bg: #faf7f2;
+        --c-bg-alt: #ffffff;
+        --c-bg-dark: #1a0a0a;
+        --c-bg-darker: #0a0404;
+        --c-bg-accent-soft: #fde8e0;
+        --c-text: #1a0a0a;
+        --c-text-muted: #6a4a45;
+        --c-text-faint: #9a8480;
+        --c-border: #e8dcd4;
+        --c-border-soft: #f0e6de;
+        --c-accent: #c8322a;         /* flame red */
+        --c-accent-hover: #a62820;
+        --c-accent-soft: #fad4cf;
+        --c-accent-softer: #fce6e2;
+        --c-accent-text: #8e2018;
+        --c-accent-2: #1a0a0a;
+        --c-accent-2-hover: #000000;
+        --c-accent-2-text: #1a0a0a;
+        --c-on-accent: #faf7f2;
+        --c-grid: #f0e8de;
+        --c-danger: #c8322a;
+      }
+
+      /* 3. BLOOM — soft healing, spa-like but not twee. Dusty lavender + blush + sage,
+            Instrument Serif italic for emotional display, Geist for body. */
+      html[data-theme="bloom"] {
+        --font-sans: 'Geist', 'Inter', system-ui, sans-serif;
+        --font-serif: 'Instrument Serif', Georgia, serif;
+        --c-bg: #f1ebe3;
+        --c-bg-alt: #faf5ed;
+        --c-bg-dark: #2a2330;
+        --c-bg-darker: #1a1520;
+        --c-bg-accent-soft: #e6dde3;
+        --c-text: #2a2330;
+        --c-text-muted: #6b5e6a;
+        --c-text-faint: #988894;
+        --c-border: #ddd1c6;
+        --c-border-soft: #e9e0d4;
+        --c-accent: #7d5a85;         /* dusty plum */
+        --c-accent-hover: #654970;
+        --c-accent-soft: #e4d6e6;
+        --c-accent-softer: #efe5ef;
+        --c-accent-text: #54405c;
+        --c-accent-2: #b5654a;       /* faded rose-clay */
+        --c-accent-2-hover: #97513a;
+        --c-accent-2-text: #7a3e2a;
+        --c-on-accent: #faf5ed;
+        --c-grid: #e8ddce;
+        --c-danger: #b5654a;
+      }
+
+      /* ===== GLOBAL FONT + BACKGROUND ===== */
+      body {
+        font-family: var(--font-sans) !important;
+        background-color: var(--c-bg) !important;
+        color: var(--c-text) !important;
+      }
+      .font-serif, h1, h2, h3.font-serif, .font-serif * {
+        font-family: var(--font-serif) !important;
+      }
+      .font-sans { font-family: var(--font-sans) !important; }
+
+      /* Selection */
+      ::selection { background: var(--c-accent); color: var(--c-on-accent); }
+
+      /* ===== BACKGROUND OVERRIDES ===== */
+      .bg-amber-50 { background-color: var(--c-bg) !important; }
+      .bg-amber-50\/95 { background-color: color-mix(in srgb, var(--c-bg) 95%, transparent) !important; }
+      .bg-white { background-color: var(--c-bg-alt) !important; }
+      .bg-stone-900 { background-color: var(--c-bg-dark) !important; }
+      .bg-stone-950 { background-color: var(--c-bg-darker) !important; }
+      .bg-stone-800 { background-color: color-mix(in srgb, var(--c-bg-dark) 85%, white) !important; }
+      .bg-stone-100 { background-color: var(--c-border-soft) !important; }
+      .bg-grid-pattern {
+        background-image:
+          linear-gradient(to right, var(--c-grid) 1px, transparent 1px),
+          linear-gradient(to bottom, var(--c-grid) 1px, transparent 1px) !important;
+      }
+
+      /* Text */
+      .text-stone-900 { color: var(--c-text) !important; }
+      .text-stone-800 { color: var(--c-text) !important; }
+      .text-stone-700 { color: var(--c-text) !important; }
+      .text-stone-600 { color: var(--c-text-muted) !important; }
+      .text-stone-500 { color: var(--c-text-muted) !important; }
+      .text-stone-400 { color: var(--c-text-faint) !important; }
+      .text-stone-200 { color: var(--c-bg) !important; }
+      .text-amber-50 { color: var(--c-bg) !important; }
+      .text-white { color: var(--c-on-accent) !important; }
+      .bg-stone-900.text-white, .text-white.bg-stone-900 { color: #ffffff !important; } /* ensure contrast on dark */
+      /* For dark-backed buttons, keep white text */
+      .bg-stone-900, [class*="bg-stone-9"] { color: #ffffff; }
+      footer.bg-stone-950 .text-stone-400 { color: var(--c-text-faint) !important; }
+      footer.bg-stone-950 .text-stone-500 { color: var(--c-text-muted) !important; }
+      footer.bg-stone-950 .text-stone-600 { color: var(--c-text-faint) !important; }
+      footer.bg-stone-950 .text-stone-700 { color: var(--c-text-faint) !important; }
+
+      /* Borders */
+      .border-stone-100 { border-color: var(--c-border-soft) !important; }
+      .border-stone-200 { border-color: var(--c-border) !important; }
+      .border-stone-800 { border-color: color-mix(in srgb, var(--c-bg-dark) 80%, white) !important; }
+      .border-stone-900 { border-color: var(--c-bg-darker) !important; }
+      .border-white { border-color: var(--c-bg-alt) !important; }
+
+      /* ===== ORANGE → ACCENT ===== */
+      .bg-orange-600 { background-color: var(--c-accent) !important; color: var(--c-on-accent) !important; }
+      .hover\:bg-orange-600:hover { background-color: var(--c-accent) !important; color: var(--c-on-accent) !important; }
+      .bg-orange-700, .hover\:bg-orange-700:hover { background-color: var(--c-accent-hover) !important; color: var(--c-on-accent) !important; }
+      .bg-orange-500, .bg-orange-500\/20 { background-color: var(--c-accent) !important; }
+      .bg-orange-100 { background-color: var(--c-accent-soft) !important; }
+      .bg-orange-100\/50 { background-color: color-mix(in srgb, var(--c-accent-soft) 50%, transparent) !important; }
+      .bg-orange-200 { background-color: var(--c-accent-soft) !important; }
+      .text-orange-600 { color: var(--c-accent) !important; }
+      .hover\:text-orange-600:hover { color: var(--c-accent) !important; }
+      .text-orange-700, .hover\:text-orange-700:hover { color: var(--c-accent-hover) !important; }
+      .text-orange-800 { color: var(--c-accent-text) !important; }
+      .text-orange-400 { color: var(--c-accent) !important; }
+      .text-orange-300 { color: color-mix(in srgb, var(--c-accent) 70%, var(--c-bg)) !important; }
+      .text-orange-500 { color: var(--c-accent) !important; }
+      .border-orange-200 { border-color: color-mix(in srgb, var(--c-accent) 30%, var(--c-bg)) !important; }
+      .border-orange-300 { border-color: color-mix(in srgb, var(--c-accent) 50%, var(--c-bg)) !important; }
+      .hover\:border-orange-200:hover { border-color: color-mix(in srgb, var(--c-accent) 40%, var(--c-bg)) !important; }
+      .hover\:border-orange-600:hover { border-color: var(--c-accent) !important; }
+      .focus\:ring-orange-500:focus { --tw-ring-color: var(--c-accent) !important; }
+      .shadow-orange-600\/20 { box-shadow: 0 10px 20px -5px color-mix(in srgb, var(--c-accent) 25%, transparent) !important; }
+      .shadow-orange-900\/20 { box-shadow: 0 10px 30px color-mix(in srgb, var(--c-accent) 20%, transparent) !important; }
+      .fill-orange-600 { fill: var(--c-accent) !important; color: var(--c-accent) !important; }
+
+      /* Teal → accent-2 (book 2) */
+      .bg-teal-500, .hover\:bg-teal-600:hover { background-color: var(--c-accent-2) !important; }
+      .bg-teal-600 { background-color: var(--c-accent-2) !important; }
+      .text-teal-700 { color: var(--c-accent-2-text) !important; }
+
+      /* Green (Spotify button) → keep spotify green but soften */
+      /* leave as-is for brand recognition */
+
+      /* Podcast card gradient tile */
+      .bg-gradient-to-br.from-orange-500 {
+        background-image: linear-gradient(135deg, var(--c-accent), var(--c-accent-hover)) !important;
+      }
+
+      /* Hero blobs */
+      .bg-amber-200 { background-color: color-mix(in srgb, var(--c-accent) 40%, var(--c-bg)) !important; }
+      .bg-stone-200 { background-color: var(--c-border) !important; }
+
+      /* Quiz result tint-pills kept; but red-500 pulse dot fine */
+
+      /* ===== COMPONENT POLISH ===== */
+      /* Rounded corner softening for modern theme */
+      
+
+      /* Modern theme — make hero underline a solid bar */
+      html[data-theme="modern"] svg path { stroke-width: 10; }
+
+      
+      /* === Quiet theme flourishes === */
+      html[data-theme="quiet"] h1,
+      html[data-theme="quiet"] h2 { letter-spacing: -0.025em; font-weight: 700; }
+      html[data-theme="quiet"] nav { box-shadow: none !important; border-bottom: 1px solid var(--c-border); }
+      html[data-theme="quiet"] .rounded-3xl, html[data-theme="quiet"] .rounded-2xl { border-radius: 8px !important; }
+      html[data-theme="quiet"] .rounded-xl { border-radius: 6px !important; }
+      html[data-theme="quiet"] .rounded-full { border-radius: 999px !important; }
+
+      /* === Against theme flourishes === */
+      html[data-theme="against"] h2 { font-weight: 700; letter-spacing: -0.02em; }
+      html[data-theme="against"] h1 { font-weight: 700; letter-spacing: -0.025em; line-height: 1.05 !important; padding-bottom: 0.15em; }
+      html[data-theme="against"] h1 .italic-accent,
+      html[data-theme="against"] h2 .italic-accent { font-style: italic; font-weight: 400; }
+      /* Target the hero highlighted word specifically */
+      html[data-theme="against"] h1 > span.text-orange-600 { font-style: italic; font-weight: 400; }
+      html[data-theme="against"] .bg-grid-pattern {
+        background-image:
+          linear-gradient(to right, var(--c-grid) 1px, transparent 1px),
+          linear-gradient(to bottom, var(--c-grid) 1px, transparent 1px) !important;
+        background-size: 60px 60px !important;
+      }
+      html[data-theme="against"] .rounded-3xl { border-radius: 4px !important; }
+      html[data-theme="against"] .rounded-2xl { border-radius: 3px !important; }
+      html[data-theme="against"] .rounded-xl { border-radius: 3px !important; }
+      html[data-theme="against"] .rounded-lg { border-radius: 2px !important; }
+      html[data-theme="against"] nav { border-bottom: 2px solid var(--c-text); box-shadow: none !important; }
+
+      /* === Bloom theme flourishes === */
+      html[data-theme="bloom"] h1,
+      html[data-theme="bloom"] h2,
+      html[data-theme="bloom"] h3.font-serif {
+        font-style: italic;
+        font-weight: 400;
+        letter-spacing: -0.005em;
+        line-height: 1.05;
+      }
+      html[data-theme="bloom"] h1 span,
+      html[data-theme="bloom"] h2 span { font-style: italic; }
+      html[data-theme="bloom"] .rounded-xl { border-radius: 20px !important; }
+      html[data-theme="bloom"] .rounded-2xl { border-radius: 28px !important; }
+      html[data-theme="bloom"] .rounded-3xl { border-radius: 36px !important; }
+      html[data-theme="bloom"] nav { border-bottom: 1px solid var(--c-border); box-shadow: none !important; }
+
+      
+      /* ===== TWEAKS PANEL ===== */
+      #tweaks-panel {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 100;
+        background: var(--c-bg-alt);
+        border: 1px solid var(--c-border);
+        border-radius: 18px;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        padding: 18px;
+        width: 280px;
+        font-family: var(--font-sans);
+        display: none;
+      }
+      #tweaks-panel.open { display: block; }
+      #tweaks-panel .tp-title {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--c-text-muted);
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      #tweaks-panel .tp-close {
+        background: none; border: 0; cursor: pointer; color: var(--c-text-muted);
+        font-size: 16px; line-height: 1;
+      }
+      #tweaks-panel .tp-theme-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border: 1px solid var(--c-border);
+        border-radius: 10px;
+        cursor: pointer;
+        margin-bottom: 8px;
+        transition: all 0.15s;
+        background: transparent;
+        width: 100%;
+        text-align: left;
+        font-family: inherit;
+      }
+      #tweaks-panel .tp-theme-row:hover { border-color: var(--c-accent); }
+      #tweaks-panel .tp-theme-row.active {
+        border-color: var(--c-accent);
+        background: var(--c-accent-softer);
+      }
+      #tweaks-panel .tp-swatches {
+        display: flex;
+        gap: 3px;
+      }
+      #tweaks-panel .tp-swatch {
+        width: 14px; height: 20px; border-radius: 3px;
+        border: 1px solid rgba(0,0,0,0.08);
+      }
+      #tweaks-panel .tp-label { font-size: 13px; font-weight: 600; color: var(--c-text); }
+      #tweaks-panel .tp-sublabel { font-size: 11px; color: var(--c-text-muted); }
+      #tweaks-panel .tp-text-col { flex: 1; }
+
+      /* Themes are only available with Tweaks enabled on */
+    </style>
+
 </head>
 <body class="bg-amber-50 font-sans text-stone-800 selection:bg-orange-200 bg-grid-pattern">
 
@@ -302,7 +641,7 @@
                 <!-- Logo -->
                 <a href="#" class="flex items-center gap-2 cursor-pointer text-decoration-none" aria-label="Andrea Gomez Home">
                     <i data-lucide="heart" class="text-orange-600 fill-orange-600 w-6 h-6"></i>
-                    <span class="font-serif text-xl font-bold tracking-tight text-stone-900">
+                    <span class="font-serif text-xl font-bold tracking-tight text-stone-900 whitespace-nowrap">
                         Andrea Gomez
                     </span>
                 </a>
@@ -341,43 +680,106 @@
     </nav>
 
     <main>
-        <!-- Hero Section -->
-        <header class="relative pt-40 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                <div class="inline-block py-1.5 px-4 rounded-full bg-orange-100 text-orange-800 text-xs font-bold tracking-widest uppercase mb-6 animate-fade-in-up border border-orange-200">
-                    ICU Nurse | Writer | Speaker
-                </div>
-                <h1 class="text-5xl md:text-7xl font-serif font-black text-stone-900 mb-8 leading-[1.1] animate-fade-in-up [animation-delay:100ms]">
-                    From Burnout to <span class="text-orange-600 relative inline-block whitespace-nowrap">
-                        Balance
-                        <svg class="absolute w-full h-3 -bottom-1 left-0 text-orange-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
-                            <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
-                        </svg>
-                    </span>
-                </h1>
-                <p class="mt-4 max-w-2xl mx-auto text-xl text-stone-600 leading-relaxed animate-fade-in-up [animation-delay:200ms] font-medium">
-                    Heal from job burnout. Navigate messy workplaces. Take back your mental health.
-                </p>
-                <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up [animation-delay:300ms]">
-                    <a href="#books" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-orange-600 hover:bg-orange-700 md:text-lg shadow-lg shadow-orange-600/20 transition-all hover:-translate-y-1 hover:shadow-xl">
-                        Explore My Books
-                    </a>
-                    <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 border-2 border-stone-200 text-base font-bold rounded-full text-stone-700 bg-white hover:bg-stone-50 md:text-lg shadow-sm transition-all hover:-translate-y-1 hover:border-orange-200">
-                        <i data-lucide="play" class="w-4 h-4 mr-2 fill-current"></i> Listen to Podcast
-                    </a>
-                </div>
+        <!-- Magazine Masthead Strip -->
+        <div class="masthead-strip pt-24 md:pt-28">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 flex items-baseline justify-between border-b border-stone-200 text-xs uppercase tracking-[0.22em] font-bold text-stone-500 gap-4 flex-wrap">
+                <span>Job Burnout Is Sneaky</span>
+                <span class="hidden md:inline">The best book on job burnout that you can read</span>
+                <span>Start Recovering</span>
             </div>
-            
-            <!-- Abstract Shapes -->
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-0 pointer-events-none opacity-40">
-                <div class="absolute top-20 left-0 lg:left-20 w-72 h-72 md:w-96 md:h-96 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-                <div class="absolute top-20 right-0 lg:right-20 w-72 h-72 md:w-96 md:h-96 bg-amber-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-                <div class="absolute -bottom-8 left-1/3 w-96 h-96 bg-stone-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+        </div>
+
+        <!-- Hero Section — Editorial -->
+        <header class="relative pt-10 md:pt-14 pb-16 lg:pb-24 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-12 gap-6 md:gap-10 items-end">
+                    <div class="col-span-12 md:col-span-8">
+                        <div class="inline-block py-1.5 px-4 rounded-full bg-orange-100 text-orange-800 text-xs font-bold tracking-widest uppercase mb-8 animate-fade-in-up border border-orange-200">
+                            ICU Nurse | Writer | Speaker
+                        </div>
+                        <h1 class="font-serif text-stone-900 mb-8 leading-[0.96] tracking-tight animate-fade-in-up [animation-delay:100ms]" style="font-size: clamp(3rem, 9vw, 8.5rem); font-weight: 700;">
+                            From Burnout<br>
+                            to <span class="text-orange-600 relative inline-block whitespace-nowrap italic">
+                                Balance<svg class="absolute w-full h-3 -bottom-1 left-0 text-orange-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" /></svg>
+                            </span>
+                        </h1>
+                    </div>
+                    <div class="col-span-12 md:col-span-4 md:pb-4">
+                        <div class="hidden md:block w-12 h-[2px] bg-stone-900 mb-4"></div>
+                        <p class="text-lg text-stone-600 leading-relaxed animate-fade-in-up [animation-delay:200ms] font-medium mb-8 max-w-sm">
+                            Heal from job burnout. Navigate messy workplaces. Take back your mental health.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-3 animate-fade-in-up [animation-delay:300ms]">
+                            <a href="#books" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-bold rounded-full text-white bg-orange-600 hover:bg-orange-700 shadow-lg shadow-orange-600/20 transition-all hover:-translate-y-0.5">
+                                Explore My Books
+                            </a>
+                            <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 border-2 border-stone-200 text-sm font-bold rounded-full text-stone-700 bg-white hover:bg-stone-50 shadow-sm transition-all hover:-translate-y-0.5 hover:border-orange-200">
+                                <i data-lucide="play" class="w-4 h-4 mr-2 fill-current"></i> Listen to Podcast
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
+        <!-- Symptom Ticker -->
+        <section class="symptom-ticker relative z-10 border-y border-stone-900 bg-stone-900 text-amber-50 overflow-hidden" aria-label="Signs of burnout">
+            <div class="flex items-stretch">
+                <div class="flex-shrink-0 flex items-center gap-2 px-5 md:px-6 py-4 border-r border-stone-700 bg-stone-900">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                    <span class="text-[10px] md:text-xs uppercase tracking-[0.22em] font-bold whitespace-nowrap">Signs · Of Burnout</span>
+                </div>
+                <div class="ticker-track-wrap flex-1 overflow-hidden relative">
+                    <div class="ticker-track flex items-center py-4 whitespace-nowrap">
+                        <!-- track content rendered twice for seamless loop -->
+                        <span class="ticker-item">Feeling tired all the time</span>
+                        <span class="ticker-dot">✦</span>
+                        <span class="ticker-item">Taking a break in your car before entering your home</span>
+                        <span class="ticker-dot">✦</span>
+                        <span class="ticker-item">Feeling anxious on the way to work</span>
+                        <span class="ticker-dot">✦</span>
+                        <span class="ticker-item">Can't fall asleep or stay asleep</span>
+                        <span class="ticker-dot">✦</span>
+                        <span class="ticker-item">On autopilot at work</span>
+                        <span class="ticker-dot">✦</span>
+                        <span class="ticker-item">Don't really care about your job</span>
+                        <span class="ticker-dot">✦</span>
+                        <span class="ticker-item">Dislike the people you work with</span>
+                        <span class="ticker-dot">✦</span>
+                        <span class="ticker-item">Feeling numb</span>
+                        <span class="ticker-dot">✦</span>
+                        <span class="ticker-item">Small things make you feel angry</span>
+                        <span class="ticker-dot">✦</span>
+                        <span class="ticker-item">A vacation doesn't make the negative feeling go away</span>
+                        <span class="ticker-dot">✦</span>
+                        <!-- duplicate -->
+                        <span class="ticker-item" aria-hidden="true">Feeling tired all the time</span>
+                        <span class="ticker-dot" aria-hidden="true">✦</span>
+                        <span class="ticker-item" aria-hidden="true">Taking a break in your car before entering your home</span>
+                        <span class="ticker-dot" aria-hidden="true">✦</span>
+                        <span class="ticker-item" aria-hidden="true">Feeling anxious on the way to work</span>
+                        <span class="ticker-dot" aria-hidden="true">✦</span>
+                        <span class="ticker-item" aria-hidden="true">Can't fall asleep or stay asleep</span>
+                        <span class="ticker-dot" aria-hidden="true">✦</span>
+                        <span class="ticker-item" aria-hidden="true">On autopilot at work</span>
+                        <span class="ticker-dot" aria-hidden="true">✦</span>
+                        <span class="ticker-item" aria-hidden="true">Don't really care about your job</span>
+                        <span class="ticker-dot" aria-hidden="true">✦</span>
+                        <span class="ticker-item" aria-hidden="true">Dislike the people you work with</span>
+                        <span class="ticker-dot" aria-hidden="true">✦</span>
+                        <span class="ticker-item" aria-hidden="true">Feeling numb</span>
+                        <span class="ticker-dot" aria-hidden="true">✦</span>
+                        <span class="ticker-item" aria-hidden="true">Small things make you feel angry</span>
+                        <span class="ticker-dot" aria-hidden="true">✦</span>
+                        <span class="ticker-item" aria-hidden="true">A vacation doesn't make the negative feeling go away</span>
+                        <span class="ticker-dot" aria-hidden="true">✦</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Video Player Section -->
-        <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 mb-8 relative z-20">
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-8 relative z-20">
             <div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-stone-900 aspect-video group relative">
                 <video 
                     controls 
@@ -713,8 +1115,7 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-sm text-center md:text-left">
                 <div class="font-serif text-lg text-stone-200 mb-1">Andrea Gomez</div>
-                <span class="text-stone-600">Site built with love, clarity, and a little caffeine.</span> <br/>
-                <span class="text-stone-700 text-xs">© 2026 All rights reserved.</span>
+                <span class="text-stone-700 text-xs">&copy; <span id="copyright-year">2026</span> All rights reserved.</span>
             </div>
             
             <div class="flex gap-8">
@@ -735,6 +1136,9 @@
     <script>
         // 1. Initialize Lucide Icons
         lucide.createIcons();
+
+        // 1a. Dynamic Copyright Year
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
 
         // 2. Mobile Menu Toggle
         const menuBtn = document.getElementById('mobile-menu-btn');
@@ -922,5 +1326,97 @@
                 });
         });
     </script>
+
+    <!-- Tweaks Panel -->
+    <div id="tweaks-panel" role="dialog" aria-label="Tweaks">
+      <div class="tp-title">
+        <span>Tweaks — Direction</span>
+        <button class="tp-close" id="tp-close" aria-label="Close">✕</button>
+      </div>
+      <button class="tp-theme-row" data-set-theme="quiet">
+        <div class="tp-swatches">
+          <div class="tp-swatch" style="background:#f3f1ed"></div>
+          <div class="tp-swatch" style="background:#141413"></div>
+          <div class="tp-swatch" style="background:#e63946"></div>
+        </div>
+        <div class="tp-text-col">
+          <div class="tp-label">Quiet</div>
+          <div class="tp-sublabel">Off-white · charcoal · one red</div>
+        </div>
+      </button>
+      <button class="tp-theme-row" data-set-theme="against">
+        <div class="tp-swatches">
+          <div class="tp-swatch" style="background:#faf7f2"></div>
+          <div class="tp-swatch" style="background:#1a0a0a"></div>
+          <div class="tp-swatch" style="background:#c8322a"></div>
+        </div>
+        <div class="tp-text-col">
+          <div class="tp-label">Against</div>
+          <div class="tp-sublabel">Playfair italic · crimson · op-ed</div>
+        </div>
+      </button>
+      <button class="tp-theme-row" data-set-theme="bloom">
+        <div class="tp-swatches">
+          <div class="tp-swatch" style="background:#f1ebe3"></div>
+          <div class="tp-swatch" style="background:#7d5a85"></div>
+          <div class="tp-swatch" style="background:#b5654a"></div>
+        </div>
+        <div class="tp-text-col">
+          <div class="tp-label">Bloom</div>
+          <div class="tp-sublabel">Instrument Serif · plum & clay</div>
+        </div>
+      </button>
+    </div>
+
+    <script>
+      // Theme state
+      const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+        "theme": "against"
+      }/*EDITMODE-END*/;
+
+      function applyTheme(name) {
+        document.documentElement.setAttribute('data-theme', name);
+        document.querySelectorAll('#tweaks-panel .tp-theme-row').forEach(r => {
+          r.classList.toggle('active', r.getAttribute('data-set-theme') === name);
+        });
+        try { localStorage.setItem('b2b-theme', name); } catch(e) {}
+      }
+
+      // Init from localStorage or defaults
+      (function () {
+        let saved = null;
+        try { saved = localStorage.getItem('b2b-theme'); } catch(e) {}
+        applyTheme(saved || TWEAK_DEFAULTS.theme || 'quiet');
+      })();
+
+      // Wire theme buttons
+      document.querySelectorAll('#tweaks-panel .tp-theme-row').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const t = btn.getAttribute('data-set-theme');
+          applyTheme(t);
+          if (window.parent !== window) {
+            window.parent.postMessage({type: '__edit_mode_set_keys', edits: {theme: t}}, '*');
+          }
+        });
+      });
+
+      // Edit-mode host integration
+      window.addEventListener('message', (ev) => {
+        const d = ev.data || {};
+        if (d.type === '__activate_edit_mode') {
+          document.getElementById('tweaks-panel').classList.add('open');
+        } else if (d.type === '__deactivate_edit_mode') {
+          document.getElementById('tweaks-panel').classList.remove('open');
+        }
+      });
+      document.getElementById('tp-close').addEventListener('click', () => {
+        document.getElementById('tweaks-panel').classList.remove('open');
+      });
+      // Announce tweak mode availability
+      try {
+        window.parent.postMessage({type: '__edit_mode_available'}, '*');
+      } catch (e) {}
+    </script>
+
 </body>
 </html>
