@@ -295,11 +295,13 @@
         /* ===== SYMPTOM TICKER (marquee) ===== */
         .symptom-ticker { font-family: var(--font-sans); }
         .ticker-track {
+          width: max-content;
           animation: ticker-scroll 22s linear infinite;
           will-change: transform;
         }
         .ticker-track-wrap:hover .ticker-track { animation-play-state: paused; }
         .ticker-item {
+          flex-shrink: 0;
           font-family: var(--font-serif, Georgia, serif);
           font-style: italic;
           font-weight: 400;
@@ -309,6 +311,7 @@
           color: #faf7f2;
         }
         .ticker-dot {
+          flex-shrink: 0;
           color: var(--c-accent, #ea580c);
           font-size: 0.75rem;
           padding: 0 0.25rem;
