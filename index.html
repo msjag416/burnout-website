@@ -781,24 +781,6 @@
             </div>
         </section>
 
-        <!-- Video Player Section -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-8 relative z-20">
-            <div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-stone-900 aspect-video group relative">
-                <video 
-                    controls 
-                    preload="metadata"
-                    class="w-full h-full object-cover"
-                    poster="/api/placeholder/800/450" 
-                    width="800"
-                    height="450"
-                >
-                    <!-- Update your source URL here -->
-                    <source src="your-video-file.mp4#t=0.001" type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-        </section>
-
         <!-- Interactive Quiz Section (No React Required) -->
         <section id="quiz" class="py-16 px-4 relative z-20">
             <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-stone-200 md:min-h-[400px] flex flex-col relative">
@@ -1004,6 +986,9 @@
                         <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg">
                             Get it on Amazon <i data-lucide="external-link" width="18" height="18"></i>
                         </a>
+                        <a href="chapter-one.html" class="w-full flex items-center justify-center gap-2 mt-3 border-2 border-stone-200 hover:border-orange-300 hover:bg-orange-50 text-stone-900 font-bold py-4 px-6 rounded-xl transition-colors">
+                            <i data-lucide="book-open" width="18" height="18"></i> Read Chapter One Free
+                        </a>
                     </article>
 
                     <!-- Book 2 -->
@@ -1029,6 +1014,39 @@
                         </a>
                     </article>
 
+                </div>
+            </div>
+        </section>
+
+        <!-- Reader Reviews Section -->
+        <section id="reviews" class="py-24 bg-stone-50 relative z-10 border-y border-stone-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-2">What Readers Are Saying</h2>
+                    <p class="text-stone-500 font-medium">5-star reviews of Burnout to Balance on Amazon</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <figure class="bg-white rounded-2xl p-8 shadow-sm border border-stone-100 flex flex-col h-full">
+                        <div class="text-orange-500 text-xl mb-4" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                        <h3 class="text-lg font-bold text-stone-900 mb-3 leading-snug">ICU Nurse Turns Office Politics Into a Survival Manual</h3>
+                        <blockquote class="text-stone-600 leading-relaxed flex-grow">&ldquo;Andrea Gomez takes decades of ICU trauma and turns it into blunt, funny, weirdly specific workplace advice. It's part self-help, part career strategy, part &lsquo;here's exactly what to say to your credit-stealing coworker.&rsquo; Doesn't sugarcoat anything, which is refreshing.&rdquo;</blockquote>
+                        <figcaption class="mt-6 text-sm font-bold text-stone-900">Wild Wild Wendy <span class="font-normal text-stone-500">&middot; Amazon Review</span></figcaption>
+                    </figure>
+                    <figure class="bg-white rounded-2xl p-8 shadow-sm border border-stone-100 flex flex-col h-full">
+                        <div class="text-orange-500 text-xl mb-4" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                        <h3 class="text-lg font-bold text-stone-900 mb-3 leading-snug">A Practical, No Fluff Guide</h3>
+                        <blockquote class="text-stone-600 leading-relaxed flex-grow">&ldquo;This is what I needed years ago. Written by an ICU nurse so there's no BS, just real advice that actually works. I felt so seen. Gives you a clear plan to get your sanity back and figure out whether to stay or go.&rdquo;</blockquote>
+                        <figcaption class="mt-6 text-sm font-bold text-stone-900">A Hunt <span class="font-normal text-stone-500">&middot; Amazon Review</span></figcaption>
+                    </figure>
+                    <figure class="bg-white rounded-2xl p-8 shadow-sm border border-stone-100 flex flex-col h-full">
+                        <div class="text-orange-500 text-xl mb-4" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                        <h3 class="text-lg font-bold text-stone-900 mb-3 leading-snug">A Must Read If You Wish to Start Reclaiming Your Energy</h3>
+                        <blockquote class="text-stone-600 leading-relaxed flex-grow">&ldquo;One of the most valuable takeaways was learning to recognize burnout before it takes over. The book breaks down the warning signs so clearly that I could immediately see where I had been pushing myself too hard. If you're feeling stuck or just need a game plan to make work less exhausting, this book is an invaluable guide.&rdquo;</blockquote>
+                        <figcaption class="mt-6 text-sm font-bold text-stone-900">Stephen B <span class="font-normal text-stone-500">&middot; Amazon Review</span></figcaption>
+                    </figure>
+                </div>
+                <div class="text-center mt-10">
+                    <a href="https://www.amazon.com/dp/B0F1L3KFLY#averageCustomerReviewsAnchor" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-orange-600 font-bold hover:text-orange-700 transition-colors">Read more reviews on Amazon <i data-lucide="arrow-right" width="20" height="20"></i></a>
                 </div>
             </div>
         </section>
