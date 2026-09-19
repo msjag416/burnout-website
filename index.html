@@ -289,6 +289,14 @@
         .animation-delay-4000 { animation-delay: 4s; }
         body.menu-open { overflow: hidden; }
         
+        /* Free chapter button: soft pulsing glow to draw the eye */
+        .free-chapter-btn { animation: chapter-glow 2.2s ease-in-out infinite; }
+        @keyframes chapter-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.55); }
+            50%      { box-shadow: 0 0 0 10px rgba(234, 88, 12, 0); }
+        }
+        @media (prefers-reduced-motion: reduce) { .free-chapter-btn { animation: none; } }
+
         /* Hide elements dynamically for the quiz UI */
         .hidden-quiz { display: none !important; }
 
@@ -986,8 +994,9 @@
                         <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg">
                             Get it on Amazon <i data-lucide="external-link" width="18" height="18"></i>
                         </a>
-                        <a href="chapter-one.html" class="w-full flex items-center justify-center gap-2 mt-3 border-2 border-stone-200 hover:border-orange-300 hover:bg-orange-50 text-stone-900 font-bold py-4 px-6 rounded-xl transition-colors">
-                            <i data-lucide="book-open" width="18" height="18"></i> Read Chapter One Free
+                        <a href="chapter-one.html" class="free-chapter-btn w-full flex items-center justify-center gap-2 mt-3 border-2 border-orange-400 bg-orange-50 hover:bg-orange-100 text-stone-900 font-bold py-4 px-6 rounded-xl transition-colors relative">
+                            <span class="absolute -top-3 right-4 bg-orange-600 text-white text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full shadow">Free</span>
+                            <i data-lucide="book-open" width="18" height="18" class="text-orange-600"></i> Read Chapter One Free
                         </a>
                     </article>
 
