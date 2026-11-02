@@ -336,6 +336,98 @@
 
         /* ===== MASTHEAD STRIP ===== */
         .masthead-strip { font-family: var(--font-sans); }
+
+        /* ===== HERO BOOK (tilted 3D cover) ===== */
+        .hero-book-float {
+          perspective: 1400px;
+          animation: book-float 6s ease-in-out infinite;
+        }
+        @keyframes book-float {
+          0%, 100% { transform: translateY(0); }
+          50%      { transform: translateY(-8px); }
+        }
+        .hero-book {
+          position: relative;
+          display: block;
+          width: clamp(13rem, 22vw, 19rem);
+          aspect-ratio: 2 / 3;
+          border-radius: 3px 10px 10px 3px;
+          background: #1a0a0a;
+          box-shadow: 26px 32px 48px -16px rgba(20, 20, 19, 0.55), 6px 8px 14px rgba(20, 20, 19, 0.2);
+          transform: rotateY(-16deg) rotateX(3deg);
+          transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .hero-book:hover { transform: rotateY(-6deg) rotateX(1deg) translateY(-3px); }
+        .hero-book img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: inherit;
+        }
+        /* Spine shadow and light sheen over the cover */
+        .hero-book::before {
+          content: "";
+          position: absolute;
+          top: 0; bottom: 0; left: 0;
+          width: 9%;
+          z-index: 2;
+          border-radius: 3px 0 0 3px;
+          background: linear-gradient(90deg, rgba(0,0,0,0.38), rgba(255,255,255,0.16) 45%, rgba(0,0,0,0) 100%);
+          pointer-events: none;
+        }
+        .hero-book::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 2;
+          border-radius: inherit;
+          background: linear-gradient(105deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 38%);
+          pointer-events: none;
+        }
+        /* Shows only if the cover image fails to load */
+        .hero-book-fallback {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+          padding: 1.5rem;
+          text-align: center;
+          color: #faf7f2;
+          background: linear-gradient(160deg, var(--c-accent), var(--c-bg-dark));
+          border-radius: inherit;
+        }
+        .hero-book-fallback span {
+          font-family: var(--font-serif);
+          font-weight: 700;
+          font-size: 1.75rem;
+          line-height: 1.05;
+        }
+        .hero-book-fallback small {
+          font-size: 0.7rem;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+        }
+
+        /* ===== HERO ECG TRACE (draws left to right once on load) ===== */
+        .ecg-trace {
+          clip-path: inset(0 100% 0 0);
+          animation: ecg-reveal 4.5s cubic-bezier(0.45, 0.05, 0.3, 1) 0.5s forwards;
+          filter: drop-shadow(0 0 6px color-mix(in srgb, var(--c-accent) 50%, transparent));
+        }
+        @keyframes ecg-reveal {
+          from { clip-path: inset(0 100% 0 0); }
+          to   { clip-path: inset(0 0 0 0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .ecg-trace { animation: none; clip-path: none; }
+          .hero-book-float { animation: none; }
+          .hero-book { transition: none; }
+        }
     </style>
 
     <!-- Theme System (color + font swaps via CSS variables) -->
@@ -700,34 +792,76 @@
             </div>
         </div>
 
-        <!-- Hero Section — Editorial -->
-        <header class="relative pt-10 md:pt-14 pb-16 lg:pb-24 overflow-hidden">
+        <!-- Hero Section: book-forward, with an ECG trace that runs from burnout (flatline, chaos) to balance (steady rhythm) -->
+        <header class="relative pt-10 md:pt-14 pb-8 md:pb-10 overflow-hidden">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="grid grid-cols-12 gap-6 md:gap-10 items-end">
-                    <div class="col-span-12 md:col-span-8">
+                <div class="grid grid-cols-1 md:grid-cols-[1.6fr_1fr] gap-10 md:gap-8 lg:gap-12 items-center">
+
+                    <!-- Left: headline + calls to action -->
+                    <div>
                         <div class="inline-block py-1.5 px-4 rounded-full bg-orange-100 text-orange-800 text-xs font-bold tracking-widest uppercase mb-8 animate-fade-in-up border border-orange-200">
                             ICU Nurse | Writer | Speaker
                         </div>
-                        <h1 class="font-serif text-stone-900 mb-8 leading-[0.96] tracking-tight animate-fade-in-up [animation-delay:100ms]" style="font-size: clamp(3rem, 9vw, 8.5rem); font-weight: 700;">
+                        <h1 class="font-serif text-stone-900 mb-6 leading-[0.96] tracking-tight animate-fade-in-up [animation-delay:100ms]" style="font-size: clamp(2.75rem, 6.4vw, 5.75rem); font-weight: 700;">
                             From Burnout<br>
                             to <span class="text-orange-600 relative inline-block whitespace-nowrap italic">
                                 Balance<svg class="absolute w-full h-3 -bottom-1 left-0 text-orange-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" /></svg>
                             </span>
                         </h1>
-                    </div>
-                    <div class="col-span-12 md:col-span-4 md:pb-4">
-                        <div class="hidden md:block w-12 h-[2px] bg-stone-900 mb-4"></div>
-                        <p class="text-lg text-stone-600 leading-relaxed animate-fade-in-up [animation-delay:200ms] font-medium mb-8 max-w-sm">
+                        <p class="text-lg md:text-xl text-stone-600 leading-relaxed animate-fade-in-up [animation-delay:200ms] font-medium mb-8 max-w-xl">
                             Heal from job burnout. Navigate messy workplaces. Take back your mental health.
                         </p>
-                        <div class="flex flex-col sm:flex-row gap-3 animate-fade-in-up [animation-delay:300ms]">
-                            <a href="#books" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-bold rounded-full text-white bg-orange-600 hover:bg-orange-700 shadow-lg shadow-orange-600/20 transition-all hover:-translate-y-0.5">
-                                Explore My Books
+                        <div class="flex flex-col xl:flex-row gap-3 max-w-md xl:max-w-none animate-fade-in-up [animation-delay:300ms]">
+                            <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-8 py-4 border border-transparent text-base xl:whitespace-nowrap font-bold rounded-full text-white bg-orange-600 hover:bg-orange-700 shadow-lg shadow-orange-600/20 transition-all hover:-translate-y-0.5">
+                                Get the Book on Amazon <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
                             </a>
-                            <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 border-2 border-stone-200 text-sm font-bold rounded-full text-stone-700 bg-white hover:bg-stone-50 shadow-sm transition-all hover:-translate-y-0.5 hover:border-orange-200">
-                                <i data-lucide="play" class="w-4 h-4 mr-2 fill-current"></i> Listen to Podcast
+                            <a href="#quiz" class="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-stone-900 text-base xl:whitespace-nowrap font-bold rounded-full text-stone-900 bg-transparent hover:bg-white transition-all hover:-translate-y-0.5">
+                                <i data-lucide="activity" class="w-5 h-5"></i> Take the 7-Question Burnout Check
                             </a>
                         </div>
+                        <a href="chapter-one.html" class="inline-flex items-center gap-2 mt-5 text-sm font-bold text-stone-700 hover:text-orange-600 transition-colors animate-fade-in-up [animation-delay:400ms]">
+                            <i data-lucide="book-open" class="w-4 h-4"></i>
+                            <span class="border-b-2 border-orange-300 pb-0.5">Or read Chapter One free</span>
+                        </a>
+                    </div>
+
+                    <!-- Right: the book, tilted, with one reader review -->
+                    <div class="flex flex-col items-center animate-fade-in-up [animation-delay:250ms]">
+                        <div class="hero-book-float">
+                            <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="hero-book" aria-label="Burnout to Balance on Amazon">
+                                <div class="hero-book-fallback" aria-hidden="true">
+                                    <span>Burnout<br>to Balance</span>
+                                    <small>Andrea Gomez</small>
+                                </div>
+                                <img
+                                    src="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg"
+                                    alt="Cover of Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace by Andrea Gomez"
+                                    width="400"
+                                    height="600"
+                                    fetchpriority="high"
+                                    onerror="this.remove()"
+                                    onload="if (this.naturalWidth < 50) this.remove()"
+                                />
+                            </a>
+                        </div>
+                        <figure class="relative z-20 -mt-6 w-full max-w-[18rem] bg-white border border-stone-200 rounded-2xl shadow-xl p-5 -rotate-1">
+                            <div class="text-orange-500 text-sm tracking-widest mb-2" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                            <blockquote class="font-serif italic text-lg leading-snug text-stone-900" style="text-wrap: balance;">&ldquo;This is what I needed years ago.&rdquo;</blockquote>
+                            <figcaption class="mt-2 text-[11px] font-bold uppercase tracking-widest text-stone-500">A Hunt &middot; Amazon review</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ECG trace: flatline, then chaos, then a steady rhythm -->
+            <div class="relative z-0 mt-12 md:mt-16" aria-hidden="true">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <svg class="ecg-trace block w-full h-16 md:h-24 text-orange-600" viewBox="0 0 1200 120" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <path vector-effect="non-scaling-stroke" d="M0,70 L230,70 L250,70 L258,52 L266,92 L276,70 L300,70 L306,30 L318,108 L330,70 L345,70 L349,58 L356,84 L362,70 L395,70 L401,18 L414,112 L427,70 L440,70 L443,40 L452,100 L460,70 L490,70 L497,25 L508,110 L520,70 L548,70 L562,70 L572,60 L582,70 L598,70 L604,80 L612,14 L620,100 L628,70 L652,70 L664,56 L676,70 L690,70 L700,60 L710,70 L726,70 L732,80 L740,14 L748,100 L756,70 L780,70 L792,56 L804,70 L818,70 L828,60 L838,70 L854,70 L860,80 L868,14 L876,100 L884,70 L908,70 L920,56 L932,70 L946,70 L956,60 L966,70 L982,70 L988,80 L996,14 L1004,100 L1012,70 L1036,70 L1048,56 L1060,70 L1074,70 L1084,60 L1094,70 L1110,70 L1116,80 L1124,14 L1132,100 L1140,70 L1164,70 L1176,56 L1188,70 L1200,70" />
+                    </svg>
+                    <div class="flex justify-between mt-2 text-[10px] md:text-xs uppercase tracking-[0.22em] font-bold text-stone-500">
+                        <span>Burnout</span>
+                        <span>Balance</span>
                     </div>
                 </div>
             </div>
