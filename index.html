@@ -303,10 +303,10 @@
         @keyframes chapter-pop { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
         .chapter-modal-grid { display: grid; grid-template-columns: 1fr; }
         @media (min-width: 640px) { .chapter-modal-grid { grid-template-columns: 15rem 1fr; } }
-        .chapter-modal-art { background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c-accent) 45%, var(--c-bg-dark)) 0%, var(--c-bg-dark) 70%); display: flex; align-items: center; justify-content: center; padding: 1.75rem 1rem; position: relative; }
+        .chapter-modal-art { background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c-accent) 45%, var(--c-bg-dark)) 0%, var(--c-bg-dark) 70%); display: flex; align-items: center; justify-content: center; padding: 1.75rem 1rem; position: relative; perspective: 1400px; }
         @media (max-width: 639px) { .chapter-modal-art { padding-top: 3.25rem; } }
-        .chapter-modal-art img { width: 7.5rem; border-radius: 3px 8px 8px 3px; transform: rotate(-5deg); box-shadow: 0 20px 34px -10px rgba(0,0,0,0.75); }
-        @media (min-width: 640px) { .chapter-modal-art img { width: 10.5rem; } }
+        .chapter-modal-art .hero-book { width: 7.5rem; }
+        @media (min-width: 640px) { .chapter-modal-art .hero-book { width: 10.5rem; } }
         .chapter-modal-badge { position: absolute; top: 1rem; left: 1rem; font: 700 0.65rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.16em; text-transform: uppercase; color: #fff; background: var(--c-accent); padding: 0.4rem 0.6rem; border-radius: 0.4rem; }
         .chapter-modal-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.5rem; height: 2.5rem; border-radius: 999px; display: flex; align-items: center; justify-content: center; color: var(--c-text-muted); background: var(--c-bg-alt); z-index: 2; cursor: pointer; }
         .chapter-modal-close:hover { color: var(--c-text); }
@@ -453,6 +453,12 @@
           pointer-events: none;
         }
         .spot-stage .hero-book { width: clamp(12rem, 26vw, 20rem); }
+        /* Same 3D tilt for the smaller covers on dark backgrounds (quiz result, free chapter pop-up, second book) */
+        .book-stage { perspective: 1400px; }
+        .book-dark { box-shadow: 22px 28px 40px -14px rgba(0,0,0,0.85), 5px 7px 12px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.08); }
+        .book-auto { aspect-ratio: auto; } /* takes the image's own shape, so nothing is ever trimmed */
+        .book-auto img { position: static; display: block; height: auto; }
+        .book-sm { width: 6rem; }
         .spot-reviews { scrollbar-width: none; }
         .spot-reviews::-webkit-scrollbar { display: none; }
 
@@ -508,11 +514,10 @@
         .vitals-input { width: 100%; padding: 1rem 1.25rem; border-radius: 0.9rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); color: #fff; }
         .vitals-input::placeholder { color: rgba(255,255,255,0.45); }
         .vitals-input:focus { outline: none; border-color: var(--c-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent) 35%, transparent); }
-        .vitals-result-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: center; }
+        .vitals-result-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: center; perspective: 1400px; }
         @media (min-width: 640px) { .vitals-result-grid { grid-template-columns: 9rem 1fr; gap: 2rem; } }
-        .vitals-result-cover { width: 7.5rem; margin: 0 auto; border-radius: 0.3rem; transform: rotate(-4deg); box-shadow: 0 18px 30px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08); transition: transform .3s ease; }
-        .vitals-result-cover:hover { transform: rotate(0deg) scale(1.03); }
-        @media (min-width: 640px) { .vitals-result-cover { width: 100%; } }
+        .vitals-result-book { width: 7.5rem; margin: 0 auto; }
+        @media (min-width: 640px) { .vitals-result-book { width: 100%; } }
         .vitals-tag { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0.75rem; border-radius: 999px; font: 700 0.68rem/1 ui-monospace, monospace; letter-spacing: 0.14em; text-transform: uppercase; background: color-mix(in srgb, var(--hr-color) 18%, transparent); color: var(--hr-color); }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1089,8 +1094,12 @@
                         <!-- Result Screen: result next to the book -->
                         <div id="quiz-result" class="hidden-quiz animate-fade-in-up">
                             <div class="vitals-result-grid">
-                                <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" aria-label="Burnout to Balance on Amazon">
-                                    <img class="vitals-result-cover" src="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg" alt="Burnout to Balance book cover" loading="lazy" width="300" height="450">
+                                <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="hero-book book-dark vitals-result-book" aria-label="Burnout to Balance on Amazon">
+                                    <div class="hero-book-fallback" aria-hidden="true">
+                                        <span>Burnout<br>to Balance</span>
+                                        <small>Andrea Gomez</small>
+                                    </div>
+                                    <img src="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg" alt="Burnout to Balance book cover" loading="lazy" width="313" height="500" onerror="this.remove()" onload="if (this.naturalWidth < 50) this.remove()">
                                 </a>
                                 <div class="text-center sm:text-left">
                                     <span id="result-tag" class="vitals-tag mb-3"><i id="result-icon" data-lucide="activity" class="w-3.5 h-3.5"></i><span id="result-tag-text">Result</span></span>
@@ -1223,14 +1232,17 @@
 
                 <!-- Also by: the teen book, kept as a quieter second row -->
                 <div class="mt-16 md:mt-20 pt-10 border-t border-stone-800 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
-                    <img
-                        src="https://images-na.ssl-images-amazon.com/images/P/B0DTFMFZTT.01._SCLZZZZZZZ_.jpg"
-                        alt="Cover for Stronger Than You Think: A Guide for Teens Overcoming Anxiety"
-                        width="400"
-                        height="600"
-                        loading="lazy"
-                        class="w-24 h-auto rounded-md shadow-2xl shrink-0"
-                    />
+                    <div class="book-stage shrink-0">
+                        <a href="https://www.amazon.com/dp/B0DTFMFZTT" target="_blank" rel="noopener noreferrer" class="hero-book book-dark book-auto book-sm" aria-label="Stronger Than You Think on Amazon">
+                            <img
+                                src="https://images-na.ssl-images-amazon.com/images/P/B0DTFMFZTT.01._SCLZZZZZZZ_.jpg"
+                                alt="Cover for Stronger Than You Think: A Guide for Teens Overcoming Anxiety"
+                                width="400"
+                                height="600"
+                                loading="lazy"
+                            />
+                        </a>
+                    </div>
                     <div class="text-center sm:text-left">
                         <div class="font-mono text-xs uppercase tracking-[0.22em] font-bold text-stone-400 mb-2">Also by Andrea Gomez</div>
                         <h3 class="font-serif text-amber-50 text-2xl font-bold mb-1">Stronger Than You Think</h3>
@@ -1397,7 +1409,13 @@
             <div class="chapter-modal-grid">
                 <div class="chapter-modal-art">
                     <span class="chapter-modal-badge">Free Chapter 05</span>
-                    <img src="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg" alt="Burnout to Balance book cover" width="313" height="500" loading="lazy">
+                    <div class="hero-book book-dark">
+                        <div class="hero-book-fallback" aria-hidden="true">
+                            <span>Burnout<br>to Balance</span>
+                            <small>Andrea Gomez</small>
+                        </div>
+                        <img src="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg" alt="Burnout to Balance book cover" width="313" height="500" loading="lazy" onerror="this.remove()" onload="if (this.naturalWidth < 50) this.remove()">
+                    </div>
                 </div>
                 <div class="p-6 sm:p-8 sm:pr-12">
                     <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] font-bold text-orange-600 mb-3">A free chapter from Burnout to Balance</p>
