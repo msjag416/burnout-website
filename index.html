@@ -443,12 +443,17 @@
           text-transform: uppercase;
         }
 
-        /* ===== BOOK SPOTLIGHT (dark band after the quiz) ===== */
-        #books .spot-accent { color: color-mix(in srgb, var(--c-accent) 55%, #ffffff) !important; }
-        #books .text-orange-400 { color: color-mix(in srgb, var(--c-accent) 50%, #ffffff) !important; }
-        #books .text-stone-400 { color: color-mix(in srgb, var(--c-bg) 62%, var(--c-bg-dark)) !important; }
-        #books .border-stone-800 { border-color: color-mix(in srgb, var(--c-bg-dark) 82%, #ffffff) !important; }
-        #books .border-orange-300 { border-color: color-mix(in srgb, var(--c-accent) 60%, #ffffff) !important; }
+        /* ===== BOOK SPOTLIGHT (light band after the quiz; the markup still uses its old light-on-dark
+                 classes, so these rules flip them to dark text on the cream background) ===== */
+        #books .text-amber-50, #books .text-amber-50\/90 { color: var(--c-text) !important; }
+        #books .hover\:text-amber-50:hover { color: var(--c-accent-hover) !important; }
+        #books .spot-accent, #books .text-orange-400 { color: var(--c-accent-text) !important; }
+        #books .text-stone-400 { color: var(--c-text-muted) !important; }
+        #books .border-stone-800 { border-color: var(--c-border) !important; }
+        #books .border-orange-300 { border-color: var(--c-accent) !important; }
+        #books .hover\:bg-white\/10:hover { background-color: var(--c-accent-softer) !important; }
+        #books figure.bg-white { box-shadow: 0 12px 30px -16px rgba(28,28,31,0.25) !important; border: 1px solid var(--c-border); }
+        #books .book-dark { box-shadow: 14px 18px 28px -12px rgba(28,28,31,0.45), 3px 5px 10px rgba(28,28,31,0.2); }
         .spot-stage {
           position: relative;
           display: flex;
@@ -481,9 +486,9 @@
         .step-item summary::-webkit-details-marker { display: none; }
         .step-item summary:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 4px; border-radius: 4px; }
         .step-chev { position: relative; width: 1.75rem; height: 1.75rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--c-accent) 55%, transparent); transition: transform .35s ease, background-color .2s ease; }
-        .step-chev::before, .step-chev::after { content: ""; position: absolute; left: 50%; top: 50%; width: 0.7rem; height: 2px; background: color-mix(in srgb, var(--c-accent) 55%, #ffffff); transform: translate(-50%, -50%); border-radius: 2px; }
+        .step-chev::before, .step-chev::after { content: ""; position: absolute; left: 50%; top: 50%; width: 0.7rem; height: 2px; background: var(--c-accent); transform: translate(-50%, -50%); border-radius: 2px; }
         .step-chev::after { transform: translate(-50%, -50%) rotate(90deg); }
-        .step-item summary:hover .step-chev { background: color-mix(in srgb, var(--c-accent) 25%, transparent); }
+        .step-item summary:hover .step-chev { background: var(--c-accent-softer); }
         .step-item[open] .step-chev { transform: rotate(45deg); background: var(--c-accent); }
         .step-item[open] .step-chev::before, .step-item[open] .step-chev::after { background: #ffffff; }
         .step-item[open] .step-body { animation: step-open .4s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -597,12 +602,12 @@
         --font-serif: 'Playfair Display', 'DM Serif Display', Georgia, serif;
         --c-bg: #faf7f2;
         --c-bg-alt: #ffffff;
-        --c-bg-dark: #1a0a0a;
-        --c-bg-darker: #0a0404;
+        --c-bg-dark: #1c1c1f;
+        --c-bg-darker: #111113;
         --c-bg-accent-soft: #fde8e0;
-        --c-text: #1a0a0a;
-        --c-text-muted: #6a4a45;
-        --c-text-faint: #9a8480;
+        --c-text: #1c1c1f;
+        --c-text-muted: #57575c;
+        --c-text-faint: #85858a;
         --c-border: #e8dcd4;
         --c-border-soft: #f0e6de;
         --c-accent: #c8322a;         /* flame red */
@@ -610,9 +615,9 @@
         --c-accent-soft: #fad4cf;
         --c-accent-softer: #fce6e2;
         --c-accent-text: #8e2018;
-        --c-accent-2: #1a0a0a;
+        --c-accent-2: #1c1c1f;
         --c-accent-2-hover: #000000;
-        --c-accent-2-text: #1a0a0a;
+        --c-accent-2-text: #1c1c1f;
         --c-on-accent: #faf7f2;
         --c-grid: #f0e8de;
         --c-danger: #c8322a;
@@ -1158,7 +1163,7 @@
         </section>
 
         <!-- Book Spotlight: dark band right after the quiz. Cover + the eight steps + reader reviews + buy buttons, all in one view -->
-        <section id="books" class="py-20 md:py-28 bg-stone-900 relative z-10 overflow-hidden">
+        <section id="books" class="py-20 md:py-28 bg-amber-50 relative z-10 overflow-hidden border-t border-stone-100">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-12 lg:gap-16 items-start">
 
