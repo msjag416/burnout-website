@@ -384,7 +384,10 @@
           transform: rotateY(-16deg) rotateX(3deg);
           transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        .hero-book:hover { transform: rotateY(-6deg) rotateX(1deg) translateY(-3px); }
+        /* Straighten-on-hover only for a real mouse; phones keep the tilt and skip the stuck "hover" state after a tap */
+        @media (hover: hover) and (pointer: fine) {
+          .hero-book:hover { transform: rotateY(-6deg) rotateX(1deg) translateY(-3px); }
+        }
         .hero-book img {
           position: absolute;
           inset: 0;
