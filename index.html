@@ -322,6 +322,91 @@
         .chapter-modal-badge { position: absolute; top: 1rem; left: 1rem; font: 700 0.65rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.16em; text-transform: uppercase; color: #fff; background: var(--c-accent); padding: 0.4rem 0.6rem; border-radius: 0.4rem; }
         .chapter-modal-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.5rem; height: 2.5rem; border-radius: 999px; display: flex; align-items: center; justify-content: center; color: var(--c-text-muted); background: var(--c-bg-alt); z-index: 2; cursor: pointer; }
         .chapter-modal-close:hover { color: var(--c-text); }
+
+        /* ===== LOOK INSIDE READER: an open book with real pages you can turn ===== */
+        .look-inside-btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.7rem 1.25rem 0.7rem 0.8rem; border-radius: 999px; background: #fff; color: var(--c-text); font-weight: 700; font-size: 0.9rem; border: 1px solid var(--c-border); box-shadow: 0 10px 24px -14px rgba(28,28,31,0.35); cursor: pointer; transition: transform .2s, box-shadow .2s, border-color .2s; }
+        .look-inside-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 30px -14px rgba(28,28,31,0.45); border-color: var(--c-accent); }
+        .look-inside-icon { width: 2rem; height: 2rem; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: var(--c-accent); color: #fff; }
+
+        .reader-modal { width: min(64rem, calc(100vw - 1rem)); max-height: calc(100dvh - 1rem); padding: 0; border: 0; border-radius: 1.5rem; background: #111113; color: var(--c-text); box-shadow: 0 40px 80px -20px rgba(0,0,0,0.7); overflow: hidden; }
+        .reader-modal::backdrop { background: rgba(10, 4, 4, 0.78); backdrop-filter: blur(5px); }
+        .reader-modal[open] { animation: chapter-pop .28s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .reader-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.5rem; height: 2.5rem; border-radius: 999px; display: flex; align-items: center; justify-content: center; color: #e7e7ea; background: rgba(255,255,255,0.08); z-index: 3; cursor: pointer; }
+        .reader-close:hover { background: rgba(255,255,255,0.16); }
+        .reader-shell { display: flex; flex-direction: column; gap: 0.75rem; padding: 1rem 0.75rem 0.9rem; max-height: calc(100dvh - 1rem); }
+        @media (min-width: 640px) { .reader-shell { padding: 1.1rem 1.5rem 1.1rem; gap: 1rem; } }
+        .reader-top { display: flex; align-items: center; justify-content: space-between; padding-right: 3.5rem; min-height: 2.5rem; }
+        .reader-kicker, .reader-count { font: 700 0.65rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.16em; text-transform: uppercase; }
+        .reader-kicker { color: var(--c-accent); }
+        .reader-count { color: #85858a; }
+
+        .reader-book { position: relative; display: flex; align-items: center; justify-content: center; perspective: 2200px; }
+        .reader-spread { display: grid; grid-template-columns: 1fr; width: min(100%, 22rem); position: relative; transform-style: preserve-3d; }
+        @media (min-width: 768px) { .reader-spread { grid-template-columns: 1fr 1fr; width: min(100%, 46rem); } }
+        /* the gutter: a soft shadow where the two pages meet the spine */
+        @media (min-width: 768px) {
+          .reader-spread::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 5rem; transform: translateX(-50%); background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.16) 48%, rgba(0,0,0,0.28) 50%, rgba(0,0,0,0.16) 52%, transparent 100%); pointer-events: none; z-index: 2; border-radius: 2px; }
+        }
+        .reader-page { position: relative; background: #fbf7ef; color: #2a2a2e; aspect-ratio: 3 / 4.7; max-height: calc(100dvh - 11.5rem); display: none; flex-direction: column; box-shadow: 0 30px 60px -24px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,0,0,0.25); border-radius: 0.35rem 0.9rem 0.9rem 0.35rem; backface-visibility: hidden; overflow: hidden; }
+        .reader-page.is-visible { display: flex; }
+        /* paper texture: faint lines of fibre and a slightly darker edge */
+        .reader-page::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(0,0,0,0.03), transparent 12%, transparent 88%, rgba(0,0,0,0.04)); }
+        @media (min-width: 768px) {
+          .reader-page.is-left { border-radius: 0.9rem 0.35rem 0.35rem 0.9rem; }
+          .reader-page.is-left::after { background: linear-gradient(90deg, rgba(0,0,0,0.02), transparent 60%, rgba(0,0,0,0.07)); }
+          .reader-page.is-right::after { background: linear-gradient(90deg, rgba(0,0,0,0.07), transparent 40%, rgba(0,0,0,0.02)); }
+        }
+        .reader-page-inner { flex: 1; padding: 1.6rem 1.5rem 1.1rem; font-family: Georgia, 'Times New Roman', serif; font-size: 0.92rem; line-height: 1.5; overflow: hidden; }
+        @media (min-width: 768px) { .reader-page { aspect-ratio: 3 / 4.2; } .reader-page-inner { padding: 2rem 2rem 1.2rem; font-size: 0.95rem; } }
+        .reader-page-inner p { margin: 0 0 0.75em; }
+        .reader-page-inner p:last-child { margin-bottom: 0; }
+        .reader-chapter { font: 700 0.62rem/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-accent); margin-bottom: 0.6rem !important; }
+        .reader-h { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 1.22em; line-height: 1.2; margin: 0 0 0.7em; color: #1c1c1f; }
+        .reader-drop::first-letter { font-family: 'Playfair Display', Georgia, serif; font-size: 3.1em; float: left; line-height: 0.8; padding: 0.08em 0.1em 0 0; color: var(--c-accent); font-weight: 700; }
+        .reader-smallcaps { font-variant: small-caps; letter-spacing: 0.04em; }
+        .reader-list { margin: 0 0 0.75em; padding-left: 1.1em; }
+        .reader-list li { margin-bottom: 0.45em; }
+        .reader-list li::marker { color: var(--c-accent); }
+        .reader-folio { position: absolute; bottom: 0.65rem; left: 0; right: 0; text-align: center; font: 600 0.62rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.12em; color: #85858a; }
+        /* title page and the closing page */
+        .reader-page-title .reader-page-inner, .reader-page-end .reader-page-inner { display: flex; flex-direction: column; justify-content: center; text-align: center; }
+        .reader-eyebrow { font: 700 0.62rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.18em; text-transform: uppercase; color: var(--c-accent); }
+        .reader-booktitle { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 2.4em; line-height: 0.98; color: #1c1c1f; margin: 0.9em 0 0.5em; }
+        .reader-subtitle { font-style: italic; font-size: 1.05em; color: #57575c; margin-bottom: 2.2em !important; }
+        .reader-tiny { font-size: 0.78em; color: #85858a; }
+        .reader-page-end { background: #1c1c1f; color: #f1efe9; }
+        .reader-page-end::after { display: none; }
+        .reader-endtitle { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 1.9em; line-height: 1.05; color: #fff; margin: 0.6em 0 0.6em; }
+        .reader-endtext { font-size: 0.92em; color: #c9c9ce; margin-bottom: 1.6em !important; }
+        .reader-cta { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.85rem 1.3rem; border-radius: 999px; background: var(--c-accent); color: #fff; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 0.9rem; transition: transform .2s, filter .2s; }
+        .reader-cta:hover { transform: translateY(-2px); filter: brightness(1.08); }
+        .reader-cta-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.7rem; padding: 0.7rem 1rem; border-radius: 999px; border: 1px solid rgba(255,255,255,0.3); color: #f1efe9; font-family: 'Inter', system-ui, sans-serif; font-weight: 600; font-size: 0.82rem; cursor: pointer; }
+        .reader-cta-ghost:hover { background: rgba(255,255,255,0.08); }
+
+        /* page turn: the new right-hand page swings in from the spine, the new left-hand page settles into place */
+        @keyframes reader-turn-in { from { transform: rotateY(-85deg); opacity: 0.2; } to { transform: rotateY(0); opacity: 1; } }
+        @keyframes reader-turn-back { from { transform: rotateY(85deg); opacity: 0.2; } to { transform: rotateY(0); opacity: 1; } }
+        @keyframes reader-settle { from { opacity: 0.35; transform: translateX(6px); } to { opacity: 1; transform: none; } }
+        .reader-spread.turn-forward .reader-page.is-right, .reader-spread.turn-forward .reader-page.is-solo { transform-origin: left center; animation: reader-turn-in .5s cubic-bezier(0.2, 0.75, 0.25, 1) both; }
+        .reader-spread.turn-forward .reader-page.is-left { animation: reader-settle .4s ease-out both; }
+        .reader-spread.turn-back .reader-page.is-left, .reader-spread.turn-back .reader-page.is-solo { transform-origin: right center; animation: reader-turn-back .5s cubic-bezier(0.2, 0.75, 0.25, 1) both; }
+        .reader-spread.turn-back .reader-page.is-right { animation: reader-settle .4s ease-out both; }
+
+        .reader-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 2.75rem; height: 2.75rem; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.08); color: #f1efe9; z-index: 4; cursor: pointer; transition: background .2s, opacity .2s; }
+        .reader-arrow:hover { background: var(--c-accent); }
+        .reader-arrow[disabled] { opacity: 0.25; cursor: default; }
+        .reader-arrow[disabled]:hover { background: rgba(255,255,255,0.08); }
+        .reader-arrow-prev { left: 0; }
+        .reader-arrow-next { right: 0; }
+        @media (min-width: 1100px) { .reader-arrow-prev { left: 0.5rem; } .reader-arrow-next { right: 0.5rem; } }
+        /* on phones the arrows sit under the page instead of over it */
+        @media (max-width: 639px) { .reader-book { flex-wrap: wrap; } .reader-arrow { position: static; transform: none; order: 2; margin: 0.6rem 1.25rem 0; width: 3.25rem; height: 3rem; border-radius: 0.9rem; background: rgba(255,255,255,0.1); } .reader-spread { order: 1; } }
+        .reader-bottom { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .reader-dots { display: flex; gap: 0.35rem; }
+        .reader-dots i { width: 1.1rem; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.18); transition: background .2s; }
+        .reader-dots i.on { background: var(--c-accent); }
+        .reader-hint { font-size: 0.72rem; color: #85858a; margin: 0; }
+        @media (prefers-reduced-motion: reduce) { .reader-spread .reader-page { animation: none !important; } .reader-modal[open] { animation: none; } }
         body.chapter-open { overflow: hidden; }
 
         /* Hide elements dynamically for the quiz UI */
@@ -962,10 +1047,16 @@
                                 <i data-lucide="activity" class="w-5 h-5"></i> Take the 7-Question Burnout Check
                             </a>
                         </div>
-                        <button type="button" data-open-chapter class="inline-flex items-center gap-2 mt-5 text-sm font-bold text-stone-700 hover:text-orange-600 transition-colors animate-fade-in-up [animation-delay:400ms] cursor-pointer">
-                            <i data-lucide="download" class="w-4 h-4"></i>
-                            <span class="border-b-2 border-orange-300 pb-0.5">Download free chapter</span>
-                        </button>
+                        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mt-5 animate-fade-in-up [animation-delay:400ms]">
+                            <button type="button" data-open-reader class="inline-flex items-center gap-2 text-sm font-bold text-stone-700 hover:text-orange-600 transition-colors cursor-pointer">
+                                <i data-lucide="book-open" class="w-4 h-4"></i>
+                                <span class="border-b-2 border-orange-300 pb-0.5">Look inside the book</span>
+                            </button>
+                            <button type="button" data-open-chapter class="inline-flex items-center gap-2 text-sm font-bold text-stone-700 hover:text-orange-600 transition-colors cursor-pointer">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                                <span class="border-b-2 border-orange-300 pb-0.5">Download free chapter</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Right: the book, tilted, with one reader review -->
@@ -1185,6 +1276,13 @@
                                     onload="if (this.naturalWidth < 50) this.remove()"
                                 />
                             </a>
+                        </div>
+                        <!-- Look Inside: opens the page-turning reader with the opening pages of Chapter 1 -->
+                        <div class="flex justify-center -mt-2">
+                            <button type="button" data-open-reader class="look-inside-btn" aria-haspopup="dialog" aria-controls="reader-modal">
+                                <span class="look-inside-icon" aria-hidden="true"><i data-lucide="book-open" class="w-4 h-4"></i></span>
+                                <span>Look inside<span class="hidden sm:inline"> &middot; read the first pages free</span></span>
+                            </button>
                         </div>
                     </div>
 
@@ -1568,6 +1666,123 @@
             </div>
         </dialog>
 
+        <!-- Look Inside reader: an open book you can page through. Every page is word for word from Chapter 1 (burnout-to-balance-chapter-1-free.pdf). Opened by any button with data-open-reader -->
+        <dialog id="reader-modal" class="reader-modal" aria-label="Look inside Burnout to Balance">
+            <button type="button" class="reader-close" data-close-reader aria-label="Close the reader"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="reader-shell">
+                <div class="reader-top">
+                    <span class="reader-kicker">Look inside<span class="hidden sm:inline"> &middot; Chapter 1</span></span>
+                    <span class="reader-count" id="reader-count" aria-live="polite">Page 1 of 8</span>
+                </div>
+
+                <div class="reader-book" id="reader-book">
+                    <button type="button" class="reader-arrow reader-arrow-prev" data-reader-prev aria-label="Previous page"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+
+                    <div class="reader-spread" id="reader-spread">
+                        <!-- Page 1: half title -->
+                        <article class="reader-page reader-page-title">
+                            <div class="reader-page-inner">
+                                <p class="reader-eyebrow">Andrea Gomez</p>
+                                <h2 class="reader-booktitle">Burnout<br>to Balance</h2>
+                                <p class="reader-subtitle">Your 8-Step Guide to Thriving in a Messy Workplace</p>
+                                <p class="reader-tiny">Written by an ICU nurse with 27 years at the bedside</p>
+                            </div>
+                            <span class="reader-folio">1</span>
+                        </article>
+
+                        <!-- Page 2 -->
+                        <article class="reader-page">
+                            <div class="reader-page-inner">
+                                <p class="reader-chapter">Chapter 1: Face Your Stress and Its Impact</p>
+                                <h3 class="reader-h">Step 1: Recognize Burnout for What It Is</h3>
+                                <p class="reader-drop">Job burnout is work-related stress that leaves you physically and emotionally drained. It can make you feel useless, powerless, or detached from your job. You might second-guess your abilities, struggle to focus, or feel like your work has no real value.</p>
+                                <p>Burnout is not classified as a medical condition, but it is a real problem that can lead to anxiety, depression, and even physical health issues. Some people experience it as extreme fatigue. Others feel stuck in a cycle of frustration and apathy, unable to find motivation no matter how hard they try.</p>
+                            </div>
+                            <span class="reader-folio">2</span>
+                        </article>
+
+                        <!-- Page 3 -->
+                        <article class="reader-page">
+                            <div class="reader-page-inner">
+                                <p>Research in neuroscience and psychology, including several studies published in journals like <em>Biological Psychiatry</em> and <em>Nature Reviews Neuroscience</em> revealed that burnout physically alters the brain. Long-term exposure to workplace stress impacts three main brain areas:</p>
+                                <p><strong>Prefrontal Cortex Shrinkage:</strong> The prefrontal cortex, responsible for decision-making, focus, and impulse control, shrinks under chronic stress. This is why burned-out individuals struggle with concentration, problem-solving, and even basic decision-making. Tasks that once felt easy now feel like too much effort.</p>
+                                <p><strong>Amygdala Enlargement:</strong> The amygdala, the brain&rsquo;s emotional response center, becomes hyperactive when stress is constant. This means heightened anxiety, increased irritability, and an overactive fight-or-flight response. Small work stressors, like an email from your boss, suddenly feel like full-blown threats.</p>
+                            </div>
+                            <span class="reader-folio">3</span>
+                        </article>
+
+                        <!-- Page 4 -->
+                        <article class="reader-page">
+                            <div class="reader-page-inner">
+                                <p><strong>Hippocampus Damage:</strong> The hippocampus, which regulates memory and learning, also takes a hit. Burnout can lead to forgetfulness, difficulty retaining information, and an overall sense of brain fog. Ever found yourself rereading the same email five times and still not processing it? That&rsquo;s your hippocampus waving a white flag.</p>
+                                <p>The longer burnout persists, the more these changes reinforce each other. Your brain becomes wired to anticipate stress, making relaxation and recovery even harder. But the good news is these effects aren&rsquo;t permanent. When stress levels decrease, the brain has the ability to rebuild and restore itself.</p>
+                                <p>The interesting thing is that two people can face the same work conditions, but only one burns out. Factors like personality, past job experiences, and workplace culture all play a role in how burnout takes hold.</p>
+                            </div>
+                            <span class="reader-folio">4</span>
+                        </article>
+
+                        <!-- Page 5 -->
+                        <article class="reader-page">
+                            <div class="reader-page-inner">
+                                <h3 class="reader-h">Are You Burned Out? Ask Yourself These Questions</h3>
+                                <p class="reader-smallcaps">If any of these sound familiar, burnout might be at play:</p>
+                                <ul class="reader-list">
+                                    <li>Do you struggle to start your workday and feel like you are forcing yourself to keep going?</li>
+                                    <li>Have you started questioning whether your job has any value or meaning?</li>
+                                    <li>Do you feel detached from your work, coworkers, or clients?</li>
+                                    <li>Have you lost patience with the people you work with, or even dislike them?</li>
+                                    <li>Do you lack energy and feel mentally foggy or unproductive?</li>
+                                </ul>
+                            </div>
+                            <span class="reader-folio">5</span>
+                        </article>
+
+                        <!-- Page 6 -->
+                        <article class="reader-page">
+                            <div class="reader-page-inner">
+                                <ul class="reader-list">
+                                    <li>Does your work feel pointless, even when you are meeting expectations?</li>
+                                    <li>Have you started doubting your skills and abilities?</li>
+                                    <li>Are you relying on food, alcohol, or other distractions to cope?</li>
+                                    <li>Have your sleep habits changed, or are you experiencing physical symptoms like headaches or stomach issues?</li>
+                                </ul>
+                                <p>If you are nodding along to even one or two of these, you&rsquo;re at your limit. The key thing to remember is that this is not just &ldquo;being stressed.&rdquo; It is a sign that your work situation is affecting your well-being in ways that cannot be fixed by pushing through.</p>
+                            </div>
+                            <span class="reader-folio">6</span>
+                        </article>
+
+                        <!-- Page 7 -->
+                        <article class="reader-page">
+                            <div class="reader-page-inner">
+                                <h3 class="reader-h">Why Do Some People Burn Out Faster Than Others?</h3>
+                                <p>Getting things done should be simple. You make a list, tackle each task, and move on. But modern life has a way of making even the most basic responsibilities feel tiring. There is always something demanding your attention, and no matter how much you accomplish, there is always more waiting. The problem is not just the workload. It is the expectation that you should always be able to handle it.</p>
+                                <p>That expectation is exactly what leads to burnout. You keep pushing, pretending your energy is limitless, until one day you hit a wall. You fall behind on tasks or feel that you have a never-ending to-do list. If you take an honest look at it, the exhaustion runs deeper. It is not just about your everyday stress. It is about how you have been conditioned to work.</p>
+                            </div>
+                            <span class="reader-folio">7</span>
+                        </article>
+
+                        <!-- Page 8: keep reading -->
+                        <article class="reader-page reader-page-end">
+                            <div class="reader-page-inner">
+                                <p class="reader-eyebrow">That&rsquo;s the opening of Step 1</p>
+                                <h3 class="reader-endtitle">Seven more steps are waiting</h3>
+                                <p class="reader-endtext">The rest of this chapter looks at how your inner child shaped the way you work. The next seven steps cover reading the room, handling difficult coworkers and bosses, and knowing when it&rsquo;s time to leave.</p>
+                                <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="reader-cta">Get the Book on Amazon <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+                                <button type="button" class="reader-cta-ghost" data-reader-to-chapter><i data-lucide="download" class="w-4 h-4"></i> Download Chapter 5 free</button>
+                            </div>
+                        </article>
+                    </div>
+
+                    <button type="button" class="reader-arrow reader-arrow-next" data-reader-next aria-label="Next page"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
+                </div>
+
+                <div class="reader-bottom">
+                    <div class="reader-dots" id="reader-dots" aria-hidden="true"></div>
+                    <p class="reader-hint">Tap the page edge, swipe, or use your arrow keys</p>
+                </div>
+            </div>
+        </dialog>
+
         <!-- Newsletter Section -->
         <section id="newsletter" class="py-24 bg-stone-900 text-center px-4 relative z-10">
             <div class="max-w-2xl mx-auto rounded-3xl p-8 md:p-12" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);">
@@ -1693,6 +1908,106 @@
         document.querySelectorAll('[data-close-chapter]').forEach(b => b.addEventListener('click', closeChapter));
         // Click on the dark area outside the card closes it
         chapterModal.addEventListener('click', (e) => { if (e.target === chapterModal) closeChapter(); });
+
+        // 3c. Look Inside reader: an open book with the first pages of Chapter 1. Two pages at a time on wide screens, one on phones.
+        (function () {
+            const modal = document.getElementById('reader-modal');
+            if (!modal) return;
+            const spread = document.getElementById('reader-spread');
+            const twoUp = window.matchMedia('(min-width: 768px)');
+            const allPages = Array.from(spread.querySelectorAll('.reader-page'));
+            // On phones (one page at a time) the half-title page is skipped so the first tap lands on the writing
+            const livePages = () => twoUp.matches ? allPages : allPages.filter(p => !p.classList.contains('reader-page-title'));
+            let pages = allPages;
+            const count = document.getElementById('reader-count');
+            const dots = document.getElementById('reader-dots');
+            const prevBtn = modal.querySelector('[data-reader-prev]');
+            const nextBtn = modal.querySelector('[data-reader-next]');
+            let index = 0; // index of the first visible page
+            let dotEls = [];
+
+            function perView() { return twoUp.matches ? 2 : 1; }
+            function lastStart() { const n = perView(); return Math.max(0, Math.ceil(pages.length / n) * n - n); }
+
+            // Shrink the type on a page a little if its text doesn't fit (small phones, short screens)
+            function fitPage(page) {
+                const inner = page.querySelector('.reader-page-inner');
+                if (!inner) return;
+                inner.style.fontSize = '';
+                let size = parseFloat(getComputedStyle(inner).fontSize);
+                let guard = 0;
+                while (inner.scrollHeight > inner.clientHeight + 1 && size > 10 && guard < 14) {
+                    size -= 0.5; inner.style.fontSize = size + 'px'; guard++;
+                }
+            }
+
+            function render(direction) {
+                const n = perView();
+                pages = livePages();
+                allPages.forEach(p => { if (!pages.includes(p)) { p.classList.remove('is-visible', 'is-left', 'is-right', 'is-solo'); p.setAttribute('aria-hidden', 'true'); } });
+                if (dotEls.length !== pages.length) { dots.innerHTML = ''; pages.forEach(() => dots.appendChild(document.createElement('i'))); dotEls = Array.from(dots.children); }
+                index = Math.min(Math.max(0, index), lastStart());
+                if (n === 2 && index % 2 === 1) index -= 1;
+                spread.classList.remove('turn-forward', 'turn-back');
+                pages.forEach((p, i) => {
+                    const on = i >= index && i < index + n;
+                    p.classList.toggle('is-visible', on);
+                    p.classList.toggle('is-left', on && n === 2 && i === index);
+                    p.classList.toggle('is-right', on && n === 2 && i === index + 1);
+                    p.classList.toggle('is-solo', on && n === 1);
+                    p.setAttribute('aria-hidden', on ? 'false' : 'true');
+                    const folio = p.querySelector('.reader-folio'); if (folio) folio.textContent = i + 1;
+                });
+                if (direction) { void spread.offsetWidth; spread.classList.add(direction === 'next' ? 'turn-forward' : 'turn-back'); }
+                pages.filter(p => p.classList.contains('is-visible')).forEach(fitPage);
+                const first = index + 1, last = Math.min(index + n, pages.length);
+                count.textContent = (n === 2 && last > first) ? `Pages ${first}–${last} of ${pages.length}` : `Page ${first} of ${pages.length}`;
+                dotEls.forEach((d, i) => d.classList.toggle('on', i >= index && i < index + n));
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index >= lastStart();
+            }
+            function next() { if (index < lastStart()) { index += perView(); render('next'); } }
+            function prev() { if (index > 0) { index -= perView(); render('prev'); } }
+
+            function openReader() {
+                index = 0;
+                if (typeof modal.showModal === 'function') modal.showModal(); else modal.setAttribute('open', '');
+                document.body.classList.add('chapter-open');
+                render();
+                nextBtn.focus({ preventScroll: true });
+            }
+            function closeReader() { if (typeof modal.close === 'function') modal.close(); else modal.removeAttribute('open'); }
+            modal.addEventListener('close', () => document.body.classList.remove('chapter-open'));
+
+            document.querySelectorAll('[data-open-reader]').forEach(b => b.addEventListener('click', openReader));
+            modal.querySelectorAll('[data-close-reader]').forEach(b => b.addEventListener('click', closeReader));
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeReader(); });
+            prevBtn.addEventListener('click', prev);
+            nextBtn.addEventListener('click', next);
+            // From the last page, straight into the free chapter sign-up
+            const toChapter = modal.querySelector('[data-reader-to-chapter]');
+            if (toChapter) toChapter.addEventListener('click', () => { closeReader(); setTimeout(openChapter, 60); });
+
+            // Arrow keys turn pages while the reader is open
+            modal.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+                else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+            });
+            // Tap the outer edge of a page to turn it (like a real book); swipe works too
+            let touchX = null;
+            spread.addEventListener('pointerdown', (e) => { touchX = e.clientX; });
+            spread.addEventListener('pointerup', (e) => {
+                if (touchX === null) return;
+                const dx = e.clientX - touchX; touchX = null;
+                if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); return; }
+                if (e.target.closest('a, button')) return;
+                const r = spread.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width;
+                if (x > 0.82) next(); else if (x < 0.18) prev();
+            });
+            twoUp.addEventListener('change', () => { if (modal.open) render(); });
+            window.addEventListener('resize', () => { if (modal.open) pages.filter(p => p.classList.contains('is-visible')).forEach(fitPage); });
+        })();
 
         chapterForm.addEventListener('submit', async (e) => {
             e.preventDefault();
