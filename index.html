@@ -897,14 +897,16 @@
                     <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 max-[359px]:px-3 py-2 rounded-full bg-orange-600 text-white hover:bg-orange-700 transition-colors font-bold text-xs shadow-md shadow-orange-600/30 whitespace-nowrap">
                         Get the Book
                     </a>
-                    <button id="mobile-menu-btn" class="p-2 text-stone-900 focus:outline-none relative z-[60]" aria-label="Toggle menu">
+                    <button id="mobile-menu-btn" class="p-2 text-stone-900 focus:outline-none relative z-[60]" aria-label="Toggle menu" aria-expanded="false">
                         <i data-lucide="menu" class="w-7 h-7" id="menu-icon"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Menu Overlay -->
+    </nav>
+
+        <!-- Mobile Menu Overlay (kept outside <nav>: the nav's blur effect would otherwise trap the backdrop inside the top bar) -->
         <div id="mobile-menu" class="hidden">
             <div class="fixed inset-0 bg-stone-900/20 backdrop-blur-sm z-40 md:hidden" id="mobile-backdrop"></div>
             <div class="fixed top-20 right-0 w-full max-w-sm bg-amber-50 shadow-2xl z-50 md:hidden border-l border-stone-200">
@@ -917,7 +919,6 @@
                 </div>
             </div>
         </div>
-    </nav>
 
     <main>
         <!-- Magazine Masthead Strip -->
@@ -1646,27 +1647,23 @@
         const menuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const backdrop = document.getElementById('mobile-backdrop');
-        const menuIcon = document.getElementById('menu-icon');
         const mobileLinks = document.querySelectorAll('.mobile-link');
         let isMenuOpen = false;
 
         function toggleMenu() {
             isMenuOpen = !isMenuOpen;
-            if (isMenuOpen) {
-                mobileMenu.classList.remove('hidden');
-                document.body.classList.add('menu-open');
-                menuIcon.setAttribute('data-lucide', 'x');
-            } else {
-                mobileMenu.classList.add('hidden');
-                document.body.classList.remove('menu-open');
-                menuIcon.setAttribute('data-lucide', 'menu');
-            }
+            mobileMenu.classList.toggle('hidden', !isMenuOpen);
+            document.body.classList.toggle('menu-open', isMenuOpen);
+            menuBtn.setAttribute('aria-expanded', isMenuOpen);
+            // Swap the icon (lucide replaces the <i> with an <svg>, so rebuild it each time)
+            menuBtn.innerHTML = '<i data-lucide="' + (isMenuOpen ? 'x' : 'menu') + '" class="w-7 h-7"></i>';
             lucide.createIcons();
         }
 
         menuBtn.addEventListener('click', toggleMenu);
         backdrop.addEventListener('click', toggleMenu);
         mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && isMenuOpen) toggleMenu(); });
 
         // 3. Form Submission Handling
         const form = document.getElementById('newsletter-form');
