@@ -1406,45 +1406,29 @@
         </section>
 
         <!-- Podcast Section -->
-        <section id="podcast" class="py-24 bg-amber-50 relative z-10 border-y border-stone-100">
+        <section id="podcast" class="py-16 md:py-20 bg-amber-50 relative z-10 border-y border-stone-100">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
+                <div class="text-center mb-8">
                     <h2 class="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">The Podcast</h2>
                     <p class="text-lg text-stone-500 font-medium max-w-2xl mx-auto">
                         The podcast records the conversations we usually have in the breakroom. We speak plainly about the failures of leadership. We laugh at the absurdity of the job. It serves as a record of our reality.
                     </p>
                 </div>
 
-                <div class="bg-stone-900 rounded-3xl p-6 md:p-10 shadow-2xl text-white transform transition-all duration-500 hover:shadow-orange-900/20 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-80 h-80 bg-orange-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-orange-600/30 transition-all duration-500"></div>
-                    
-                    <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
-                        <div class="w-40 h-40 md:w-48 md:h-48 bg-gradient-to-br from-orange-500 to-amber-700 rounded-2xl shadow-lg flex-shrink-0 flex items-center justify-center text-5xl font-serif font-bold text-white/90 border-4 border-white/10 rotate-3 group-hover:rotate-0 transition-transform duration-500">
-                            B2B
-                        </div>
-                        <div class="flex-1 text-center md:text-left">
-                            <div class="uppercase tracking-widest text-xs font-bold text-orange-400 mb-2">Listen Now</div>
-                            <h3 class="text-3xl md:text-4xl font-bold mb-3 leading-tight">Burnout to Balance</h3>
-                            <p class="text-stone-400 mb-8 text-lg">Andrea Gomez</p>
-                            <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
-                                <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-400 text-stone-900 font-bold py-3 px-8 rounded-full transition-colors flex items-center gap-2 transform hover:scale-105">
-                                    <i data-lucide="plus" class="w-5 h-5"></i> Follow on Spotify
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Real Spotify player: visitors can press play on any episode without leaving the site -->
-                    <div class="mt-10 relative z-10">
-                        <div class="uppercase tracking-widest text-xs font-bold text-orange-400 mb-3 text-center md:text-left">Press play right here</div>
-                        <iframe
-                            title="Burnout to Balance podcast player on Spotify"
-                            src="https://open.spotify.com/embed/show/7zbvtiqGQfj40nvOmVi6Fu?utm_source=generator&amp;theme=0"
-                            width="100%"
-                            height="352"
-                            style="border:0; border-radius:12px; display:block; background:#282828;"
-                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                            loading="lazy"></iframe>
+                <!-- Spotify's own player sits right on the page (its colours come from the podcast cover art) -->
+                <div class="max-w-2xl mx-auto">
+                    <iframe
+                        title="Burnout to Balance podcast player on Spotify"
+                        src="https://open.spotify.com/embed/show/7zbvtiqGQfj40nvOmVi6Fu?utm_source=generator"
+                        width="100%"
+                        height="152"
+                        style="border:0; border-radius:12px; display:block;"
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy"></iframe>
+                    <div class="mt-5 flex justify-center">
+                        <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-bold py-2.5 px-6 rounded-full border-2 border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-amber-50 transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Follow on Spotify
+                        </a>
                     </div>
                 </div>
             </div>
