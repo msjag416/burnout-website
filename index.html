@@ -413,6 +413,34 @@
           text-transform: uppercase;
         }
 
+        /* ===== BOOK SPOTLIGHT (dark band after the quiz) ===== */
+        #books .spot-accent { color: color-mix(in srgb, var(--c-accent) 55%, #ffffff) !important; }
+        #books .text-orange-400 { color: color-mix(in srgb, var(--c-accent) 50%, #ffffff) !important; }
+        #books .text-stone-400 { color: color-mix(in srgb, var(--c-bg) 62%, var(--c-bg-dark)) !important; }
+        #books .border-stone-800 { border-color: color-mix(in srgb, var(--c-bg-dark) 82%, #ffffff) !important; }
+        #books .border-orange-300 { border-color: color-mix(in srgb, var(--c-accent) 60%, #ffffff) !important; }
+        .spot-stage {
+          position: relative;
+          display: flex;
+          justify-content: center;
+          padding: 2rem 0 2.5rem;
+          perspective: 1400px;
+        }
+        .spot-stage::before {
+          content: "";
+          position: absolute;
+          left: 50%; top: 50%;
+          width: 125%; aspect-ratio: 1;
+          max-width: 34rem;
+          transform: translate(-50%, -50%);
+          background: radial-gradient(circle, color-mix(in srgb, var(--c-accent) 45%, transparent) 0%, transparent 62%);
+          filter: blur(10px);
+          pointer-events: none;
+        }
+        .spot-stage .hero-book { width: clamp(12rem, 26vw, 20rem); }
+        .spot-reviews { scrollbar-width: none; }
+        .spot-reviews::-webkit-scrollbar { display: none; }
+
         /* ===== HERO ECG TRACE (draws left to right once on load) ===== */
         .ecg-trace {
           clip-path: inset(0 100% 0 0);
@@ -1025,8 +1053,147 @@
             </div>
         </section>
 
+        <!-- Book Spotlight: dark band right after the quiz. Cover + the eight steps + reader reviews + buy buttons, all in one view -->
+        <section id="books" class="py-20 md:py-28 bg-stone-900 relative z-10 overflow-hidden">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-12 lg:gap-16 items-start">
+
+                    <!-- Left: the book, lit from behind. Stays in view on desktop while the steps scroll past -->
+                    <div class="lg:sticky lg:top-28 self-start">
+                        <div class="spot-stage">
+                            <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="hero-book" aria-label="Burnout to Balance on Amazon">
+                                <div class="hero-book-fallback" aria-hidden="true">
+                                    <span>Burnout<br>to Balance</span>
+                                    <small>Andrea Gomez</small>
+                                </div>
+                                <img
+                                    src="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg"
+                                    alt="Cover of Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace by Andrea Gomez"
+                                    width="400"
+                                    height="600"
+                                    loading="lazy"
+                                    onerror="this.remove()"
+                                    onload="if (this.naturalWidth < 50) this.remove()"
+                                />
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right: pitch, buy buttons, the eight steps -->
+                    <div>
+                        <div class="font-mono text-xs uppercase tracking-[0.22em] font-bold text-orange-400 mb-5">Inside the book</div>
+                        <h2 class="font-serif text-amber-50 leading-[1.02] mb-6" style="font-size: clamp(2.25rem, 5vw, 3.75rem);">
+                            Eight Steps to Survive <span class="spot-accent italic font-normal">a Messy Workplace</span>
+                        </h2>
+                        <p class="text-stone-400 text-lg leading-relaxed mb-8 max-w-xl">
+                            Written by an ICU nurse with more than two decades at the bedside. Learn to read any workplace, set healthy limits, and keep your sanity, whether you stay or decide it's time to walk away. No workbook, no magic formula, just a decision to stop accepting burnout as the price of success.
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row gap-3 mb-12 md:mb-14">
+                            <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-8 py-4 font-bold rounded-full text-white bg-orange-600 hover:bg-orange-700 shadow-lg transition-all hover:-translate-y-0.5">
+                                Get the Book on Amazon <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+                            </a>
+                            <a href="chapter-one.html" class="inline-flex items-center justify-center gap-2 px-8 py-4 font-bold rounded-full border-2 border-orange-300 text-amber-50 hover:bg-white/10 transition-colors">
+                                <i data-lucide="book-open" class="w-5 h-5"></i> Read Chapter One Free
+                            </a>
+                        </div>
+
+                        <ol class="border-t border-stone-800">
+                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
+                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">1</span>
+                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 1: </span>Recognize Burnout for What It Is</span>
+                            </li>
+                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
+                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">2</span>
+                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 2: </span>Understand How You Show Up at Work</span>
+                            </li>
+                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
+                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">3</span>
+                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 3: </span>Pay Attention to Others&rsquo; Signals</span>
+                            </li>
+                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
+                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">4</span>
+                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 4: </span>How You Connect Matters</span>
+                            </li>
+                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
+                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">5</span>
+                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 5: </span>Combine What You&rsquo;ve Learned and Use Them on Your Boss and Co-Workers</span>
+                            </li>
+                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
+                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">6</span>
+                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 6: </span>Adjusting Your Approach</span>
+                            </li>
+                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
+                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">7</span>
+                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 7: </span>Staying at the Job Out of Fear</span>
+                            </li>
+                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
+                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">8</span>
+                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 8: </span>Saying Goodbye on Your Terms and Perfecting Your Resume</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Reader reviews: 3 across on desktop, swipeable strip on phones -->
+                <div id="reviews" class="mt-20 md:mt-28">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-8">
+                        <h3 class="font-serif text-amber-50 text-2xl md:text-3xl font-bold">What Readers Are Saying</h3>
+                        <p class="text-stone-400 font-medium text-sm">5-star reviews of Burnout to Balance on Amazon</p>
+                    </div>
+                    <div class="spot-reviews -mx-4 px-4 sm:mx-0 sm:px-0 flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-2" role="region" aria-label="Reader reviews" tabindex="0">
+                        <figure class="snap-start shrink-0 basis-[85%] sm:basis-[60%] md:basis-auto bg-white rounded-2xl p-7 md:p-8 shadow-xl flex flex-col">
+                            <div class="text-orange-500 text-xl mb-4" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                            <h4 class="text-lg font-bold text-stone-900 mb-3 leading-snug">ICU Nurse Turns Office Politics Into a Survival Manual</h4>
+                            <blockquote class="text-stone-600 leading-relaxed flex-grow">&ldquo;Andrea Gomez takes decades of ICU trauma and turns it into blunt, funny, weirdly specific workplace advice. It's part self-help, part career strategy, part &lsquo;here's exactly what to say to your credit-stealing coworker.&rsquo; Doesn't sugarcoat anything, which is refreshing.&rdquo;</blockquote>
+                            <figcaption class="mt-6 text-sm font-bold text-stone-900">Wild Wild Wendy <span class="font-normal text-stone-500">&middot; Amazon Review</span></figcaption>
+                        </figure>
+                        <figure class="snap-start shrink-0 basis-[85%] sm:basis-[60%] md:basis-auto bg-white rounded-2xl p-7 md:p-8 shadow-xl flex flex-col">
+                            <div class="text-orange-500 text-xl mb-4" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                            <h4 class="text-lg font-bold text-stone-900 mb-3 leading-snug">A Practical, No Fluff Guide</h4>
+                            <blockquote class="text-stone-600 leading-relaxed flex-grow">&ldquo;This is what I needed years ago. Written by an ICU nurse so there's no BS, just real advice that actually works. I felt so seen. Gives you a clear plan to get your sanity back and figure out whether to stay or go.&rdquo;</blockquote>
+                            <figcaption class="mt-6 text-sm font-bold text-stone-900">A Hunt <span class="font-normal text-stone-500">&middot; Amazon Review</span></figcaption>
+                        </figure>
+                        <figure class="snap-start shrink-0 basis-[85%] sm:basis-[60%] md:basis-auto bg-white rounded-2xl p-7 md:p-8 shadow-xl flex flex-col">
+                            <div class="text-orange-500 text-xl mb-4" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                            <h4 class="text-lg font-bold text-stone-900 mb-3 leading-snug">A Must Read If You Wish to Start Reclaiming Your Energy</h4>
+                            <blockquote class="text-stone-600 leading-relaxed flex-grow">&ldquo;One of the most valuable takeaways was learning to recognize burnout before it takes over. The book breaks down the warning signs so clearly that I could immediately see where I had been pushing myself too hard. If you're feeling stuck or just need a game plan to make work less exhausting, this book is an invaluable guide.&rdquo;</blockquote>
+                            <figcaption class="mt-6 text-sm font-bold text-stone-900">Stephen B <span class="font-normal text-stone-500">&middot; Amazon Review</span></figcaption>
+                        </figure>
+                    </div>
+                    <p class="md:hidden mt-3 text-xs font-bold uppercase tracking-widest text-stone-400">Swipe for more reviews &rarr;</p>
+                    <div class="mt-8">
+                        <a href="https://www.amazon.com/dp/B0F1L3KFLY#averageCustomerReviewsAnchor" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-orange-400 font-bold hover:text-amber-50 transition-colors">Read more reviews on Amazon <i data-lucide="arrow-right" width="20" height="20"></i></a>
+                    </div>
+                </div>
+
+                <!-- Also by: the teen book, kept as a quieter second row -->
+                <div class="mt-16 md:mt-20 pt-10 border-t border-stone-800 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
+                    <img
+                        src="https://images-na.ssl-images-amazon.com/images/P/B0DTFMFZTT.01._SCLZZZZZZZ_.jpg"
+                        alt="Cover for Stronger Than You Think: A Guide for Teens Overcoming Anxiety"
+                        width="400"
+                        height="600"
+                        loading="lazy"
+                        class="w-24 h-auto rounded-md shadow-2xl shrink-0"
+                    />
+                    <div class="text-center sm:text-left">
+                        <div class="font-mono text-xs uppercase tracking-[0.22em] font-bold text-stone-400 mb-2">Also by Andrea Gomez</div>
+                        <h3 class="font-serif text-amber-50 text-2xl font-bold mb-1">Stronger Than You Think</h3>
+                        <p class="text-stone-400 italic mb-3">A Guide for Teens Overcoming Anxiety</p>
+                        <p class="text-stone-400 text-sm leading-relaxed mb-4 max-w-2xl">
+                            Teens today face anxieties that previous generations did not. The digital age compresses trauma. It speeds up the cycle of comparison and despair. This book hands them tools. They can use these tools to dismantle their panic.
+                        </p>
+                        <a href="https://www.amazon.com/dp/B0DTFMFZTT" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-orange-400 font-bold hover:text-amber-50 transition-colors">
+                            Get it on Amazon <i data-lucide="external-link" width="18" height="18"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- About Section -->
-        <section id="about" class="py-24 bg-white relative z-10 border-t border-stone-100">
+        <section id="about" class="py-24 bg-white relative z-10 border-t border-stone-100 overflow-hidden">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-12 gap-12 items-start">
                     <div class="md:col-span-5">
@@ -1093,103 +1260,6 @@
                         </div>
                         <span>Latest Episode</span>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Books Section -->
-        <section id="books" class="py-24 bg-white relative z-10">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">Essential Reading</h2>
-                    <p class="text-lg text-stone-600 font-medium">Buy my books.</p>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
-                    
-                    <!-- Book 1 -->
-                    <article class="group bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-stone-100">
-                        <div class="relative -mt-16 mb-8 mx-auto w-48 shadow-2xl rounded-lg transform group-hover:-translate-y-2 transition-transform duration-500">
-                            <img 
-                                src="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg" 
-                                alt="Cover for Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace" 
-                                width="400"
-                                height="600"
-                                class="w-full h-auto rounded-lg"
-                                loading="lazy"
-                            />
-                        </div>
-                        <h3 class="text-2xl font-bold text-stone-900 mb-2 font-serif text-center">Burnout to Balance</h3>
-                        <div class="w-12 h-1 bg-orange-500 mx-auto mb-4 rounded-full"></div>
-                        <p class="text-stone-500 mb-6 font-medium italic text-center">Your 8-Step Guide to Thriving in a Messy Workplace</p>
-                        <p class="text-stone-600 mb-8 flex-grow leading-relaxed text-center">
-                            This book maps the territory of a messy workplace. You can't navigate a minefield without knowing where the explosives lie. This book identifies eight specific steps. These steps move any employee from desperation to stability. It avoids promising a perfect job. It promises a way to survive the one you have.
-                        </p>
-                        <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg">
-                            Get it on Amazon <i data-lucide="external-link" width="18" height="18"></i>
-                        </a>
-                        <a href="chapter-one.html" class="free-chapter-btn w-full flex items-center justify-center gap-2 mt-3 border-2 border-orange-400 bg-orange-50 hover:bg-orange-100 text-stone-900 font-bold py-4 px-6 rounded-xl transition-colors relative">
-                            <span class="absolute -top-3 right-4 bg-orange-600 text-white text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full shadow">Free</span>
-                            <i data-lucide="book-open" width="18" height="18" class="text-orange-600"></i> Read Chapter One Free
-                        </a>
-                    </article>
-
-                    <!-- Book 2 -->
-                    <article class="group bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-stone-100">
-                        <div class="relative -mt-16 mb-8 mx-auto w-48 shadow-2xl rounded-lg transform group-hover:-translate-y-2 transition-transform duration-500">
-                            <img 
-                                src="https://images-na.ssl-images-amazon.com/images/P/B0DTFMFZTT.01._SCLZZZZZZZ_.jpg" 
-                                alt="Cover for Stronger Than You Think: A Guide for Teens Overcoming Anxiety" 
-                                width="400"
-                                height="600"
-                                class="w-full h-auto rounded-lg"
-                                loading="lazy"
-                            />
-                        </div>
-                        <h3 class="text-2xl font-bold text-stone-900 mb-2 font-serif text-center">Stronger Than You Think</h3>
-                        <div class="w-12 h-1 bg-teal-500 mx-auto mb-4 rounded-full"></div>
-                        <p class="text-teal-700 mb-6 font-medium italic text-center">A Guide for Teens Overcoming Anxiety</p>
-                        <p class="text-stone-600 mb-8 flex-grow leading-relaxed text-center">
-                            Teens today face anxieties that previous generations did not. The digital age compresses trauma. It speeds up the cycle of comparison and despair. This book hands them tools. They can use these tools to dismantle their panic.
-                        </p>
-                        <a href="https://www.amazon.com/dp/B0DTFMFZTT" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-teal-600 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg">
-                            Get it on Amazon <i data-lucide="external-link" width="18" height="18"></i>
-                        </a>
-                    </article>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Reader Reviews Section -->
-        <section id="reviews" class="py-24 bg-stone-50 relative z-10 border-y border-stone-100">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-2">What Readers Are Saying</h2>
-                    <p class="text-stone-500 font-medium">5-star reviews of Burnout to Balance on Amazon</p>
-                </div>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <figure class="bg-white rounded-2xl p-8 shadow-sm border border-stone-100 flex flex-col h-full">
-                        <div class="text-orange-500 text-xl mb-4" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                        <h3 class="text-lg font-bold text-stone-900 mb-3 leading-snug">ICU Nurse Turns Office Politics Into a Survival Manual</h3>
-                        <blockquote class="text-stone-600 leading-relaxed flex-grow">&ldquo;Andrea Gomez takes decades of ICU trauma and turns it into blunt, funny, weirdly specific workplace advice. It's part self-help, part career strategy, part &lsquo;here's exactly what to say to your credit-stealing coworker.&rsquo; Doesn't sugarcoat anything, which is refreshing.&rdquo;</blockquote>
-                        <figcaption class="mt-6 text-sm font-bold text-stone-900">Wild Wild Wendy <span class="font-normal text-stone-500">&middot; Amazon Review</span></figcaption>
-                    </figure>
-                    <figure class="bg-white rounded-2xl p-8 shadow-sm border border-stone-100 flex flex-col h-full">
-                        <div class="text-orange-500 text-xl mb-4" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                        <h3 class="text-lg font-bold text-stone-900 mb-3 leading-snug">A Practical, No Fluff Guide</h3>
-                        <blockquote class="text-stone-600 leading-relaxed flex-grow">&ldquo;This is what I needed years ago. Written by an ICU nurse so there's no BS, just real advice that actually works. I felt so seen. Gives you a clear plan to get your sanity back and figure out whether to stay or go.&rdquo;</blockquote>
-                        <figcaption class="mt-6 text-sm font-bold text-stone-900">A Hunt <span class="font-normal text-stone-500">&middot; Amazon Review</span></figcaption>
-                    </figure>
-                    <figure class="bg-white rounded-2xl p-8 shadow-sm border border-stone-100 flex flex-col h-full">
-                        <div class="text-orange-500 text-xl mb-4" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                        <h3 class="text-lg font-bold text-stone-900 mb-3 leading-snug">A Must Read If You Wish to Start Reclaiming Your Energy</h3>
-                        <blockquote class="text-stone-600 leading-relaxed flex-grow">&ldquo;One of the most valuable takeaways was learning to recognize burnout before it takes over. The book breaks down the warning signs so clearly that I could immediately see where I had been pushing myself too hard. If you're feeling stuck or just need a game plan to make work less exhausting, this book is an invaluable guide.&rdquo;</blockquote>
-                        <figcaption class="mt-6 text-sm font-bold text-stone-900">Stephen B <span class="font-normal text-stone-500">&middot; Amazon Review</span></figcaption>
-                    </figure>
-                </div>
-                <div class="text-center mt-10">
-                    <a href="https://www.amazon.com/dp/B0F1L3KFLY#averageCustomerReviewsAnchor" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-orange-600 font-bold hover:text-orange-700 transition-colors">Read more reviews on Amazon <i data-lucide="arrow-right" width="20" height="20"></i></a>
                 </div>
             </div>
         </section>
