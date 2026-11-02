@@ -613,7 +613,7 @@
         .vitals-dot { width: 0.55rem; height: 0.55rem; border-radius: 999px; flex: none; }
         .vitals-monitor {
           --hr-color: #34d399;
-          --ecg-speed: 2.6s;
+          --ecg-speed: 3.333s; /* 72 bpm: 4 beats per loop x 60/72 s */
           background: radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--c-accent) 18%, var(--c-bg-dark)) 0%, var(--c-bg-dark) 55%, var(--c-bg-darker) 100%);
           border-radius: 1.5rem; color: #f5efe9; overflow: hidden; position: relative;
           box-shadow: 0 30px 60px -20px color-mix(in srgb, var(--c-bg-dark) 60%, transparent), inset 0 0 0 1px rgba(255,255,255,0.06);
@@ -2082,7 +2082,9 @@
             const hr = 72 + score * 12;
             vitalsHr.textContent = hr;
             vitalsMonitor.style.setProperty('--hr-color', tierColor(score));
-            vitalsMonitor.style.setProperty('--ecg-speed', (2.6 - score * 0.27).toFixed(2) + 's');
+            // The line slides 4 heartbeats per loop, so one loop takes 4 beats x (60 / bpm) seconds.
+            // 72 bpm = 3.33 s per loop. (The old timing showed about 92 bpm at "72".)
+            vitalsMonitor.style.setProperty('--ecg-speed', (240 / hr).toFixed(3) + 's');
         }
 
         // Recovery plan autoresponses sent via FormSubmit (tier-specific)
