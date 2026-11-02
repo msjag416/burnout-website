@@ -1313,18 +1313,23 @@
                             <p class="text-stone-400 mb-8 text-lg">Andrea Gomez • Season 1</p>
                             <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
                                 <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu?si=6FfWoYK-RU-Q5pG9cYy09A" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-400 text-stone-900 font-bold py-3 px-8 rounded-full transition-colors flex items-center gap-2 transform hover:scale-105">
-                                    <i data-lucide="play" class="w-5 h-5 fill-current"></i> Play on Spotify
+                                    <i data-lucide="plus" class="w-5 h-5"></i> Follow on Spotify
                                 </a>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="mt-12 flex items-center gap-4 text-xs font-mono text-stone-500">
-                        <span>0:00</span>
-                        <div class="h-1 flex-1 bg-stone-800 rounded-full overflow-hidden">
-                            <div class="w-1/3 h-full bg-orange-500 rounded-full relative animate-pulse"></div>
-                        </div>
-                        <span>Latest Episode</span>
+
+                    <!-- Real Spotify player: visitors can press play on any episode without leaving the site -->
+                    <div class="mt-10 relative z-10">
+                        <div class="uppercase tracking-widest text-xs font-bold text-orange-400 mb-3 text-center md:text-left">Press play right here</div>
+                        <iframe
+                            title="Burnout to Balance podcast player on Spotify"
+                            src="https://open.spotify.com/embed/show/7zbvtiqGQfj40nvOmVi6Fu?utm_source=generator&amp;theme=0"
+                            width="100%"
+                            height="352"
+                            style="border:0; border-radius:12px; display:block; background:#282828;"
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                            loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
