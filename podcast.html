@@ -12,94 +12,159 @@
     <meta property="og:description" content="Pick any episode and listen right here. Honest talks on job burnout, toxic workplaces, and work stress.">
     <meta property="og:image" content="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/43229313/43229313-1791765462836-cd7efd873c1cf.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="theme-color" content="#fffbf0">
+    <meta name="theme-color" content="#faf7f2">
+    <!-- Same heart favicon as the home page -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ea580c'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+    <!-- Same fonts as the home page: Playfair Display headings, Inter text -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
     <script>
+        // Same colours as the home page's "against" theme
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Merriweather', 'serif'] },
-                    colors: { amber: { 50: '#fffbf0' }, stone: { 950: '#0c0a09' } }
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'Georgia', 'serif']
+                    },
+                    colors: {
+                        paper: '#faf7f2',     /* page background */
+                        ink: '#1c1c1f',       /* main text and dark areas */
+                        inkdeep: '#111113',   /* footer */
+                        muted: '#57575c',     /* body grey */
+                        faint: '#85858a',     /* small grey */
+                        line: '#e8dcd4',      /* borders */
+                        grid: '#f0e8de',      /* background grid */
+                        accent: '#c8322a',    /* flame red */
+                        accenthover: '#a62820',
+                        accentsoft: '#fad4cf'
+                    }
                 }
             }
         }
     </script>
     <style>
         html { scroll-padding-top: 80px; }
+        body { background-color: #faf7f2; }
+        ::selection { background: #c8322a; color: #faf7f2; }
+        /* Same faint grid as the home page background */
+        .bg-grid-pattern {
+            background-image:
+                linear-gradient(to right, #f0e8de 1px, transparent 1px),
+                linear-gradient(to bottom, #f0e8de 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        h1, h2 { letter-spacing: -0.02em; }
         .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .episode.is-playing { border-color: #ea580c; box-shadow: 0 0 0 2px #ea580c33; }
-        .episode.is-playing .play-btn { background: #ea580c; color: #fff; }
+        .episode { transition: border-color .2s, box-shadow .2s, transform .2s; }
+        @media (hover: hover) and (pointer: fine) {
+            .episode:hover { border-color: #c8322a; transform: translateY(-1px); box-shadow: 0 14px 28px -18px rgba(28,28,31,0.35); }
+        }
+        .episode.is-playing { border-color: #c8322a; box-shadow: 0 0 0 2px rgba(200,50,42,0.18); }
+        .episode.is-playing .play-btn { background: #c8322a; color: #fff; }
+        /* Podcast cover: square art with the same soft red glow behind it as the home page's book */
+        .cover-stage { position: relative; display: inline-block; }
+        .cover-stage::before {
+            content: ""; position: absolute; left: 50%; top: 50%; width: 170%; aspect-ratio: 1;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(200,50,42,0.30) 0%, transparent 62%);
+            filter: blur(10px); pointer-events: none;
+        }
         #player-bar audio { width: 100%; height: 40px; }
+        @media (prefers-reduced-motion: reduce) { .episode { transition: none; } }
     </style>
 </head>
-<body class="bg-amber-50 text-stone-800 font-sans antialiased">
+<body class="bg-paper text-ink font-sans antialiased bg-grid-pattern">
 
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-amber-50/95 backdrop-blur-md shadow-sm">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+    <!-- Top bar: same look as the home page (logo, links, Subscribe, Get the Book, dark line underneath) -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-paper/95 backdrop-blur-md border-b-2 border-ink">
+        <div class="max-w-6xl mx-auto px-4 max-[359px]:px-3 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center gap-4 h-20">
                 <a href="index.html" class="flex items-center gap-2" aria-label="Andrea Gomez Home">
-                    <i data-lucide="heart" class="text-orange-600 fill-orange-600 w-6 h-6"></i>
-                    <span class="font-serif text-xl font-bold tracking-tight text-stone-900 whitespace-nowrap">Andrea Gomez</span>
+                    <i data-lucide="heart" class="text-accent fill-accent w-6 h-6"></i>
+                    <span class="font-serif text-xl max-[359px]:text-base font-bold tracking-tight text-ink whitespace-nowrap">Andrea Gomez</span>
                 </a>
-                <a href="index.html" class="inline-flex items-center gap-2 text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to site
-                </a>
+
+                <div class="hidden md:flex items-center gap-5 lg:gap-8">
+                    <a href="index.html#about" class="text-xs lg:text-sm uppercase tracking-wide font-bold text-muted hover:text-accent transition-colors">About</a>
+                    <a href="podcast.html" aria-current="page" class="text-xs lg:text-sm uppercase tracking-wide font-bold text-accent">Podcast</a>
+                    <a href="index.html#books" class="text-xs lg:text-sm uppercase tracking-wide font-bold text-muted hover:text-accent transition-colors">Books</a>
+                    <a href="index.html#articles" class="text-xs lg:text-sm uppercase tracking-wide font-bold text-muted hover:text-accent transition-colors">Articles</a>
+                    <div class="flex items-center gap-2 lg:gap-3">
+                        <a href="index.html#newsletter" class="px-4 lg:px-5 py-2.5 rounded-full bg-ink text-paper hover:bg-accent transition-colors font-bold text-sm shadow-md">Subscribe</a>
+                        <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full bg-accent text-white hover:bg-accenthover transition-all hover:-translate-y-0.5 font-bold text-sm shadow-md shadow-accent/30 whitespace-nowrap">
+                            <i data-lucide="book-open" class="hidden lg:inline-block w-4 h-4"></i> Get the Book
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Phones: Get the Book + back to the home page -->
+                <div class="md:hidden flex items-center gap-2 max-[359px]:gap-1">
+                    <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 max-[359px]:px-3 py-2 rounded-full bg-accent text-white hover:bg-accenthover transition-colors font-bold text-xs shadow-md shadow-accent/30 whitespace-nowrap">Get the Book</a>
+                    <a href="index.html" class="p-2 text-ink" aria-label="Back to the home page"><i data-lucide="house" class="w-6 h-6"></i></a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main class="pt-32 pb-40 px-4 sm:px-6 lg:px-8">
+    <main class="pt-32 md:pt-36 pb-40 px-4 sm:px-6 lg:px-8" style="overflow-x: clip;">
         <div class="max-w-3xl mx-auto">
 
             <!-- Show header -->
-            <header class="text-center mb-12">
-                <span class="inline-block py-1.5 px-4 rounded-full bg-orange-100 text-orange-800 text-xs font-bold tracking-widest uppercase mb-8 border border-orange-200">The Podcast</span>
-                <img src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/43229313/43229313-1791765462836-cd7efd873c1cf.jpg" alt="Burnout to Balance: The Workplace Survival Podcast cover art" width="224" height="224" class="w-48 md:w-56 mx-auto rounded-2xl shadow-2xl mb-10" />
-                <h1 class="font-serif text-4xl md:text-5xl font-bold text-stone-900 leading-tight mb-6">Burnout to Balance Podcast</h1>
-                <p class="text-stone-600 max-w-xl mx-auto leading-relaxed mb-8">Short, honest talks about job burnout, toxic workplaces, difficult bosses, and the stress of modern work. Pick any episode below and press play to listen right here.</p>
+            <header class="text-center mb-14">
+                <div class="cover-stage mb-10">
+                    <img src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/43229313/43229313-1791765462836-cd7efd873c1cf.jpg" alt="Burnout to Balance: The Workplace Survival Podcast cover art" width="224" height="224" class="relative w-48 md:w-56 mx-auto rounded-md shadow-2xl ring-1 ring-black/10" />
+                </div>
+                <div class="font-mono text-xs uppercase tracking-[0.22em] font-bold text-accent mb-4">The Workplace Survival Podcast</div>
+                <h1 class="font-serif font-bold text-ink leading-[1.05] mb-6" style="font-size: clamp(2.5rem, 6vw, 3.75rem);">
+                    Burnout to Balance <span class="text-accent italic font-normal">Podcast</span>
+                </h1>
+                <p class="text-muted text-lg max-w-xl mx-auto leading-relaxed mb-8">Short, honest talks about job burnout, toxic workplaces, difficult bosses, and the stress of modern work. Pick any episode below and press play to listen right here.</p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 font-bold py-2.5 px-6 rounded-full border-2 border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-amber-50 transition-colors">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Follow on Spotify
+                    <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 font-bold py-3.5 px-7 rounded-full bg-accent text-white hover:bg-accenthover transition-all hover:-translate-y-0.5 shadow-lg">
+                        Get the Book on Amazon <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
                     </a>
-                    <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 font-bold py-2.5 px-6 rounded-full bg-orange-600 text-white hover:bg-orange-700 transition-colors shadow-md shadow-orange-600/30">
-                        Get the Book <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    <a href="https://open.spotify.com/show/7zbvtiqGQfj40nvOmVi6Fu" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 font-bold py-3.5 px-7 rounded-full border-2 border-ink text-ink hover:bg-ink hover:text-paper transition-colors">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Follow on Spotify
                     </a>
                 </div>
             </header>
 
             <!-- Episode list (filled in from the podcast RSS feed) -->
             <section aria-labelledby="episodes-heading">
-                <h2 id="episodes-heading" class="font-serif text-2xl font-bold text-stone-900 mb-6">All Episodes <span id="episode-count" class="text-stone-400 text-lg font-sans font-semibold"></span></h2>
-                <p id="episodes-loading" class="text-stone-500">Loading episodes...</p>
+                <div class="flex items-baseline justify-between gap-4 border-b-2 border-ink pb-3 mb-6">
+                    <h2 id="episodes-heading" class="font-serif text-3xl font-bold text-ink">All Episodes</h2>
+                    <span id="episode-count" class="font-mono text-xs uppercase tracking-[0.18em] font-bold text-faint"></span>
+                </div>
+                <p id="episodes-loading" class="text-muted">Loading episodes...</p>
                 <ol id="episode-list" class="space-y-4"></ol>
             </section>
         </div>
     </main>
 
     <!-- Player bar: appears at the bottom once someone presses play -->
-    <div id="player-bar" class="hidden fixed bottom-0 left-0 right-0 z-50 bg-stone-950 text-amber-50 shadow-2xl border-t border-stone-800">
+    <div id="player-bar" class="hidden fixed bottom-0 left-0 right-0 z-50 bg-ink text-paper shadow-2xl border-t-2 border-accent">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 py-3">
-            <p class="text-xs uppercase tracking-widest text-orange-400 font-bold">Now playing</p>
+            <p class="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-accent font-bold">Now playing</p>
             <p id="now-playing" class="font-semibold text-sm truncate mb-2"></p>
             <audio id="audio" controls preload="none"></audio>
         </div>
     </div>
 
-    <footer class="bg-stone-950 text-stone-400 py-12 border-t border-stone-900">
+    <footer class="bg-inkdeep text-faint py-12 border-t border-inkdeep">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-sm text-center md:text-left">
-                <div class="font-serif text-lg text-stone-200 mb-1">Andrea Gomez</div>
-                <span class="text-stone-700 text-xs">&copy; <span id="copyright-year">2026</span> All rights reserved.</span>
+                <div class="font-serif text-lg text-paper mb-1">Andrea Gomez</div>
+                <span class="text-faint text-xs">&copy; <span id="copyright-year">2026</span> All rights reserved.</span>
             </div>
             <div class="flex gap-8">
-                <a href="https://medium.com/@msjag416" aria-label="Medium" class="text-stone-500 hover:text-white transition-colors"><i data-lucide="pen-tool" class="w-6 h-6"></i></a>
-                <a href="https://www.instagram.com/msjag_writer/" aria-label="Instagram" class="text-stone-500 hover:text-white transition-colors"><i data-lucide="instagram" class="w-6 h-6"></i></a>
-                <a href="https://www.linkedin.com/in/jag416/" aria-label="LinkedIn" class="text-stone-500 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+                <a href="https://medium.com/@msjag416" aria-label="Medium" class="text-muted hover:text-white transition-colors transform hover:scale-110"><i data-lucide="pen-tool" class="w-6 h-6"></i></a>
+                <a href="https://www.instagram.com/msjag_writer/" aria-label="Instagram" class="text-muted hover:text-white transition-colors transform hover:scale-110"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+                <a href="https://www.linkedin.com/in/jag416/" aria-label="LinkedIn" class="text-muted hover:text-white transition-colors transform hover:scale-110"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
             </div>
         </div>
     </footer>
@@ -154,33 +219,39 @@
         audio.addEventListener('pause', () => currentCard && setButton(currentCard, false));
         audio.addEventListener('ended', () => currentCard && setButton(currentCard, false));
 
-        function buildCard(ep) {
+        function buildCard(ep, number) {
             const li = document.createElement('li');
-            li.className = 'episode bg-white rounded-2xl border border-stone-200 shadow-sm p-5 flex gap-4 items-start transition-all';
+            li.className = 'episode bg-white rounded-xl border border-line p-5 flex gap-4 items-start';
             li.dataset.audio = ep.audio;
             li.dataset.title = ep.title;
 
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.className = 'play-btn shrink-0 w-12 h-12 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 flex items-center justify-center transition-colors';
+            btn.className = 'play-btn shrink-0 w-12 h-12 rounded-full bg-ink text-paper hover:bg-accent flex items-center justify-center transition-colors';
             btn.innerHTML = PLAY_ICON;
             btn.setAttribute('aria-label', 'Play ' + ep.title);
             btn.addEventListener('click', () => playEpisode(li));
 
             const text = document.createElement('div');
-            text.className = 'min-w-0';
+            text.className = 'min-w-0 flex-1';
             const h3 = document.createElement('h3');
-            h3.className = 'font-serif font-bold text-stone-900 text-lg leading-snug';
+            h3.className = 'font-serif font-bold text-ink text-lg md:text-xl leading-snug';
             h3.textContent = ep.title;
             const meta = document.createElement('p');
-            meta.className = 'text-xs font-semibold uppercase tracking-wide text-stone-400 mt-1';
+            meta.className = 'font-mono text-[0.68rem] font-bold uppercase tracking-[0.14em] text-faint mt-1.5';
             meta.textContent = [ep.date, ep.length].filter(Boolean).join(' · ');
             const summary = document.createElement('p');
-            summary.className = 'clamp-2 text-stone-600 text-sm leading-relaxed mt-2';
+            summary.className = 'clamp-2 text-muted text-sm leading-relaxed mt-2';
             summary.textContent = ep.summary;
-
             text.append(h3, meta, summary);
-            li.append(btn, text);
+
+            // Episode number in red italic, like the 8 steps on the home page
+            const num = document.createElement('span');
+            num.className = 'hidden sm:block shrink-0 font-serif italic text-accent text-3xl leading-none pt-1 w-10 text-right';
+            num.setAttribute('aria-hidden', 'true');
+            num.textContent = number;
+
+            li.append(btn, text, num);
             return li;
         }
 
@@ -207,11 +278,12 @@
                 }).filter(ep => ep.audio);
 
                 if (!episodes.length) throw new Error('No episodes');
-                episodes.forEach(ep => list.appendChild(buildCard(ep)));
-                document.getElementById('episode-count').textContent = '(' + episodes.length + ')';
+                // Newest first; numbered so the first episode ever is 1
+                episodes.forEach((ep, i) => list.appendChild(buildCard(ep, episodes.length - i)));
+                document.getElementById('episode-count').textContent = episodes.length + ' episodes';
                 loading.remove();
             } catch (err) {
-                loading.innerHTML = 'Episodes could not load right now. You can listen to every episode on <a class="text-orange-600 font-bold underline" target="_blank" rel="noopener noreferrer" href="' + SPOTIFY_URL + '">Spotify</a>.';
+                loading.innerHTML = 'Episodes could not load right now. You can listen to every episode on <a class="text-accent font-bold underline" target="_blank" rel="noopener noreferrer" href="' + SPOTIFY_URL + '">Spotify</a>.';
             }
         }
 
