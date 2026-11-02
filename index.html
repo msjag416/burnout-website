@@ -2088,9 +2088,38 @@
             const hr = 72 + score * 12;
             vitalsHr.textContent = hr;
             vitalsMonitor.style.setProperty('--hr-color', tierColor(score));
-            // The line slides 4 heartbeats per loop, so one loop takes 4 beats x (60 / bpm) seconds.
-            // 72 bpm = 3.33 s per loop. (The old timing showed about 92 bpm at "72".)
-            vitalsMonitor.style.setProperty('--ecg-speed', (240 / hr).toFixed(3) + 's');
+            drawEcg(hr);
+        }
+
+        // ECG trace that behaves like a real monitor: the strip always moves at the same speed
+        // (like paper at 25 mm/s), and a faster heart rate puts the R waves closer together.
+        // R-R interval = 60 / bpm seconds. The QRS keeps its width; P, ST, T and the gap between
+        // beats get shorter as the rate climbs, the way they do in sinus tachycardia.
+        const ECG_UNITS_PER_SEC = 120;   // sweep speed in drawing units (72 bpm = 100 units per beat)
+        const ECG_VISIBLE = 400;         // drawing units visible in the monitor window
+        let ecgDrawnHr = null;
+        function drawEcg(hr) {
+            if (hr === ecgDrawnHr) return;
+            ecgDrawnHr = hr;
+            const svg = document.querySelector('.vitals-ecg svg');
+            const path = svg && svg.querySelector('path');
+            if (!path) return;
+            const rr = 60 / hr;                         // seconds between R waves
+            const beat = ECG_UNITS_PER_SEC * rr;        // drawing units between R waves
+            // Shorten P, PR, ST and T with rate (QRS stays 18 units wide)
+            let f = Math.min(1, Math.pow(rr, 0.75));
+            if (beat - 18 - 54 * f < 2) f = (beat - 20) / 54;
+            const n = (v) => +v.toFixed(2);
+            const tp = beat - 18 - 54 * f;              // flat line between T and the next P
+            const one = `l${n(tp)} 0 q${n(6*f)} -8 ${n(12*f)} 0 l${n(6*f)} 0 l4 6 l5 -34 l5 44 l4 -16 l${n(10*f)} 0 q${n(8*f)} -12 ${n(16*f)} 0 l${n(10*f)} 0 `;
+            // Draw whole beats covering at least the visible window, twice, so the loop is seamless
+            const beatsPerLoop = Math.ceil(ECG_VISIBLE / beat);
+            const loop = beatsPerLoop * beat;
+            path.setAttribute('d', 'M0 34 ' + one.repeat(beatsPerLoop * 2));
+            svg.setAttribute('viewBox', `0 0 ${n(loop * 2)} 60`);
+            svg.style.width = (loop * 2 / ECG_VISIBLE * 100).toFixed(3) + '%';
+            // Same sweep speed at every rate: loop time = loop length / speed
+            vitalsMonitor.style.setProperty('--ecg-speed', (loop / ECG_UNITS_PER_SEC).toFixed(3) + 's');
         }
 
         // Recovery plan autoresponses sent via FormSubmit (tier-specific)
