@@ -625,6 +625,9 @@
         .vitals-hr-num { font-size: clamp(2.6rem, 7vw, 3.6rem); font-weight: 700; font-variant-numeric: tabular-nums; }
         .vitals-ecg { height: 56px; overflow: hidden; margin: 0.4rem 0 0; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%); }
         .vitals-ecg svg { width: 200%; height: 100%; display: block; animation: vitals-scroll var(--ecg-speed) linear infinite; }
+        .quiz-chapter-note { display: flex; gap: 0.55rem; align-items: flex-start; text-align: left; font-size: 0.9rem; line-height: 1.5; color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; padding: 0.7rem 0.85rem; }
+        .quiz-chapter-note svg { margin-top: 0.2rem; color: #4ade80; }
+        .quiz-chapter-note a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
         .vitals-ecg path { stroke: var(--hr-color); transition: stroke .5s ease; }
         @keyframes vitals-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .vitals-segs { display: flex; gap: 0.3rem; }
@@ -1224,10 +1227,11 @@
                         <!-- Email Capture Screen (gates the result) -->
                         <div id="quiz-email-capture" class="hidden-quiz animate-fade-in-up">
                             <span class="vitals-tag mb-4"><i data-lucide="mail" class="w-3.5 h-3.5"></i>Your result is ready</span>
-                            <h3 class="vitals-q mb-3" style="min-height:0">Where should I send your recovery plan?</h3>
-                            <p class="text-white/70 leading-relaxed mb-6">Enter your email to see your result. A recovery write-up matched to your score lands in your inbox right after.</p>
+                            <h3 class="vitals-q mb-3" style="min-height:0">Get your result and a free chapter</h3>
+                            <p class="text-white/70 leading-relaxed mb-6">Join my free <strong class="text-white">Healing from Job Burnout</strong> newsletter and start with Chapter 5 of <em>Burnout to Balance</em>, "Putting It All Together." It downloads as soon as you see your result.</p>
                             <form id="quiz-email-form" action="https://formsubmit.co/58889c1dddb0e0f0b1f59ab88c96d5bd" method="POST" class="flex flex-col sm:flex-row gap-3">
-                                <input type="hidden" name="_subject" value="New Burnout Quiz Lead" />
+                                <input type="hidden" name="_subject" value="New Burnout Quiz Lead: Healing from Job Burnout newsletter" />
+                                <input type="hidden" name="lead_source" value="Burnout quiz + free Chapter 5" />
                                 <input type="hidden" name="_captcha" value="false" />
                                 <input type="hidden" name="_autoresponse" id="quiz-autoresponse" value="" />
                                 <input type="hidden" name="quiz_tier" id="quiz-tier-field" value="" />
@@ -1236,7 +1240,7 @@
                                 <input type="email" id="quiz-email-input" name="email" placeholder="your@email.com" required class="vitals-input sm:flex-1" />
                                 <button type="submit" class="vitals-btn vitals-btn-yes sm:px-8 whitespace-nowrap">Show My Result</button>
                             </form>
-                            <p class="text-xs text-white/40 mt-3">Unsubscribe any time.</p>
+                            <p class="text-xs text-white/50 mt-3">You're joining the Healing from Job Burnout newsletter. Unsubscribe any time.</p>
                         </div>
 
                         <!-- Result Screen: result next to the book -->
@@ -1252,7 +1256,9 @@
                                 <div class="text-center sm:text-left">
                                     <span id="result-tag" class="vitals-tag mb-3"><i id="result-icon" data-lucide="activity" class="w-3.5 h-3.5"></i><span id="result-tag-text">Result</span></span>
                                     <h3 id="result-title" class="vitals-q mb-3" style="min-height:0">Result Title</h3>
-                                    <p id="result-text" class="text-white/75 leading-relaxed mb-6">Result description goes here.</p>
+                                    <p id="result-text" class="text-white/75 leading-relaxed mb-4">Result description goes here.</p>
+                                    <!-- Free Chapter 5: starts downloading when they press "Show My Result"; this link is the backup -->
+                                    <p class="quiz-chapter-note mb-6"><i data-lucide="download" class="w-4 h-4 shrink-0"></i><span>Your free Chapter 5 is downloading. Welcome to Healing from Job Burnout. <a id="quiz-chapter-download" href="burnout-to-balance-chapter-5-free.pdf" download="Burnout-to-Balance-Chapter-5-free.pdf" target="_blank" rel="noopener">Didn't start? Download it here.</a></span></p>
                                     <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
                                         <a id="result-cta" href="#books" class="vitals-btn vitals-btn-yes px-7 whitespace-nowrap">Take Action</a>
                                         <button id="btn-reset-quiz" type="button" class="text-white/50 text-sm font-bold py-3 px-4 whitespace-nowrap hover:text-white transition-colors">Retake the check</button>
@@ -2223,6 +2229,9 @@ Andrea`
             document.getElementById('quiz-autoresponse').value = TIER_AUTORESPONSES[tierKey];
             sendSignup(quizEmailForm);
             showResult();
+            // Start the free Chapter 5 download (still part of the button press, so browsers allow it)
+            const chDl = document.getElementById('quiz-chapter-download');
+            if (chDl) chDl.click();
         });
 
         // 5. Dynamic Article Fetching
