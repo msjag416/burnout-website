@@ -461,6 +461,19 @@
         .book-sm { width: 6rem; }
         .spot-reviews { scrollbar-width: none; }
         .spot-reviews::-webkit-scrollbar { display: none; }
+        /* 8 steps: click-to-open cards (native details, one open at a time) */
+        .step-item summary { list-style: none; cursor: pointer; transition: color .2s ease; }
+        .step-item summary::-webkit-details-marker { display: none; }
+        .step-item summary:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 4px; border-radius: 4px; }
+        .step-chev { position: relative; width: 1.75rem; height: 1.75rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--c-accent) 55%, transparent); transition: transform .35s ease, background-color .2s ease; }
+        .step-chev::before, .step-chev::after { content: ""; position: absolute; left: 50%; top: 50%; width: 0.7rem; height: 2px; background: color-mix(in srgb, var(--c-accent) 55%, #ffffff); transform: translate(-50%, -50%); border-radius: 2px; }
+        .step-chev::after { transform: translate(-50%, -50%) rotate(90deg); }
+        .step-item summary:hover .step-chev { background: color-mix(in srgb, var(--c-accent) 25%, transparent); }
+        .step-item[open] .step-chev { transform: rotate(45deg); background: var(--c-accent); }
+        .step-item[open] .step-chev::before, .step-item[open] .step-chev::after { background: #ffffff; }
+        .step-item[open] .step-body { animation: step-open .4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        @keyframes step-open { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .step-item[open] .step-body { animation: none; } .step-chev { transition: none; } }
 
         /* ===== HERO ECG TRACE (draws left to right once on load) ===== */
         .ecg-trace {
@@ -1162,38 +1175,111 @@
                             </button>
                         </div>
 
+                        <p class="font-mono text-xs uppercase tracking-[0.22em] font-bold text-stone-400 mb-4">The 8 steps &middot; tap one to read a line from the chapter</p>
                         <ol class="border-t border-stone-800">
-                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
-                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">1</span>
-                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 1: </span>Recognize Burnout for What It Is</span>
+                            <li class="border-b border-stone-800">
+                                <details name="b2b-steps" class="step-item">
+                                    <summary class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5">
+                                        <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">1</span>
+                                        <span class="flex-1 text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 1: </span>Recognize Burnout for What It Is</span>
+                                        <span class="step-chev self-center shrink-0" aria-hidden="true"></span>
+                                    </summary>
+                                    <div class="step-body pl-14 md:pl-[4.5rem] pr-8 pb-6">
+                                        <blockquote class="font-serif italic text-lg md:text-xl leading-relaxed text-amber-50/90">&ldquo;Job burnout is work-related stress that leaves you physically and emotionally drained. It can make you feel useless, powerless, or detached from your job.&rdquo;</blockquote>
+                                        <p class="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] font-bold text-stone-400">From Chapter 1: Face Your Stress and Its Impact</p>
+                                    </div>
+                                </details>
                             </li>
-                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
-                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">2</span>
-                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 2: </span>Understand How You Show Up at Work</span>
+                            <li class="border-b border-stone-800">
+                                <details name="b2b-steps" class="step-item">
+                                    <summary class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5">
+                                        <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">2</span>
+                                        <span class="flex-1 text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 2: </span>Understand How You Show Up at Work</span>
+                                        <span class="step-chev self-center shrink-0" aria-hidden="true"></span>
+                                    </summary>
+                                    <div class="step-body pl-14 md:pl-[4.5rem] pr-8 pb-6">
+                                        <blockquote class="font-serif italic text-lg md:text-xl leading-relaxed text-amber-50/90">&ldquo;Balance looks like having influence without needing control. Being able to lead, set boundaries, and earn respect without manipulating, dominating, or demanding.&rdquo;</blockquote>
+                                        <p class="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] font-bold text-stone-400">From Chapter 2: Pinpointing the Root of Your Stress</p>
+                                    </div>
+                                </details>
                             </li>
-                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
-                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">3</span>
-                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 3: </span>Pay Attention to Others&rsquo; Signals</span>
+                            <li class="border-b border-stone-800">
+                                <details name="b2b-steps" class="step-item">
+                                    <summary class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5">
+                                        <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">3</span>
+                                        <span class="flex-1 text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 3: </span>Pay Attention to Others&#8217; Signals</span>
+                                        <span class="step-chev self-center shrink-0" aria-hidden="true"></span>
+                                    </summary>
+                                    <div class="step-body pl-14 md:pl-[4.5rem] pr-8 pb-6">
+                                        <blockquote class="font-serif italic text-lg md:text-xl leading-relaxed text-amber-50/90">&ldquo;Workplace politics shape everything, whether you engage in them or not. You&#8217;ll be able to avoid most conflicts, or perhaps all of them, if you become a master at reading the room.&rdquo;</blockquote>
+                                        <p class="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] font-bold text-stone-400">From Chapter 3: Learn to Read the Room</p>
+                                    </div>
+                                </details>
                             </li>
-                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
-                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">4</span>
-                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 4: </span>How You Connect Matters</span>
+                            <li class="border-b border-stone-800">
+                                <details name="b2b-steps" class="step-item">
+                                    <summary class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5">
+                                        <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">4</span>
+                                        <span class="flex-1 text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 4: </span>How You Connect Matters</span>
+                                        <span class="step-chev self-center shrink-0" aria-hidden="true"></span>
+                                    </summary>
+                                    <div class="step-body pl-14 md:pl-[4.5rem] pr-8 pb-6">
+                                        <blockquote class="font-serif italic text-lg md:text-xl leading-relaxed text-amber-50/90">&ldquo;Everyone has their own way of feeling valued. Connection drivers explain how people feel seen and appreciated at work.&rdquo;</blockquote>
+                                        <p class="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] font-bold text-stone-400">From Chapter 4: Identify Your Connection Drivers</p>
+                                    </div>
+                                </details>
                             </li>
-                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
-                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">5</span>
-                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 5: </span>Combine What You&rsquo;ve Learned and Use Them on Your Boss and Co-Workers</span>
+                            <li class="border-b border-stone-800">
+                                <details name="b2b-steps" class="step-item">
+                                    <summary class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5">
+                                        <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">5</span>
+                                        <span class="flex-1 text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 5: </span>Combine What You&#8217;ve Learned and Use Them on Your Boss and Co-Workers</span>
+                                        <span class="step-chev self-center shrink-0" aria-hidden="true"></span>
+                                    </summary>
+                                    <div class="step-body pl-14 md:pl-[4.5rem] pr-8 pb-6">
+                                        <blockquote class="font-serif italic text-lg md:text-xl leading-relaxed text-amber-50/90">&ldquo;You can&#8217;t fix the chaos at your workplace, but you can decide how to handle it. &#8230; Finding the middle ground is about making sure you are not being taken advantage of or ignored.&rdquo;</blockquote>
+                                        <p class="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] font-bold text-stone-400">From Chapter 5: Putting It All Together</p>
+                                    </div>
+                                </details>
                             </li>
-                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
-                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">6</span>
-                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 6: </span>Adjusting Your Approach</span>
+                            <li class="border-b border-stone-800">
+                                <details name="b2b-steps" class="step-item">
+                                    <summary class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5">
+                                        <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">6</span>
+                                        <span class="flex-1 text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 6: </span>Adjusting Your Approach</span>
+                                        <span class="step-chev self-center shrink-0" aria-hidden="true"></span>
+                                    </summary>
+                                    <div class="step-body pl-14 md:pl-[4.5rem] pr-8 pb-6">
+                                        <blockquote class="font-serif italic text-lg md:text-xl leading-relaxed text-amber-50/90">&ldquo;Narcissists don&#8217;t respect competence; they see it as competition. Instead of stating observations outright, I could have framed them as questions, making her feel like she was the one solving the problem.&rdquo;</blockquote>
+                                        <p class="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] font-bold text-stone-400">From Chapter 6: The Everyday Art of Adaptive Messaging</p>
+                                    </div>
+                                </details>
                             </li>
-                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
-                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">7</span>
-                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 7: </span>Staying at the Job Out of Fear</span>
+                            <li class="border-b border-stone-800">
+                                <details name="b2b-steps" class="step-item">
+                                    <summary class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5">
+                                        <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">7</span>
+                                        <span class="flex-1 text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 7: </span>Staying at the Job Out of Fear</span>
+                                        <span class="step-chev self-center shrink-0" aria-hidden="true"></span>
+                                    </summary>
+                                    <div class="step-body pl-14 md:pl-[4.5rem] pr-8 pb-6">
+                                        <blockquote class="font-serif italic text-lg md:text-xl leading-relaxed text-amber-50/90">&ldquo;Staying in a burnout-inducing job is what happens when weariness becomes so routine that even the thought of something different feels exhausting. Change will never come from your messy workplace if it&#8217;s not mandated.&rdquo;</blockquote>
+                                        <p class="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] font-bold text-stone-400">From Chapter 7: The Lull of Complacency</p>
+                                    </div>
+                                </details>
                             </li>
-                            <li class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5 border-b border-stone-800">
-                                <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">8</span>
-                                <span class="text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 8: </span>Saying Goodbye on Your Terms and Perfecting Your Resume</span>
+                            <li class="border-b border-stone-800">
+                                <details name="b2b-steps" class="step-item">
+                                    <summary class="flex items-baseline gap-5 md:gap-7 py-4 md:py-5">
+                                        <span class="spot-accent font-serif italic text-3xl md:text-4xl w-9 md:w-11 shrink-0" aria-hidden="true">8</span>
+                                        <span class="flex-1 text-amber-50 text-lg md:text-xl font-semibold leading-snug"><span class="sr-only">Step 8: </span>Saying Goodbye on Your Terms and Perfecting Your Resume</span>
+                                        <span class="step-chev self-center shrink-0" aria-hidden="true"></span>
+                                    </summary>
+                                    <div class="step-body pl-14 md:pl-[4.5rem] pr-8 pb-6">
+                                        <blockquote class="font-serif italic text-lg md:text-xl leading-relaxed text-amber-50/90">&ldquo;The art of leaving is not in the exit itself, but in the courage to walk through the door. &#8230; Maybe you can wait it out. But how long have you been telling yourself that?&rdquo;</blockquote>
+                                        <p class="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] font-bold text-stone-400">From Chapter 8: The Clean Break</p>
+                                    </div>
+                                </details>
                             </li>
                         </ol>
                     </div>
