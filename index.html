@@ -322,6 +322,15 @@
         .chapter-modal-badge { position: absolute; top: 1rem; left: 1rem; font: 700 0.65rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.16em; text-transform: uppercase; color: #fff; background: var(--c-accent); padding: 0.4rem 0.6rem; border-radius: 0.4rem; }
         .chapter-modal-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.5rem; height: 2.5rem; border-radius: 999px; display: flex; align-items: center; justify-content: center; color: var(--c-text-muted); background: var(--c-bg-alt); z-index: 2; cursor: pointer; }
         .chapter-modal-close:hover { color: var(--c-text); }
+        /* Phones: the X stays pinned while the pop-up scrolls, and the top picture is shorter */
+        @media (max-width: 639px) {
+          .chapter-modal-close { position: sticky; top: 0.75rem; margin: 0.75rem 0.75rem -3.25rem auto; z-index: 6; box-shadow: 0 4px 14px -4px rgba(0,0,0,0.45); }
+          .chapter-modal-art { padding: 2.9rem 1rem 1.1rem; }
+          .chapter-modal-art .hero-book { display: none; }
+          .chapter-peek { padding-left: 0; width: 15rem; }
+          .chapter-page { padding-bottom: 2.4rem; }
+          .chapter-page-blur { max-height: 1.4rem; }
+        }
 
         /* ===== LOOK INSIDE READER: an open book with real pages you can turn ===== */
         .look-inside-btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.7rem 1.25rem 0.7rem 0.8rem; border-radius: 999px; background: #fff; color: var(--c-text); font-weight: 700; font-size: 0.9rem; border: 1px solid var(--c-border); box-shadow: 0 10px 24px -14px rgba(28,28,31,0.35); cursor: pointer; transition: transform .2s, box-shadow .2s, border-color .2s; }
@@ -1912,7 +1921,10 @@
             if (typeof chapterModal.showModal === 'function') chapterModal.showModal();
             else chapterModal.setAttribute('open', '');
             document.body.classList.add('chapter-open');
-            setTimeout(() => { const f = document.getElementById('chapter-email'); if (f && !chapterForm.classList.contains('hidden')) f.focus(); }, 50);
+            // Jump to the email box on computers only. On phones this scrolled the pop-up (and the X) out of view and popped up the keyboard.
+            if (!window.matchMedia('(max-width: 639px)').matches) {
+                setTimeout(() => { const f = document.getElementById('chapter-email'); if (f && !chapterForm.classList.contains('hidden')) f.focus(); }, 50);
+            }
         }
         function closeChapter() {
             if (typeof chapterModal.close === 'function') chapterModal.close();
