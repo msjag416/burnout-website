@@ -850,31 +850,42 @@
 
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 bg-amber-50/95 backdrop-blur-md shadow-sm">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+        <div class="max-w-6xl mx-auto px-4 max-[359px]:px-3 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center gap-4 h-20">
                 <!-- Logo -->
                 <a href="#" class="flex items-center gap-2 cursor-pointer text-decoration-none" aria-label="Andrea Gomez Home">
                     <i data-lucide="heart" class="text-orange-600 fill-orange-600 w-6 h-6"></i>
-                    <span class="font-serif text-xl font-bold tracking-tight text-stone-900 whitespace-nowrap">
+                    <span class="font-serif text-xl max-[359px]:text-base font-bold tracking-tight text-stone-900 whitespace-nowrap">
                         Andrea Gomez
                     </span>
                 </a>
                 
                 <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="#about" class="text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">About</a>
-                    <a href="#podcast" class="text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">Podcast</a>
-                    <a href="#books" class="text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">Books</a>
-                    <a href="#articles" class="text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">Articles</a>
-                    <a href="#newsletter" class="px-5 py-2.5 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 transition-colors font-bold text-sm shadow-md">
-                        Subscribe
-                    </a>
+                <div class="hidden md:flex items-center gap-5 lg:gap-8">
+                    <a href="#about" class="text-xs lg:text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">About</a>
+                    <a href="#podcast" class="text-xs lg:text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">Podcast</a>
+                    <a href="#books" class="text-xs lg:text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">Books</a>
+                    <a href="#articles" class="text-xs lg:text-sm uppercase tracking-wide font-bold text-stone-600 hover:text-orange-600 transition-colors">Articles</a>
+                    <div class="flex items-center gap-2 lg:gap-3">
+                        <a href="#newsletter" class="px-4 lg:px-5 py-2.5 rounded-full bg-stone-900 text-amber-50 hover:bg-orange-600 transition-colors font-bold text-sm shadow-md">
+                            Subscribe
+                        </a>
+                        <!-- Book purchase button: stays in view because the whole nav is fixed to the top -->
+                        <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full bg-orange-600 text-white hover:bg-orange-700 transition-all hover:-translate-y-0.5 font-bold text-sm shadow-md shadow-orange-600/30 whitespace-nowrap">
+                            <i data-lucide="book-open" class="hidden lg:inline-block w-4 h-4"></i> Get the Book
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 text-stone-900 focus:outline-none relative z-[60]" aria-label="Toggle menu">
-                    <i data-lucide="menu" class="w-7 h-7" id="menu-icon"></i>
-                </button>
+                <!-- Mobile: Get the Book button + menu button -->
+                <div class="md:hidden flex items-center gap-1 max-[359px]:gap-0">
+                    <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 max-[359px]:px-3 py-2 rounded-full bg-orange-600 text-white hover:bg-orange-700 transition-colors font-bold text-xs shadow-md shadow-orange-600/30 whitespace-nowrap">
+                        Get the Book
+                    </a>
+                    <button id="mobile-menu-btn" class="p-2 text-stone-900 focus:outline-none relative z-[60]" aria-label="Toggle menu">
+                        <i data-lucide="menu" class="w-7 h-7" id="menu-icon"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
