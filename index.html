@@ -7,7 +7,7 @@
     
     <!-- SEO Meta Tags -->
     <title>Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace | Andrea Gomez</title>
-    <meta name="description" content="Burnout to Balance by ICU nurse Andrea Gomez is an 8-step guide to thriving in a messy workplace. Take the free burnout check and read Chapter One free.">
+    <meta name="description" content="Burnout to Balance by ICU nurse Andrea Gomez is an 8-step guide to thriving in a messy workplace. Take the free burnout check and download a free chapter.">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://burnouttobalanceguide.com/">
@@ -16,14 +16,14 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://burnouttobalanceguide.com/">
     <meta property="og:title" content="Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace | Andrea Gomez">
-    <meta property="og:description" content="Burnout to Balance by ICU nurse Andrea Gomez is an 8-step guide to thriving in a messy workplace. Take the free burnout check and read Chapter One free.">
+    <meta property="og:description" content="Burnout to Balance by ICU nurse Andrea Gomez is an 8-step guide to thriving in a messy workplace. Take the free burnout check and download a free chapter.">
     <meta property="og:image" content="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://burnouttobalanceguide.com/">
     <meta name="twitter:title" content="Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace | Andrea Gomez">
-    <meta name="twitter:description" content="Burnout to Balance by ICU nurse Andrea Gomez is an 8-step guide to thriving in a messy workplace. Take the free burnout check and read Chapter One free.">
+    <meta name="twitter:description" content="Burnout to Balance by ICU nurse Andrea Gomez is an 8-step guide to thriving in a messy workplace. Take the free burnout check and download a free chapter.">
     <meta name="twitter:image" content="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg">
 
     <meta name="theme-color" content="#fffbf0">
@@ -295,6 +295,22 @@
             50%      { box-shadow: 0 0 0 10px rgba(234, 88, 12, 0); }
         }
         @media (prefers-reduced-motion: reduce) { .free-chapter-btn { animation: none; } }
+
+        /* ===== FREE CHAPTER POP-UP (newsletter sign-up that unlocks Chapter 5) ===== */
+        .chapter-modal { width: min(44rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: 0; border: 0; border-radius: 1.5rem; background: var(--c-bg); color: var(--c-text); box-shadow: 0 40px 80px -20px rgba(0,0,0,0.6); overflow: auto; }
+        .chapter-modal::backdrop { background: rgba(10, 4, 4, 0.72); backdrop-filter: blur(4px); }
+        .chapter-modal[open] { animation: chapter-pop .28s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        @keyframes chapter-pop { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+        .chapter-modal-grid { display: grid; grid-template-columns: 1fr; }
+        @media (min-width: 640px) { .chapter-modal-grid { grid-template-columns: 15rem 1fr; } }
+        .chapter-modal-art { background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c-accent) 45%, var(--c-bg-dark)) 0%, var(--c-bg-dark) 70%); display: flex; align-items: center; justify-content: center; padding: 1.75rem 1rem; position: relative; }
+        @media (max-width: 639px) { .chapter-modal-art { padding-top: 3.25rem; } }
+        .chapter-modal-art img { width: 7.5rem; border-radius: 3px 8px 8px 3px; transform: rotate(-5deg); box-shadow: 0 20px 34px -10px rgba(0,0,0,0.75); }
+        @media (min-width: 640px) { .chapter-modal-art img { width: 10.5rem; } }
+        .chapter-modal-badge { position: absolute; top: 1rem; left: 1rem; font: 700 0.65rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.16em; text-transform: uppercase; color: #fff; background: var(--c-accent); padding: 0.4rem 0.6rem; border-radius: 0.4rem; }
+        .chapter-modal-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.5rem; height: 2.5rem; border-radius: 999px; display: flex; align-items: center; justify-content: center; color: var(--c-text-muted); background: var(--c-bg-alt); z-index: 2; cursor: pointer; }
+        .chapter-modal-close:hover { color: var(--c-text); }
+        body.chapter-open { overflow: hidden; }
 
         /* Hide elements dynamically for the quiz UI */
         .hidden-quiz { display: none !important; }
@@ -896,10 +912,10 @@
                                 <i data-lucide="activity" class="w-5 h-5"></i> Take the 7-Question Burnout Check
                             </a>
                         </div>
-                        <a href="chapter-one.html" class="inline-flex items-center gap-2 mt-5 text-sm font-bold text-stone-700 hover:text-orange-600 transition-colors animate-fade-in-up [animation-delay:400ms]">
-                            <i data-lucide="book-open" class="w-4 h-4"></i>
-                            <span class="border-b-2 border-orange-300 pb-0.5">Or read Chapter One free</span>
-                        </a>
+                        <button type="button" data-open-chapter class="inline-flex items-center gap-2 mt-5 text-sm font-bold text-stone-700 hover:text-orange-600 transition-colors animate-fade-in-up [animation-delay:400ms] cursor-pointer">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            <span class="border-b-2 border-orange-300 pb-0.5">Download free chapter</span>
+                        </button>
                     </div>
 
                     <!-- Right: the book, tilted, with one reader review -->
@@ -1132,9 +1148,9 @@
                             <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-8 py-4 font-bold rounded-full text-white bg-orange-600 hover:bg-orange-700 shadow-lg transition-all hover:-translate-y-0.5">
                                 Get the Book on Amazon <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
                             </a>
-                            <a href="chapter-one.html" class="inline-flex items-center justify-center gap-2 px-8 py-4 font-bold rounded-full border-2 border-orange-300 text-amber-50 hover:bg-white/10 transition-colors">
-                                <i data-lucide="book-open" class="w-5 h-5"></i> Read Chapter One Free
-                            </a>
+                            <button type="button" data-open-chapter class="inline-flex items-center justify-center gap-2 px-8 py-4 font-bold rounded-full border-2 border-orange-300 text-amber-50 hover:bg-white/10 transition-colors cursor-pointer">
+                                <i data-lucide="download" class="w-5 h-5"></i> Download Free Chapter
+                            </button>
                         </div>
 
                         <ol class="border-t border-stone-800">
@@ -1375,6 +1391,45 @@
             </div>
         </section>
 
+        <!-- Free Chapter pop-up: email sign-up (joins the newsletter) unlocks the Chapter 5 PDF. Opened by any button with data-open-chapter -->
+        <dialog id="chapter-modal" class="chapter-modal" aria-labelledby="chapter-modal-title">
+            <button type="button" class="chapter-modal-close" data-close-chapter aria-label="Close"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="chapter-modal-grid">
+                <div class="chapter-modal-art">
+                    <span class="chapter-modal-badge">Free Chapter 05</span>
+                    <img src="https://images-na.ssl-images-amazon.com/images/P/B0F1L3KFLY.01._SCLZZZZZZZ_.jpg" alt="Burnout to Balance book cover" width="313" height="500" loading="lazy">
+                </div>
+                <div class="p-6 sm:p-8 sm:pr-12">
+                    <p class="font-mono text-[0.68rem] uppercase tracking-[0.18em] font-bold text-orange-600 mb-3">A free chapter from Burnout to Balance</p>
+                    <h2 id="chapter-modal-title" class="font-serif text-3xl font-bold leading-tight text-stone-900 mb-2">Putting It All Together</h2>
+                    <p class="font-serif italic text-lg text-stone-600 leading-snug mb-4">Outsmarting Annoying Coworkers Without Losing Your Sanity</p>
+                    <p class="text-sm text-stone-600 mb-6">Also in this chapter: <strong class="text-stone-900">How to Use HR Without Getting Burned.</strong> 15 pages, PDF.</p>
+
+                    <form id="chapter-form" action="https://formsubmit.co/58889c1dddb0e0f0b1f59ab88c96d5bd" method="POST" class="flex flex-col gap-3">
+                        <input type="hidden" name="_subject" value="New Subscriber: Free Chapter 5 Download" />
+                        <input type="hidden" name="_captcha" value="false" />
+                        <input type="hidden" name="lead_source" value="Free Chapter 5 download" />
+                        <input type="hidden" name="_autoresponse" value="Thanks for joining my newsletter! Here is your free chapter from Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace. Chapter 5, Putting It All Together: https://burnouttobalanceguide.com/burnout-to-balance-chapter-5-free.pdf  If you'd like the whole book, you can find it here: https://www.amazon.com/dp/B0F1L3KFLY  Andrea" />
+                        <label for="chapter-email" class="sr-only">Email address</label>
+                        <input type="email" id="chapter-email" name="email" placeholder="your@email.com" required autocomplete="email" class="w-full px-5 py-4 rounded-xl text-stone-900 bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder:text-stone-400" />
+                        <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-white bg-orange-600 hover:bg-orange-700 transition-colors shadow-lg cursor-pointer">
+                            <i data-lucide="download" class="w-5 h-5"></i> Send Me the Free Chapter
+                        </button>
+                        <p class="text-xs text-stone-500 leading-relaxed">By signing up you'll also get my newsletter on surviving messy workplaces. Unsubscribe any time.</p>
+                    </form>
+
+                    <div id="chapter-success" class="hidden">
+                        <div class="inline-flex items-center gap-2 text-sm font-bold text-green-700 mb-3"><i data-lucide="check-circle" class="w-5 h-5"></i> You're on the list</div>
+                        <p class="text-stone-600 mb-5">Your chapter is ready. We've also emailed you the link so you can find it later.</p>
+                        <a href="burnout-to-balance-chapter-5-free.pdf" download target="_blank" rel="noopener" class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-white bg-orange-600 hover:bg-orange-700 transition-colors shadow-lg">
+                            <i data-lucide="download" class="w-5 h-5"></i> Download Chapter 5 (PDF)
+                        </a>
+                        <a href="https://www.amazon.com/dp/B0F1L3KFLY" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-1 text-sm font-bold text-stone-700 hover:text-orange-600">Want all eight steps? Get the book on Amazon <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+            </div>
+        </dialog>
+
         <!-- Newsletter Section -->
         <section id="newsletter" class="py-24 bg-stone-900 text-center px-4 relative z-10">
             <div class="max-w-2xl mx-auto rounded-3xl p-8 md:p-12" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);">
@@ -1482,6 +1537,41 @@
                 form.classList.add('hidden');
                 formFooter.classList.add('hidden');
                 successMsg.classList.remove('hidden');
+            }
+        });
+
+        // 3b. Free Chapter pop-up: open from any [data-open-chapter], sign up, then show the download
+        const chapterModal = document.getElementById('chapter-modal');
+        const chapterForm = document.getElementById('chapter-form');
+        const chapterSuccess = document.getElementById('chapter-success');
+
+        function openChapter() {
+            if (typeof chapterModal.showModal === 'function') chapterModal.showModal();
+            else chapterModal.setAttribute('open', '');
+            document.body.classList.add('chapter-open');
+            setTimeout(() => { const f = document.getElementById('chapter-email'); if (f && !chapterForm.classList.contains('hidden')) f.focus(); }, 50);
+        }
+        function closeChapter() {
+            if (typeof chapterModal.close === 'function') chapterModal.close();
+            else chapterModal.removeAttribute('open');
+        }
+        chapterModal.addEventListener('close', () => document.body.classList.remove('chapter-open'));
+        document.querySelectorAll('[data-open-chapter]').forEach(b => b.addEventListener('click', openChapter));
+        document.querySelectorAll('[data-close-chapter]').forEach(b => b.addEventListener('click', closeChapter));
+        // Click on the dark area outside the card closes it
+        chapterModal.addEventListener('click', (e) => { if (e.target === chapterModal) closeChapter(); });
+
+        chapterForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = chapterForm.querySelector('button[type=submit]');
+            btn.disabled = true;
+            try {
+                await fetch(chapterForm.action, { method: "POST", body: new FormData(chapterForm) });
+            } catch (error) {
+                console.error("Chapter sign-up error", error);
+            } finally {
+                chapterForm.classList.add('hidden');
+                chapterSuccess.classList.remove('hidden');
             }
         });
 
