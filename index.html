@@ -577,6 +577,9 @@
         .book-auto { aspect-ratio: auto; } /* takes the image's own shape, so nothing is ever trimmed */
         .book-auto img { position: static; display: block; height: auto; }
         .book-sm { width: 6rem; }
+        /* "Also by" cover: bigger so the second book gets noticed (11rem on phones, 14rem on tablets and up) */
+        .book-also { width: 11rem; }
+        @media (min-width: 640px) { .book-also { width: 14rem; } }
         .spot-reviews { scrollbar-width: none; }
         .spot-reviews::-webkit-scrollbar { display: none; }
         /* 8 steps: click-to-open cards (native details, one open at a time) */
@@ -1468,9 +1471,9 @@
                 </div>
 
                 <!-- Also by: the teen book, kept as a quieter second row -->
-                <div class="mt-16 md:mt-20 pt-10 border-t border-stone-800 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
+                <div class="mt-16 md:mt-20 pt-10 border-t border-stone-800 flex flex-col sm:flex-row items-center gap-6 sm:gap-10">
                     <div class="book-stage shrink-0">
-                        <a href="https://www.amazon.com/dp/B0DTFMFZTT" target="_blank" rel="noopener noreferrer" class="hero-book book-dark book-auto book-sm" aria-label="Stronger Than You Think on Amazon">
+                        <a href="https://www.amazon.com/dp/B0DTFMFZTT" target="_blank" rel="noopener noreferrer" class="hero-book book-dark book-auto book-also" aria-label="Stronger Than You Think on Amazon">
                             <img
                                 src="https://images-na.ssl-images-amazon.com/images/P/B0DTFMFZTT.01._SCLZZZZZZZ_.jpg"
                                 alt="Cover for Stronger Than You Think: A Guide for Teens Overcoming Anxiety"
