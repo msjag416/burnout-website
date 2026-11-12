@@ -1505,16 +1505,23 @@
                     <div class="md:col-span-5 md:sticky md:top-28 self-start">
                         <div class="relative">
                             <div class="absolute -inset-4 bg-orange-100 rounded-2xl transform -rotate-2"></div>
-                            <img 
-                                src="burnout_to_balance_books.webp" 
-                                alt="Wall art in a coffee shop reading Happiness is a Cup of Coffee and a Good Book, with a display of Burnout to Balance books by Andrea Gomez" 
-                                width="644"
-                                height="800"
-                                loading="lazy"
-                                decoding="async"
+                            <!-- Animated book cover: plays like a gif (muted, looping). The video files only load when a visitor scrolls near #about (see "ABOUT VIDEO" script). -->
+                            <video
+                                id="about-book-video"
                                 class="relative rounded-xl shadow-lg w-full h-auto object-cover transition-all duration-500 hover:scale-[1.02]"
-                                onerror="this.onerror=null; this.src='burnout_to_balance_books.JPG';"
-                            />
+                                width="600"
+                                height="800"
+                                data-poster="burnout-to-balance-book-poster.webp"
+                                muted
+                                loop
+                                playsinline
+                                disableremoteplayback
+                                preload="none"
+                                aria-label="Animated cover of Burnout to Balance: Your 8-Step Guide to Thriving in a Messy Workplace by Andrea Gomez"
+                            >
+                                <source data-src="burnout-to-balance-book.webm" type="video/webm" />
+                                <source data-src="burnout-to-balance-book.mp4" type="video/mp4" />
+                            </video>
                         </div>
                     </div>
                     <div class="md:col-span-7">
@@ -2437,6 +2444,41 @@ Andrea`
       try {
         window.parent.postMessage({type: '__edit_mode_available'}, '*');
       } catch (e) {}
+    </script>
+
+    <!-- ABOUT VIDEO: load the animated cover only when #about is near, then loop it like a gif.
+         People who ask their device for less motion see the still first frame instead. -->
+    <script>
+      (function () {
+        var video = document.getElementById('about-book-video');
+        if (!video) return;
+        var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var started = false;
+        function start() {
+          if (started) return;
+          started = true;
+          video.poster = video.getAttribute('data-poster');
+          if (still) return;
+          video.querySelectorAll('source[data-src]').forEach(function (s) { s.src = s.getAttribute('data-src'); });
+          video.load();
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+        }
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) start();
+              if (started && !still) {
+                if (entry.isIntersecting) { var p = video.play(); if (p && p.catch) p.catch(function () {}); }
+                else video.pause();
+              }
+            });
+          }, { rootMargin: '300px 0px' });
+          io.observe(video);
+        } else {
+          window.addEventListener('load', start);
+        }
+      })();
     </script>
 
 </body>
