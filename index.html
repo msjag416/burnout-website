@@ -222,7 +222,9 @@
     </script>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ea580c'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     
         
     <!-- Icons: only the Lucide icons this site uses, built by tools/build-assets.mjs -->
@@ -667,7 +669,7 @@
         --c-bg-accent-soft: #fde8e0;
         --c-text: #1c1c1f;
         --c-text-muted: #57575c;
-        --c-text-faint: #85858a;
+        --c-text-faint: #6b6b70;     /* was #85858a; darkened so small grey text passes the readability (contrast) check */
         --c-border: #e8dcd4;
         --c-border-soft: #f0e6de;
         --c-accent: #c8322a;         /* flame red */
@@ -825,6 +827,10 @@
 
       /* === Against theme flourishes === */
       html[data-theme="against"] h2 { font-weight: 700; letter-spacing: -0.02em; }
+      /* Grey text on the dark newsletter band: light enough to read on charcoal */
+      html[data-theme="against"] #newsletter .text-stone-400 { color: #b4b4b9 !important; }
+      html[data-theme="against"] #newsletter #form-footer { color: #a1a1a6 !important; }
+      html[data-theme="against"] footer .text-stone-700 { color: #a1a1a6 !important; }
       html[data-theme="against"] h1 { font-weight: 700; letter-spacing: -0.025em; line-height: 1.05 !important; padding-bottom: 0.15em; }
       html[data-theme="against"] h1 .italic-accent,
       html[data-theme="against"] h2 .italic-accent { font-style: italic; font-weight: 400; }
@@ -2258,17 +2264,18 @@ Andrea`
         });
 
         // 5. Dynamic Article Fetching
+        // Read Medium's HTML with DOMParser: unlike innerHTML on a page element, it doesn't load the
+        // images inside it (Medium puts tracking pixels in its feed, which caused console errors).
+        function parseFeedHtml(html) {
+            return new DOMParser().parseFromString(html || '', 'text/html');
+        }
         function stripHtml(html) {
-            let tmp = document.createElement("DIV");
-            tmp.innerHTML = html;
-            return tmp.textContent || tmp.innerText || "";
+            return parseFeedHtml(html).body.textContent || "";
         }
 
         function findImageInContent(content) {
-            const div = document.createElement('div');
-            div.innerHTML = content;
-            const img = div.querySelector('img');
-            return img ? img.src : null;
+            const img = parseFeedHtml(content).querySelector('img');
+            return img ? img.getAttribute('src') : null;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -2288,7 +2295,7 @@ Andrea`
                                     <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="absolute inset-0 z-10"><span class="sr-only">Read ${item.title}</span></a>
                                     <div class="h-48 w-full overflow-hidden bg-orange-100/50 flex items-center justify-center pointer-events-none">
                                         ${image 
-                                            ? `<img src="${image}" alt="Thumbnail for ${item.title}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" width="400" height="200" />`
+                                            ? `<img src="${image}" alt="Thumbnail for ${item.title}" loading="lazy" crossorigin="anonymous" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" width="400" height="200" />`
                                             : `<i data-lucide="pen-tool" class="w-12 h-12 text-orange-300 opacity-50"></i>`
                                         }
                                     </div>

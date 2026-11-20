@@ -101,7 +101,7 @@ def card(ep, number):
                         <button type="button" class="play-btn shrink-0 w-12 h-12 rounded-full bg-ink text-paper hover:bg-accent flex items-center justify-center transition-colors" aria-label="Play {html.escape(ep['title'], quote=True)}">{PLAY_ICON}</button>
                         <div class="min-w-0 flex-1">
                             <h3 class="font-serif font-bold text-ink text-lg md:text-xl leading-snug">{html.escape(ep['title'])}</h3>
-                            <p class="font-mono text-[0.68rem] font-bold uppercase tracking-[0.14em] text-faint mt-1.5"><time datetime="{ep['date'].date().isoformat()}">{date}</time>{(' · ' + length) if length else ''}</p>
+                            <p class="font-mono text-[0.68rem] font-bold uppercase tracking-[0.14em] text-muted mt-1.5"><time datetime="{ep['date'].date().isoformat()}">{date}</time>{(' · ' + length) if length else ''}</p>
                             <p class="clamp-2 text-muted text-sm leading-relaxed mt-2">{html.escape(ep['summary'])}</p>
                         </div>
                         <span class="hidden sm:block shrink-0 font-serif italic text-accent text-3xl leading-none pt-1 w-10 text-right" aria-hidden="true">{number}</span>
