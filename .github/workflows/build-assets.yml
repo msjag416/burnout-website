@@ -1,0 +1,36 @@
+name: Build site CSS and icons
+
+# The pages no longer load Tailwind and Lucide from outside servers at visit time.
+# Their CSS (assets/site-*.css) and icons (assets/icons.js) are built from the pages.
+# When a page changes, this rebuilds them so any new class or icon works right away.
+on:
+  push:
+    branches: [main]
+    paths: ['*.html', 'build-podcast.py', 'tools/**', 'package.json', 'package-lock.json']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-assets
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: node tools/build-assets.mjs
+      - name: Commit rebuilt files if they changed
+        run: |
+          if git diff --quiet -- assets; then echo "Assets already up to date."; exit 0; fi
+          git config user.name "asset-builder"
+          git config user.email "actions@users.noreply.github.com"
+          git add assets
+          git commit -m "Rebuild site CSS and icons"
+          git push

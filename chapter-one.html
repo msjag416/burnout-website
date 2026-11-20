@@ -14,21 +14,11 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#fffbf0">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script src="assets/icons.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Merriweather', 'serif'] },
-                    colors: { amber: { 50: '#fffbf0' }, stone: { 950: '#0c0a09' } }
-                }
-            }
-        }
-    </script>
     <style>
         html { scroll-padding-top: 80px; }
         .chapter p { margin-bottom: 1.5rem; }
@@ -37,6 +27,8 @@
         .chapter li { margin-bottom: 0.6rem; }
         .chapter .drop::first-letter { font-family: 'Merriweather', serif; font-weight: 900; font-size: 3.4em; float: left; line-height: 0.8; margin: 0.08em 0.12em 0 0; color: #ea580c; }
     </style>
+    <!-- Site CSS, built from Tailwind by tools/build-assets.mjs. Kept last in the head so it wins over the page styles above, the same as the old Tailwind CDN did. -->
+    <link rel="stylesheet" href="assets/site-chapter.css">
 </head>
 <body class="bg-amber-50 text-stone-800 font-sans antialiased">
 

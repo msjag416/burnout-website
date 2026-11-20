@@ -598,37 +598,12 @@
     </script>
 <!-- SCHEMA:END -->
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script src="assets/icons.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Same fonts as the home page: Playfair Display headings, Inter text -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
-    <script>
-        // Same colours as the home page's "against" theme
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                        serif: ['"Playfair Display"', 'Georgia', 'serif']
-                    },
-                    colors: {
-                        paper: '#faf7f2',     /* page background */
-                        ink: '#1c1c1f',       /* main text and dark areas */
-                        inkdeep: '#111113',   /* footer */
-                        muted: '#57575c',     /* body grey */
-                        faint: '#85858a',     /* small grey */
-                        line: '#e8dcd4',      /* borders */
-                        grid: '#f0e8de',      /* background grid */
-                        accent: '#c8322a',    /* flame red */
-                        accenthover: '#a62820',
-                        accentsoft: '#fad4cf'
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         html { scroll-padding-top: 80px; }
         body { background-color: #faf7f2; }
@@ -659,6 +634,8 @@
         #player-bar audio { width: 100%; height: 40px; }
         @media (prefers-reduced-motion: reduce) { .episode { transition: none; } }
     </style>
+    <!-- Site CSS, built from Tailwind by tools/build-assets.mjs. Kept last in the head so it wins over the page styles above, the same as the old Tailwind CDN did. -->
+    <link rel="stylesheet" href="assets/site-podcast.css">
 </head>
 <body class="bg-paper text-ink font-sans antialiased bg-grid-pattern">
 
